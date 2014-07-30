@@ -1,0 +1,30 @@
+#!/bin/bash
+
+relay_on_file="relay_bank1relay0_on.hex"
+relay_off_file="relay_bank1relay0_off.hex"
+relay_status_file="relay_status.hex"
+
+if [ $# -ne 2 ]
+then
+  echo "$0: <ip_addr> on|off|status"
+  exit
+fi
+ADDR=$1
+OP=$2
+if [ $OP == "on" ]
+then
+  echo "Turning relay ON"
+  cat $relay_on_file | nc $ADDR 2101 | hexdump -C
+elif [ $OP == "off" ]
+then
+  echo "Turning relay OFF"
+  cat $relay_off_file | nc $ADDR 2101 | hexdump -C
+elif [ $OP == "status" ]
+then
+  echo "Fetching relay STATUS"
+  cat $relay_status_file | nc $ADDR 2101 | hexdump -C
+else
+  echo "Invalid Command: $OP, should be: on|off|status"
+fi
+
+
