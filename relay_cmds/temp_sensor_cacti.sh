@@ -5,17 +5,16 @@
 # PWG 7.15.2014
 
 # Check input args
-if [ $# -lt 2 ] 
+if [ $# -lt 3 ] 
 then
-  echo "usage: $0 <ip_addr> <cmd_file>"
+  echo "usage: $0 <ip_addr> <port> <cmd_file>"
   exit
 fi
 
 # Read args and constants
-#RELAY_IP=143.215.249.197
 RELAY_IP=$1
-RELAY_PORT=2101
-RELAY_CMD=$2
+RELAY_PORT=$2
+RELAY_CMD=$3
 
 # Check for file existance
 if [ ! -f $RELAY_CMD ] 
