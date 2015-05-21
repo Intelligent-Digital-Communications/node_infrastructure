@@ -27,9 +27,9 @@
 			<t_export></t_export>
 			<export>on</export>
 			<t_upper_limit></t_upper_limit>
-			<upper_limit>0</upper_limit>
+			<upper_limit></upper_limit>
 			<t_lower_limit></t_lower_limit>
-			<lower_limit>20</lower_limit>
+			<lower_limit></lower_limit>
 			<t_base_value></t_base_value>
 			<base_value>1000</base_value>
 			<t_unit_value></t_unit_value>
@@ -53,6 +53,45 @@
 				<hard_return></hard_return>
 				<sequence>1</sequence>
 			</hash_1000248e5c529f8819b05a0208687723043b8d>
+			<hash_100024529f6a151a6c9cb5760c2c3ca6b5adb6>
+				<task_item_id>hash_0800243f3c0be5bf7b8b052c7a7942509270eb</task_item_id>
+				<color_id>0</color_id>
+				<alpha>FF</alpha>
+				<graph_type_id>9</graph_type_id>
+				<consolidation_function_id>4</consolidation_function_id>
+				<cdef_id>0</cdef_id>
+				<value></value>
+				<gprint_id>hash_060024e9c43831e54eca8069317a2ce8c6f751</gprint_id>
+				<text_format>cur:</text_format>
+				<hard_return></hard_return>
+				<sequence>10</sequence>
+			</hash_100024529f6a151a6c9cb5760c2c3ca6b5adb6>
+			<hash_1000242b272271e45fa87b2f749f6356549d63>
+				<task_item_id>hash_0800243f3c0be5bf7b8b052c7a7942509270eb</task_item_id>
+				<color_id>0</color_id>
+				<alpha>FF</alpha>
+				<graph_type_id>9</graph_type_id>
+				<consolidation_function_id>2</consolidation_function_id>
+				<cdef_id>0</cdef_id>
+				<value></value>
+				<gprint_id>hash_060024e9c43831e54eca8069317a2ce8c6f751</gprint_id>
+				<text_format>min:</text_format>
+				<hard_return></hard_return>
+				<sequence>11</sequence>
+			</hash_1000242b272271e45fa87b2f749f6356549d63>
+			<hash_1000244c1bb8de0570e84c56ed4849f3fcc525>
+				<task_item_id>hash_0800243f3c0be5bf7b8b052c7a7942509270eb</task_item_id>
+				<color_id>0</color_id>
+				<alpha>FF</alpha>
+				<graph_type_id>9</graph_type_id>
+				<consolidation_function_id>3</consolidation_function_id>
+				<cdef_id>0</cdef_id>
+				<value></value>
+				<gprint_id>hash_060024e9c43831e54eca8069317a2ce8c6f751</gprint_id>
+				<text_format>max:</text_format>
+				<hard_return>on</hard_return>
+				<sequence>12</sequence>
+			</hash_1000244c1bb8de0570e84c56ed4849f3fcc525>
 			<hash_1000249bf6730e6052382c6753b6f1bd728674>
 				<task_item_id>hash_0800243f3c0be5bf7b8b052c7a7942509270eb</task_item_id>
 				<color_id>0000FF</color_id>
@@ -64,21 +103,60 @@
 				<gprint_id>hash_060024e9c43831e54eca8069317a2ce8c6f751</gprint_id>
 				<text_format>core1</text_format>
 				<hard_return></hard_return>
-				<sequence>6</sequence>
+				<sequence>13</sequence>
 			</hash_1000249bf6730e6052382c6753b6f1bd728674>
+			<hash_100024c3973418d5a9646883dd704e0e2034e5>
+				<task_item_id>hash_0800243f3c0be5bf7b8b052c7a7942509270eb</task_item_id>
+				<color_id>0</color_id>
+				<alpha>FF</alpha>
+				<graph_type_id>9</graph_type_id>
+				<consolidation_function_id>4</consolidation_function_id>
+				<cdef_id>0</cdef_id>
+				<value></value>
+				<gprint_id>hash_060024e9c43831e54eca8069317a2ce8c6f751</gprint_id>
+				<text_format>cur:</text_format>
+				<hard_return></hard_return>
+				<sequence>14</sequence>
+			</hash_100024c3973418d5a9646883dd704e0e2034e5>
+			<hash_100024f311b58cceca4059d0389e96f70abe93>
+				<task_item_id>hash_0800243f3c0be5bf7b8b052c7a7942509270eb</task_item_id>
+				<color_id>0</color_id>
+				<alpha>FF</alpha>
+				<graph_type_id>9</graph_type_id>
+				<consolidation_function_id>2</consolidation_function_id>
+				<cdef_id>0</cdef_id>
+				<value></value>
+				<gprint_id>hash_060024e9c43831e54eca8069317a2ce8c6f751</gprint_id>
+				<text_format>min:</text_format>
+				<hard_return></hard_return>
+				<sequence>15</sequence>
+			</hash_100024f311b58cceca4059d0389e96f70abe93>
+			<hash_100024a4ec1564873be69592ae241dfb39d8f8>
+				<task_item_id>hash_0800243f3c0be5bf7b8b052c7a7942509270eb</task_item_id>
+				<color_id>0</color_id>
+				<alpha>FF</alpha>
+				<graph_type_id>9</graph_type_id>
+				<consolidation_function_id>3</consolidation_function_id>
+				<cdef_id>0</cdef_id>
+				<value></value>
+				<gprint_id>hash_060024e9c43831e54eca8069317a2ce8c6f751</gprint_id>
+				<text_format>max:</text_format>
+				<hard_return>on</hard_return>
+				<sequence>16</sequence>
+			</hash_100024a4ec1564873be69592ae241dfb39d8f8>
 		</items>
 		<inputs>
 			<hash_09002472ed689f17af8d05cd0cdb05e0ea96be>
 				<name>core1</name>
 				<description></description>
 				<column_name>task_item_id</column_name>
-				<items>hash_0000249bf6730e6052382c6753b6f1bd728674</items>
+				<items>hash_0000249bf6730e6052382c6753b6f1bd728674|hash_000024c3973418d5a9646883dd704e0e2034e5|hash_000024f311b58cceca4059d0389e96f70abe93|hash_000024a4ec1564873be69592ae241dfb39d8f8</items>
 			</hash_09002472ed689f17af8d05cd0cdb05e0ea96be>
 			<hash_090024ae79f504445ffaff6c36be0c1ce7a52f>
 				<name>core0</name>
 				<description>Core0 in Celsuis</description>
 				<column_name>task_item_id</column_name>
-				<items>hash_0000248e5c529f8819b05a0208687723043b8d</items>
+				<items>hash_0000248e5c529f8819b05a0208687723043b8d|hash_000024529f6a151a6c9cb5760c2c3ca6b5adb6|hash_0000242b272271e45fa87b2f749f6356549d63|hash_0000244c1bb8de0570e84c56ed4849f3fcc525</items>
 			</hash_090024ae79f504445ffaff6c36be0c1ce7a52f>
 		</inputs>
 	</hash_000024a3c6b54c03b2ff4c7c35e16a0293069a>

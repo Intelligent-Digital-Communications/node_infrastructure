@@ -103,10 +103,10 @@
 		</inputs>
 	</hash_0000240e52a4793e0603ca77a1a6a06b27d43a>
 	<hash_01002467ac4445ee65a4de414a574a5186ddcc>
-		<name>External TempF</name>
+		<name>Ambient TempF</name>
 		<ds>
 			<t_name></t_name>
-			<name>|host_description| - External TempF Ambient</name>
+			<name>|host_description| - Ambient TempF Ambient</name>
 			<data_input_id>hash_03002496d21c10aa591cfa1997d4c2205bef6c</data_input_id>
 			<t_rra_id></t_rra_id>
 			<t_rrd_step></t_rrd_step>
@@ -132,22 +132,50 @@
 			</hash_0800248809c9aa3e9a02681c14b37130f437f9>
 		</items>
 		<data>
+			<item_000>
+				<data_input_field_id>hash_070024fc85bab3f95b80ddd75584faecee4c79</data_input_field_id>
+				<t_value>on</t_value>
+				<value></value>
+			</item_000>
+			<item_001>
+				<data_input_field_id>hash_070024896c95f27e88506478a975800418bc84</data_input_field_id>
+				<t_value></t_value>
+				<value></value>
+			</item_001>
 		</data>
 	</hash_01002467ac4445ee65a4de414a574a5186ddcc>
 	<hash_03002496d21c10aa591cfa1997d4c2205bef6c>
-		<name>Ext TempF - Ambient</name>
+		<name>Ambient TempF</name>
 		<type_id>1</type_id>
-		<input_string>&lt;path_cacti&gt;/scripts/temp_sensor_cacti.sh sn1-wifi.vip.gatech.edu 8082 &lt;path_cacti&gt;/scripts/relay_readadc1_8bit.hex</input_string>
+		<input_string>&lt;path_cacti&gt;/scripts/temp_sensor_cacti.sh &lt;host&gt; &lt;port&gt; &lt;path_cacti&gt;/scripts/relay_readadc1_8bit.hex</input_string>
 		<fields>
 			<hash_07002441194b2be6e59ba5adf445ac122141a1>
-				<name>External Temp Sensor - deg F</name>
+				<name>Ambient Temp Sensor - deg F</name>
 				<update_rra>on</update_rra>
 				<regexp_match></regexp_match>
 				<allow_nulls></allow_nulls>
 				<type_code></type_code>
 				<input_output>out</input_output>
-				<data_name>ext_tempf</data_name>
+				<data_name>ambient_tempf</data_name>
 			</hash_07002441194b2be6e59ba5adf445ac122141a1>
+			<hash_070024896c95f27e88506478a975800418bc84>
+				<name>Address of Ethernet Relay</name>
+				<update_rra></update_rra>
+				<regexp_match></regexp_match>
+				<allow_nulls></allow_nulls>
+				<type_code>hostname</type_code>
+				<input_output>in</input_output>
+				<data_name>host</data_name>
+			</hash_070024896c95f27e88506478a975800418bc84>
+			<hash_070024fc85bab3f95b80ddd75584faecee4c79>
+				<name>Port for Ethernet Relay</name>
+				<update_rra></update_rra>
+				<regexp_match></regexp_match>
+				<allow_nulls></allow_nulls>
+				<type_code></type_code>
+				<input_output>in</input_output>
+				<data_name>port</data_name>
+			</hash_070024fc85bab3f95b80ddd75584faecee4c79>
 		</fields>
 	</hash_03002496d21c10aa591cfa1997d4c2205bef6c>
 	<hash_150024c21df5178e5c955013591239eb0afd46>
