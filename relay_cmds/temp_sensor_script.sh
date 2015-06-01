@@ -1,10 +1,18 @@
 #!/bin/sh
 
 # Reads an 8-bit ADC from a National Control Devices (controlanything.com) Ethernet Relay
-# PWG 7.15.2014
+# every 10 seconds
+if [ $# -ne 2 ]
+then
+  echo "$0: <ip_addr> <port>"
+  echo "Default port is 2101"
+  exit
+fi
+
 a=0
-RELAY_IP=143.215.249.197
-RELAY_PORT=2101
+RELAY_IP=$1
+# Default port is 2101
+RELAY_PORT=$2
 RELAY_CMD="relay_readadc1_8bit.hex"
 # Update Rate (sec)
 UPDATE_TIME=10
