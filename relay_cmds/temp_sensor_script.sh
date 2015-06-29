@@ -1,7 +1,14 @@
 #!/bin/sh
 
 # Reads an 8-bit ADC from a National Control Devices (controlanything.com) Ethernet Relay
-# every 10 seconds
+# PWG 7.15.2014
+a=0
+RELAY_CMD_CH1="relay_readadc1_8bit.hex"
+RELAY_CMD_CH2="relay_readadc2_8bit.hex"
+# Update Rate (sec)
+UPDATE_TIME=10
+
+# Check input args
 if [ $# -ne 2 ]
 then
   echo "$0: <ip_addr> <port>"
@@ -9,17 +16,17 @@ then
   exit
 fi
 
-a=0
 RELAY_IP=$1
-# Default port is 2101
 RELAY_PORT=$2
-RELAY_CMD="relay_readadc1_8bit.hex"
-# Update Rate (sec)
-UPDATE_TIME=10
+
 while [ "$a"==0 ]; do
- val=`cat $RELAY_CMD | nc $RELAY_IP $RELAY_PORT | hexdump -v -e '"%d"'` 
+ val_ch1=`cat ${RELAY_CMD_CH1} | nc $RELAY_IP $RELAY_PORT | hexdump -v -e '"%d"'` 
+ # If no sleep, val_ch2 is empty
+ sleep 1
+ val_ch2=`cat ${RELAY_CMD_CH2} | nc $RELAY_IP $RELAY_PORT | hexdump -v -e '"%d"'` 
  # Convert 8-bit temperature value
- temp=`echo "scale=2; ${val}*5*100/255" | bc -l`
- echo "`date`|$temp deg F"
+ temp_ch1=`echo "scale=2; ${val_ch1}*5*100/255" | bc -l`
+ temp_ch2=`echo "scale=2; ${val_ch2}*5*100/255" | bc -l`
+ echo "`date`| ch1 $temp_ch1 deg F,ch2 $temp_ch2 deg F"
  sleep $UPDATE_TIME
 done
