@@ -19,7 +19,6 @@ fi
 RELAY_IP=$1
 RELAY_PORT=$2
 CHANS=$3
-#chan_arr=$(echo $CHANS | tr "," "\n")
 chan_arr=$(echo $CHANS | tr "," " " )
 while [ "$a"==0 ]; do
    # !!! 
