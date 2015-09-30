@@ -17,7 +17,7 @@ fi
 RELAY_IP=$1
 RELAY_PORT=$2
 CHANS=$3
-RELAY_CMD="relay_readadcall_8bit.hex"
+RELAY_CMD=/usr/share/cacti/scripts/relay_readadcall_8bit.hex
 
 # Check for file existance
 if [ ! -f $RELAY_CMD ] 
