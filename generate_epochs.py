@@ -16,7 +16,7 @@ def read_csv_from_parameters():
     if not path.endswith("/"):
         path = path + "/"
 
-    path_for_log_file = path + "recordings/logs.txt"
+    path_for_log_file = path + "recordings"
     create_needed_directory(path_for_log_file)
     # Create the atqCmd file that will need to be ran later to schedule the
     # records
