@@ -1,4 +1,4 @@
-import os, time
+import os, time, pickle, subprocess
 from socket import *
 
 serverPort = 5035
@@ -27,10 +27,13 @@ def setup_socket():
 
 def process_message(connectionSocket):
     try:
-        message = connectionSocket.recv(1024) # limited to 1024 bytes
+        message = connectionSocket.recv(4096) # limited to 4096 bytes
         if not message or message == 'END':
             return EXITCODE
-        parsedMessage = message.split(',')
+        if message[0] == '3':
+            parsedMessage = message.split(',', 2)
+        else:
+            parsedMessage = message.split(',')
         # If no data is received or an 'END' message is received the while loop
         # breaks and the connection socket is colsed
         return parsedMessage
@@ -47,18 +50,18 @@ def update_gains(gainInfo):
     try:
         os.chdir(gainInfo[2])
     except:
-        return "Invalid directory.\n"
+        return "Invalid directory."
 
     try:
         err = os.system("python update_gains.py " + "--gain=" + gainInfo[1])
         if err == 0:
-            message = "\nGain for " + str(gethostname()) + " updated!\n"
+            message = "\nGain for " + str(gethostname()) + " updated!"
         else:
-            message = "There was an error updating the gains. Please try again.\n"
+            message = "There was an error updating the gains. Please try again."
 
         return message
     except:
-        return "Error updating gains on the server. Please try again.\n"
+        return "Error updating gains on the server. Please try again."
 
 def generate_epochs(epochsInfo):
     # inser / just in case the path is not in correct format
@@ -67,22 +70,22 @@ def generate_epochs(epochsInfo):
             path = epochsInfo[2] + "/"
         else:
             path = epochsInfo[2]
-
-        os.chdir(path)
+        if not os.path.exists(path):
+            return "Invalid path to generate epochs."
     except:
-        return "Invalid path to generate epochs.\n"
+        return "Invalid path to generate epochs."
 
     try:
-        err = os.system("python generate_epochs.py " + epochsInfo[1] + ".csv " + path + epochsInfo[3])
+        err = os.system("python generate_epochs.py " + epochsInfo[1] + " " + path + epochsInfo[3])
         if err == 0:
-            message = "\nEpochs generated for " + str(gethostname()) + "\n"
+            message = "\nEpochs generated for " + str(gethostname())
         else:
-            message = "There was an error generating the epochs. Please try again.\n"
-        os.system("cp /opt/IDC_scripts/update_gains.py " + path + epochsInfo[3] + "/update_gains.py")
+            message = "There was an error generating the epochs. Please try again."
+        os.system("cp update_gains.py " + path + epochsInfo[3] + "/update_gains.py")
 
         return message
     except:
-        return "Error generating epochs. Please try again.\n"
+        return "Error generating epochs. Please try again."
 
 def keyboardInterrupt_exit(connectionSocket, serverSocket):
     try:
@@ -94,6 +97,15 @@ def keyboardInterrupt_exit(connectionSocket, serverSocket):
     except:
         pass
     exit(0)
+
+def receive_file(fileStream):
+    try:
+        out_file = open(fileStream[1].strip(), 'w')
+        out_file.write(fileStream[2])
+        out_file.close()
+        return "CSV file transfer complete."
+    except:
+        return 'Error writing CSV file to server.'
 
 def main():
     try:
@@ -109,6 +121,8 @@ def main():
                     message = update_gains(parsedMessage)
                 elif parsedMessage[0] == '2':
                     message = generate_epochs(parsedMessage)
+                elif parsedMessage[0] == '3':
+                    message = receive_file(parsedMessage)
 
                 send_message(connectionSocket, message)
                 # close the TCP connection; the welcoming socket continues

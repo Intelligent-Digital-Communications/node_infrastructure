@@ -1,8 +1,8 @@
-import sys, time, subprocess
+import sys, time, subprocess, pickle
 from socket import *
 
 EXITCODE = 1
-# IP addresses that the Ping server can be bound to bound to
+# IP addresses that the Ping server can be bound to
 serverIP = "143.215.249.9", "143.215.249.7", "143.215.249.14"
 serverPort = 5035         # Port number that the Ping server is bound to
 
@@ -14,7 +14,6 @@ def help():
 
 def get_input():
     try:
-        path = '0'
         print ("\nEnter a number to select a node: \n\n"
                "0. All                               ")
 
@@ -31,12 +30,14 @@ def get_input():
             message = message + "," + raw_input("Enter full path to modify gain for:\n")
 
         if option == '2':
-            message = '2,'    +       raw_input("Enter the CSV file name: [from ]  \n")
+            fileName = raw_input("Enter the CSV file name:  \n")
+            message = '2,' + fileName
             path = raw_input("Enter full path to generate epochs:\n")
             message = message + "," + path
             message = message + "," + raw_input("Enter the name of the game:\n")
+            print "\n"
 
-        return path, node, option, message
+        return path, node, option, message, fileName
     except EOFError:
         exit(1)
 
@@ -50,23 +51,24 @@ def setup_socket(serverName):
         clientSocket.settimeout(1)
         return clientSocket
     except:
-        print("Request timed out. \n")
+        return "Request timed out.\n"
 
 def send_message(messageIn, socketIn):
     try:
         # Send the TCP packet with the message
         socketIn.send(messageIn)
         # Receive the server response
-        # Limited to 1024 bytes because that is the maximum set on the server side
-        message = socketIn.recv(1024)
+        # Limited to 4096 bytes because that is the maximum set on the server side
+        message = socketIn.recv(4096)
         return message
     except:
-        print("Error sending message, please try again.\n")
+        return "Error sending message, please try again.\n"
+
 
 def main():
     while True:
         try:
-            path, node, option, message = get_input()
+            path, node, option, message, fileName = get_input()
             #if node == '0'
             #    server = serverIP
             #else
@@ -74,28 +76,35 @@ def main():
 
             if node == '0':
                 for x in serverIP:
-                    #if option == '2':
-                        #os.system("scp -rp /Documents/csv_files/ ops@" + x + ":" + path)
-                        #subprocess.Popen('scp -rp /home/idc-dev3/Documents/csv_files/example.csv ops@' +
-                            #x + ":" + path + 'example.csv', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                     socket = setup_socket(x)
+                    if option == '2':
+                        if not fileName.endswith(".csv"):
+                            fileName = fileName + ".csv"
+                        outFile = open(fileName)
+                        fileString = outFile.read()
+                        received = send_message('3,' + fileName + ',' + fileString, socket)
+                        outFile.close()
+                        print received
                     received = send_message(message, socket)
                     print received
                     socket.close()
             else:
-                #if option == '2':
-                    #subprocess.Popen('sshpass -p ops ssh ops@rfsn-demo1.vip.gatech.edu')
-                    #print  'sudo scp /home/idc-dev1/Documents/csv_files/example.csv ops@' + serverIP[int(node)-1] + ":" + path + 'example.csv'
-                    #subprocess.Popen('sudo scp /home/idc-dev1/Documents/csv_files/example.csv ops@' +
-                        #serverIP[int(node)-1] + ":" + path + 'example.csv', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    #os.system("scp -rp /Documents/csv_files/ ops@" + serverIP[int(node)-1] + ":" + path)
                 socket = setup_socket(serverIP[int(node)-1])
+                if option == '2':
+                        if not fileName.endswith(".csv"):
+                            fileName = fileName + ".csv"
+                        outFile = open(fileName)
+                        fileString = outFile.read()
+                        received = send_message('3,' + fileName + ',' + fileString, socket)
+                        outFile.close()
+                        print received
                 received = send_message(message, socket)
                 print received
                 socket.close()
         except KeyboardInterrupt:
             try:
                 socket.close()
+                exit(0)
             except:
                 exit(0)
 
