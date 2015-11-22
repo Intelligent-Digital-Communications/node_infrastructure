@@ -31,7 +31,7 @@ def read_csv_from_parameters():
         filename_extension = items[1]
         frequency = items[2]
         length_of_epochs = items[3].strip() # Only necessary here beacuse this
-	# this item contains a newline as it's the last one on the line
+	    # this item contains a newline as it's the last one on the line
         
         # This is the filename for this specific shell script.
         filename = "epoch" + filename_extension + ".sh"
