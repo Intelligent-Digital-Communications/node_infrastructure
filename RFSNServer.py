@@ -16,7 +16,7 @@ def setup_socket():
         serverSocket = socket(AF_INET, SOCK_STREAM)
         # Assign IP address and port number to socket
         serverSocket.bind(('', serverPort))
-        # server begins listening for incoming TCP requests
+        # Server begins listening for incoming TCP requests
         serverSocket.listen(1)
         # Reuse the socket in TIME_WAIT state without waiting for it to timeout
         serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
@@ -51,8 +51,22 @@ def update_gains(gainInfo):
         os.chdir(gainInfo[2])
     except:
         return "Invalid directory."
+    #**************************************************************************
+    # Once Hayden updates his update_gains.py code uncomment everything that is
+    # commented out in this def and delete the try except above this comment
+    #**************************************************************************
+    #try:
+    #    if not gainInfo[2].endswith("/"):
+    #        path = gainInfo[2] + "/"
+    #    else:
+    #        path = gainInfo[2]
+    #    if not os.path.exists(path):
+    #        return "Invalid path to generate epochs."
+    #except:
+    #    return "Invalid path to generate epochs."
 
     try:
+        #err = os.system("python update_gains.py " + "--gain=" + gainInfo[1] + " --path=" + path)
         err = os.system("python update_gains.py " + "--gain=" + gainInfo[1])
         if err == 0:
             message = "\nGain for " + str(gethostname()) + " updated!"
@@ -87,20 +101,27 @@ def generate_epochs(epochsInfo):
     except:
         return "Error generating epochs. Please try again."
 
-def keyboardInterrupt_exit(connectionSocket, serverSocket):
-    try:
-        connectionSocket.close()
-    except:
-        pass
+def close_serverSocket(serverSocket):
     try:
         serverSocket.close()
     except:
         pass
-    exit(0)
+
+def close_connectionSocket(connectionSocket):
+    try:
+        connectionSocket.close()
+    except:
+        pass
 
 def receive_file(fileStream):
     try:
-        out_file = open(fileStream[1].strip(), 'w')
+        currentDirectory = os.getcwd()
+        if not currentDirectory.endswith("/"):
+            currentDirectory = currentDirectory + "/"
+        if not os.path.exists(currentDirectory + "csv_files/"):
+            os.makedirs(currentDirectory + "csv_files/")
+        currentDirectory = currentDirectory + "csv_files/" + fileStream[1].strip()
+        out_file = open(currentDirectory, 'w')
         out_file.write(fileStream[2])
         out_file.close()
         return "CSV file transfer complete."
@@ -131,9 +152,13 @@ def main():
         serverSocket.close()
 
     except KeyboardInterrupt:   # If the user interrupts the program, print to indicate
-        print("Exited by user.\n")
-        keyboardInterrupt_exit(connectionSocket, serverSocket)
-
+        print("\nExited by user.\n")
+        try:
+            close_serverSocket(serverSocket)
+            close_connectionSocket(connectionSocket)
+        except:
+            pass
+        exit(0)
 
 if __name__ == "__main__":
     main()

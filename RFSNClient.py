@@ -3,7 +3,9 @@ from socket import *
 
 EXITCODE = 1
 # IP addresses that the Ping server can be bound to
-serverIP = "143.215.249.9", "143.215.249.7", "143.215.249.14"
+# DO NOT DELETE THE "0" AT THE END OF THE serverIP LIST!!!!!!!!!!!!!!!!!!!!!!!!!
+serverIP = ("rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
+            "rfsn-demo3.vip.gatech.edu", "0")
 serverPort = 5035         # Port number that the Ping server is bound to
 
 def help():
@@ -14,11 +16,16 @@ def help():
 
 def get_input():
     try:
+        if len(serverIP) <= 1:
+            print ("\n-----------------------------------------------------------------\n"
+                   "                 No IP addresses have been added.                  \n"
+                   "          Please add IP addresses and restart the program.         \n"
+                   "-----------------------------------------------------------------  \n")
         print ("\nEnter a number to select a node: \n\n"
                "0. All                               ")
 
         # Display node options depending on how many IP addresses there are
-        for x in range(1, len(serverIP)+1):
+        for x in range(1, len(serverIP)):
             print( repr(x) + ". RFSN" + repr(x) )
         node = raw_input("")[:1]
 
@@ -26,11 +33,20 @@ def get_input():
                            "\n1. Update gain                     "
                            "\n2. Generate epochs               \n")[:1]
         if option == '1':
-            message = '1,' + raw_input("Enter the new gain:    \n")[:3]
-            message = message + "," + raw_input("Enter full path to modify gain for:\n")
+            gain = -1
+            gain = raw_input("Enter the new gain:    \n")[:3]
+            while not gain.isdigit() or int(gain) < 0 or int(gain)  > 100:
+                print "\nInvalid gain, please enter a number between 0 and 100.\n"
+                gain = raw_input("Enter the new gain:    \n")[:3]
+            message = '1,' + gain
+            path = raw_input("Enter full path to modify gain for:\n")
+            message = message + "," + path
+            fileName = "NA"
 
         if option == '2':
             fileName = raw_input("Enter the CSV file name:  \n")
+            if not fileName.endswith(".csv"):
+                fileName = fileName + ".csv"
             message = '2,' + fileName
             path = raw_input("Enter full path to generate epochs:\n")
             message = message + "," + path
@@ -43,6 +59,8 @@ def get_input():
 
 def setup_socket(serverName):
     try:
+        # Get ip address of target from
+        serverName = gethostbyname(serverName)
         # Create TCP client socket
         clientSocket = socket(AF_INET, SOCK_STREAM)
         # Open the TCP connection
@@ -64,40 +82,32 @@ def send_message(messageIn, socketIn):
     except:
         return "Error sending message, please try again.\n"
 
+def send_csv_file(fileNameIn, socketIn):
+    try:
+        if not fileNameIn.endswith(".csv"):
+            fileNameIn = fileNameIn + ".csv"
+        outFile = open(fileNameIn)
+        fileString = outFile.read()
+        received = send_message('3,' + fileNameIn + ',' + fileString, socketIn)
+        outFile.close()
+        print received
+    except:
+        print "Failed to send CSV file, please try again.\n"
 
 def main():
     while True:
         try:
             path, node, option, message, fileName = get_input()
-            #if node == '0'
-            #    server = serverIP
-            #else
-            #    server = serverIP[int(node)-1]
-
             if node == '0':
-                for x in serverIP:
-                    socket = setup_socket(x)
-                    if option == '2':
-                        if not fileName.endswith(".csv"):
-                            fileName = fileName + ".csv"
-                        outFile = open(fileName)
-                        fileString = outFile.read()
-                        received = send_message('3,' + fileName + ',' + fileString, socket)
-                        outFile.close()
-                        print received
-                    received = send_message(message, socket)
-                    print received
-                    socket.close()
+                server = serverIP[:(len(serverIP)-1)]
             else:
-                socket = setup_socket(serverIP[int(node)-1])
+                server = serverIP[int(node)-1], '0'
+
+            for x in server:
+                if x == '0': break
+                socket = setup_socket(x)
                 if option == '2':
-                        if not fileName.endswith(".csv"):
-                            fileName = fileName + ".csv"
-                        outFile = open(fileName)
-                        fileString = outFile.read()
-                        received = send_message('3,' + fileName + ',' + fileString, socket)
-                        outFile.close()
-                        print received
+                    send_csv_file(fileName, socket)
                 received = send_message(message, socket)
                 print received
                 socket.close()
