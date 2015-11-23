@@ -48,26 +48,17 @@ def send_message(connectionSocket, message):
 
 def update_gains(gainInfo):
     try:
-        os.chdir(gainInfo[2])
+        if not gainInfo[2].endswith("/"):
+            path = gainInfo[2] + "/"
+        else:
+            path = gainInfo[2]
+        if not os.path.exists(path):
+            return "Invalid path to generate epochs."
     except:
-        return "Invalid directory."
-    #**************************************************************************
-    # Once Hayden updates his update_gains.py code uncomment everything that is
-    # commented out in this def and delete the try except above this comment
-    #**************************************************************************
-    #try:
-    #    if not gainInfo[2].endswith("/"):
-    #        path = gainInfo[2] + "/"
-    #    else:
-    #        path = gainInfo[2]
-    #    if not os.path.exists(path):
-    #        return "Invalid path to generate epochs."
-    #except:
-    #    return "Invalid path to generate epochs."
+        return "Invalid path to generate epochs."
 
     try:
-        #err = os.system("python update_gains.py " + "--gain=" + gainInfo[1] + " --path=" + path)
-        err = os.system("python update_gains.py " + "--gain=" + gainInfo[1])
+        err = os.system("python update_gains.py " + "--gain=" + gainInfo[1] + " --path=" + path)
         if err == 0:
             message = "\nGain for " + str(gethostname()) + " updated!"
         else:
@@ -90,13 +81,15 @@ def generate_epochs(epochsInfo):
         return "Invalid path to generate epochs."
 
     try:
-        err = os.system("python generate_epochs.py " + epochsInfo[1] + " " + path + epochsInfo[3])
+        currentDirectory = os.getcwd()
+        if not currentDirectory.endswith("/"):
+            currentDirectory = currentDirectory + "/"
+        currentDirectory = currentDirectory + "csv_files/"
+        err = os.system("python generate_epochs.py " + currentDirectory + epochsInfo[1] + " " + path + epochsInfo[3])
         if err == 0:
             message = "\nEpochs generated for " + str(gethostname())
         else:
             message = "There was an error generating the epochs. Please try again."
-        os.system("cp update_gains.py " + path + epochsInfo[3] + "/update_gains.py")
-
         return message
     except:
         return "Error generating epochs. Please try again."
