@@ -16,7 +16,7 @@ def setup_socket():
         serverSocket = socket(AF_INET, SOCK_STREAM)
         # Assign IP address and port number to socket
         serverSocket.bind(('', serverPort))
-        # server begins listening for incoming TCP requests
+        # Server begins listening for incoming TCP requests
         serverSocket.listen(1)
         # Reuse the socket in TIME_WAIT state without waiting for it to timeout
         serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
@@ -48,12 +48,17 @@ def send_message(connectionSocket, message):
 
 def update_gains(gainInfo):
     try:
-        os.chdir(gainInfo[2])
+        if not gainInfo[2].endswith("/"):
+            path = gainInfo[2] + "/"
+        else:
+            path = gainInfo[2]
+        if not os.path.exists(path):
+            return "Invalid path to generate epochs."
     except:
-        return "Invalid directory."
+        return "Invalid path to generate epochs."
 
     try:
-        err = os.system("python update_gains.py " + "--gain=" + gainInfo[1])
+        err = os.system("python update_gains.py " + "--gain=" + gainInfo[1] + " --path=" + path)
         if err == 0:
             message = "\nGain for " + str(gethostname()) + " updated!"
         else:
@@ -76,31 +81,40 @@ def generate_epochs(epochsInfo):
         return "Invalid path to generate epochs."
 
     try:
-        err = os.system("python generate_epochs.py " + epochsInfo[1] + " " + path + epochsInfo[3])
+        currentDirectory = os.getcwd()
+        if not currentDirectory.endswith("/"):
+            currentDirectory = currentDirectory + "/"
+        currentDirectory = currentDirectory + "csv_files/"
+        err = os.system("python generate_epochs.py " + currentDirectory + epochsInfo[1] + " " + path + epochsInfo[3])
         if err == 0:
             message = "\nEpochs generated for " + str(gethostname())
         else:
             message = "There was an error generating the epochs. Please try again."
-        os.system("cp update_gains.py " + path + epochsInfo[3] + "/update_gains.py")
-
         return message
     except:
         return "Error generating epochs. Please try again."
 
-def keyboardInterrupt_exit(connectionSocket, serverSocket):
-    try:
-        connectionSocket.close()
-    except:
-        pass
+def close_serverSocket(serverSocket):
     try:
         serverSocket.close()
     except:
         pass
-    exit(0)
+
+def close_connectionSocket(connectionSocket):
+    try:
+        connectionSocket.close()
+    except:
+        pass
 
 def receive_file(fileStream):
     try:
-        out_file = open(fileStream[1].strip(), 'w')
+        currentDirectory = os.getcwd()
+        if not currentDirectory.endswith("/"):
+            currentDirectory = currentDirectory + "/"
+        if not os.path.exists(currentDirectory + "csv_files/"):
+            os.makedirs(currentDirectory + "csv_files/")
+        currentDirectory = currentDirectory + "csv_files/" + fileStream[1].strip()
+        out_file = open(currentDirectory, 'w')
         out_file.write(fileStream[2])
         out_file.close()
         return "CSV file transfer complete."
@@ -131,9 +145,13 @@ def main():
         serverSocket.close()
 
     except KeyboardInterrupt:   # If the user interrupts the program, print to indicate
-        print("Exited by user.\n")
-        keyboardInterrupt_exit(connectionSocket, serverSocket)
-
+        print("\nExited by user.\n")
+        try:
+            close_serverSocket(serverSocket)
+            close_connectionSocket(connectionSocket)
+        except:
+            pass
+        exit(0)
 
 if __name__ == "__main__":
     main()
