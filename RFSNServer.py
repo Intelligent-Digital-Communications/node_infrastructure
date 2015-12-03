@@ -1,11 +1,11 @@
-import os, time, pickle, subprocess
+import sys, os, subprocess
 from socket import *
 
 serverPort = 5035
 EXITCODE = '-1'
 
 def help():
-    print("--------------------------RFSNClient.py--------------------------\n"
+    print("\n--------------------------RFSNServer.py--------------------------\n"
           "         - This application connects to the RFSN Client,         \n"
           "            updates gains and schedules data captures.           \n"
           "-----------------------------------------------------------------\n")
@@ -122,6 +122,10 @@ def receive_file(fileStream):
         return 'Error writing CSV file to server.'
 
 def main():
+    if len(sys.argv) > 1:
+        if sys.argv[1] == 'help'
+            help()
+            exit(0)
     try:
         serverSocket = setup_socket()
         while 1:

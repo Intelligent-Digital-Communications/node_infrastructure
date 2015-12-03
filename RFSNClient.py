@@ -1,7 +1,7 @@
-import sys, time, subprocess, pickle
+import sys
 from socket import *
 
-EXITCODE = 1
+EXITCODE = '-1'
 # IP addresses that the Ping server can be bound to
 # DO NOT DELETE THE "0" AT THE END OF THE serverIP LIST!!!!!!!!!!!!!!!!!!!!!!!!!
 serverIP = ("rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
@@ -95,6 +95,10 @@ def send_csv_file(fileNameIn, socketIn):
         print "Failed to send CSV file, please try again.\n"
 
 def main():
+    if len(sys.argv) > 1:
+        if sys.argv[1] == 'help'
+            help()
+            exit(0)
     while True:
         try:
             path, node, option, message, fileName = get_input()
