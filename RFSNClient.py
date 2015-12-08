@@ -1,4 +1,4 @@
-import sys
+import sys, time
 from socket import *
 
 EXITCODE = '-1'
@@ -7,6 +7,7 @@ EXITCODE = '-1'
 serverIP = ("rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
             "rfsn-demo3.vip.gatech.edu", "0")
 serverPort = 5035         # Port number that the Ping server is bound to
+RECVTIMEOUT = 1           # Receive timeout time for TCP socket
 
 def help():
     print("--------------------------RFSNClient.py--------------------------\n"
@@ -71,13 +72,45 @@ def setup_socket(serverName):
     except:
         return "Request timed out.\n"
 
+def recv_timeout(socketIn,timeout=2):
+    # Make socket non blocking
+    socketIn.setblocking(0)
+
+    # Total data partwise in an array
+    final_data = [];
+    data = '';
+
+    # Beginning time
+    begin = time.time()
+    while True:
+        # If you got some data, then break after timeout
+        if final_data and time.time() - begin > timeout:
+            break
+        # If you got no data at all, wait a little longer, twice the timeout
+        elif time.time() - begin > timeout*2:
+            break
+        # Receive something
+        try:
+            data = socketIn.recv(4096)
+            if data:
+                final_data.append(data)
+                # Change the beginning time for measurement
+                begin = time.time()
+            else:
+                # Sleep for sometime to indicate a gap
+                time.sleep(0.1)
+        except:
+            pass
+
+    # Join all parts to make final string
+    return ''.join(final_data)
+
 def send_message(messageIn, socketIn):
     try:
         # Send the TCP packet with the message
-        socketIn.send(messageIn)
+        socketIn.sendall(messageIn)
         # Receive the server response
-        # Limited to 4096 bytes because that is the maximum set on the server side
-        message = socketIn.recv(4096)
+        message = recv_timeout(socketIn, RECVTIMEOUT)
         return message
     except:
         return "Error sending message, please try again.\n"
@@ -96,7 +129,7 @@ def send_csv_file(fileNameIn, socketIn):
 
 def main():
     if len(sys.argv) > 1:
-        if sys.argv[1] == 'help'
+        if sys.argv[1] == 'help':
             help()
             exit(0)
     while True:

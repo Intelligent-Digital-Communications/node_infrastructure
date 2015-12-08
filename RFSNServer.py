@@ -1,8 +1,9 @@
-import sys, os, subprocess
+import sys, os, subprocess, time
 from socket import *
 
 serverPort = 5035
 EXITCODE = '-1'
+RECVTIMEOUT = 1           # Receive timeout time for TCP socket
 
 def help():
     print("\n--------------------------RFSNServer.py--------------------------\n"
@@ -25,9 +26,42 @@ def setup_socket():
         print "Error setting up the socket\n"
         exit(1)
 
+def recv_timeout(socketIn,timeout=2):
+    # Make socket non blocking
+    socketIn.setblocking(0)
+
+    # Total data partwise in an array
+    final_data = [];
+    data = '';
+
+    # Beginning time
+    begin = time.time()
+    while True:
+        # If you got some data, then break after timeout
+        if final_data and time.time() - begin > timeout:
+            break
+        # If you got no data at all, wait a little longer, twice the timeout
+        elif time.time() - begin > timeout*2:
+            break
+        # Receive something
+        try:
+            data = socketIn.recv(4096)
+            if data:
+                final_data.append(data)
+                # Change the beginning time for measurement
+                begin = time.time()
+            else:
+                # Sleep for sometime to indicate a gap
+                time.sleep(0.1)
+        except:
+            pass
+
+    # Join all parts to make final string
+    return ''.join(final_data)
+
 def process_message(connectionSocket):
     try:
-        message = connectionSocket.recv(4096) # limited to 4096 bytes
+        message = recv_timeout(connectionSocket, RECVTIMEOUT)
         if not message or message == 'END':
             return EXITCODE
         if message[0] == '3':
@@ -123,7 +157,7 @@ def receive_file(fileStream):
 
 def main():
     if len(sys.argv) > 1:
-        if sys.argv[1] == 'help'
+        if sys.argv[1] == 'help':
             help()
             exit(0)
     try:
