@@ -1,22 +1,15 @@
-#!/usr/bin/env python
-
-import sys, os, subprocess
+import sys, os, subprocess, time
 from socket import *
-import logging
-import sys
-import datetime 
-
-LOG_FILENAME = "/var/log/rfsnserver.log" # Must be root!
 
 serverPort = 5035
 EXITCODE = '-1'
+RECVTIMEOUT = 1           # Receive timeout time for TCP socket
 
 def help():
     print("\n--------------------------RFSNServer.py--------------------------\n"
           "         - This application connects to the RFSN Client,         \n"
           "            updates gains and schedules data captures.           \n"
           "-----------------------------------------------------------------\n")
-    logging.info("Parameters unreadable.")
 
 def setup_socket():
     try:
@@ -30,12 +23,45 @@ def setup_socket():
         serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         return serverSocket
     except:
-        logging.info("Error setting up the socket\n")
+        print "Error setting up the socket\n"
         exit(1)
+
+def recv_timeout(socketIn,timeout=2):
+    # Make socket non blocking
+    socketIn.setblocking(0)
+
+    # Total data partwise in an array
+    final_data = [];
+    data = '';
+
+    # Beginning time
+    begin = time.time()
+    while True:
+        # If you got some data, then break after timeout
+        if final_data and time.time() - begin > timeout:
+            break
+        # If you got no data at all, wait a little longer, twice the timeout
+        elif time.time() - begin > timeout*2:
+            break
+        # Receive something
+        try:
+            data = socketIn.recv(4096)
+            if data:
+                final_data.append(data)
+                # Change the beginning time for measurement
+                begin = time.time()
+            else:
+                # Sleep for sometime to indicate a gap
+                time.sleep(0.1)
+        except:
+            pass
+
+    # Join all parts to make final string
+    return ''.join(final_data)
 
 def process_message(connectionSocket):
     try:
-        message = connectionSocket.recv(4096) # limited to 4096 bytes
+        message = recv_timeout(connectionSocket, RECVTIMEOUT)
         if not message or message == 'END':
             return EXITCODE
         if message[0] == '3':
@@ -52,7 +78,7 @@ def send_message(connectionSocket, message):
     try:
         connectionSocket.send(message) # Server response
     except:
-        logging.info("Send message failed.\n")
+        print "Send message failed.\n"
 
 def update_gains(gainInfo):
     try:
@@ -156,8 +182,8 @@ def main():
         # Close the welcoming socket connection
         serverSocket.close()
 
-    except KeyboardInterrupt:   # If the user interrupts the program, log to indicate
-        logging.info("\nExited by user.\n")
+    except KeyboardInterrupt:   # If the user interrupts the program, print to indicate
+        print("\nExited by user.\n")
         try:
             close_serverSocket(serverSocket)
             close_connectionSocket(connectionSocket)
@@ -165,10 +191,5 @@ def main():
             pass
         exit(0)
 
-def setup_logger():
-    logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
-    logging.info(datetime.datetime.now())
-
 if __name__ == "__main__":
-    setup_logger()
     main()
