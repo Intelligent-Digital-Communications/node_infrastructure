@@ -4,6 +4,7 @@ from socket import *
 serverPort = 5035
 EXITCODE = '-1'
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
+LOG_FILENAME = "/var/log/rfsnserver.log" # Must be root!
 
 def help():
     logging.info("\n--------------------------RFSNServer.py--------------------------\n"
