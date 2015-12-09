@@ -1,4 +1,4 @@
-import sys, os, subprocess, time
+import sys, os, subprocess, time, datetime, logging
 from socket import *
 
 serverPort = 5035
@@ -6,10 +6,11 @@ EXITCODE = '-1'
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
 
 def help():
-    print("\n--------------------------RFSNServer.py--------------------------\n"
+    logging.info("\n--------------------------RFSNServer.py--------------------------\n"
           "         - This application connects to the RFSN Client,         \n"
           "            updates gains and schedules data captures.           \n"
           "-----------------------------------------------------------------\n")
+    logging.info("Parameters unreadable.")
 
 def setup_socket():
     try:
@@ -23,7 +24,7 @@ def setup_socket():
         serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         return serverSocket
     except:
-        print "Error setting up the socket\n"
+        logging.info("Error setting up the socket\n")
         exit(1)
 
 def recv_timeout(socketIn,timeout=2):
@@ -78,7 +79,7 @@ def send_message(connectionSocket, message):
     try:
         connectionSocket.send(message) # Server response
     except:
-        print "Send message failed.\n"
+        logging.info("Send message failed.\n")
 
 def update_gains(gainInfo):
     try:
@@ -182,8 +183,8 @@ def main():
         # Close the welcoming socket connection
         serverSocket.close()
 
-    except KeyboardInterrupt:   # If the user interrupts the program, print to indicate
-        print("\nExited by user.\n")
+    except KeyboardInterrupt:   # If the user interrupts the program, log to indicate
+        logging.info("\nExited by user.\n")
         try:
             close_serverSocket(serverSocket)
             close_connectionSocket(connectionSocket)
@@ -191,5 +192,10 @@ def main():
             pass
         exit(0)
 
+def setup_logger():
+    logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
+    logging.info(datetime.datetime.now())
+
 if __name__ == "__main__":
+    setup_logger()
     main()
