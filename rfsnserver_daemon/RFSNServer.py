@@ -106,11 +106,14 @@ def update_gains(gainInfo):
 
 def generate_epochs(epochsInfo):
     # inser / just in case the path is not in correct format
+    # epochsInfo[1] = CSV filename to generate epochs from (should have been)
+    # uploaded to the current directory prior to this step
+    # epochsInfo[2] = path to write files to (generally /opt/fallXX_teamname
+    # epochsInfo[3] = nickname for the game, unused at the moment
+    path = epochsInfo[2]
     try:
-        if not epochsInfo[2].endswith("/"):
-            path = epochsInfo[2] + "/"
-        else:
-            path = epochsInfo[2]
+        if not path.endswith("/"):
+            path = path + "/"
         if not os.path.exists(path):
             return "Invalid path to generate epochs."
     except:
@@ -121,7 +124,7 @@ def generate_epochs(epochsInfo):
         if not currentDirectory.endswith("/"):
             currentDirectory = currentDirectory + "/"
         currentDirectory = currentDirectory + "csv_files/"
-        err = os.system("python generate_epochs.py " + currentDirectory + epochsInfo[1] + " " + path + epochsInfo[3])
+        err = os.system("python generate_epochs.py " + currentDirectory + epochsInfo[1] + " " + path)
         if err == 0:
             message = "\nEpochs generated for " + str(gethostname())
         else:

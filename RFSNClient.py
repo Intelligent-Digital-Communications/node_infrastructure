@@ -49,9 +49,10 @@ def get_input():
             if not fileName.endswith(".csv"):
                 fileName = fileName + ".csv"
             message = '2,' + fileName
-            path = raw_input("Enter full path to generate epochs:\n")
+            path = raw_input("Enter path to generate epochs to:\n")
             message = message + "," + path
-            message = message + "," + raw_input("Enter the name of the game:\n")
+            #message = message + "," + raw_input("Enter the name of the game (unused):\n")
+            message = message + ",old_feature"
             print "\n"
 
         return path, node, option, message, fileName
