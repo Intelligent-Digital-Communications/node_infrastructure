@@ -5,7 +5,7 @@ EXITCODE = '-1'
 # IP addresses that the Ping server can be bound to
 # DO NOT DELETE THE "0" AT THE END OF THE serverIP LIST!!!!!!!!!!!!!!!!!!!!!!!!!
 serverIP = ("rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
-            "rfsn-demo3.vip.gatech.edu", "0")
+            "rfsn-demo3.vip.gatech.edu")
 serverPort = 5035         # Port number that the Ping server is bound to
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
 
@@ -23,6 +23,8 @@ def updategains(iplist, gain, path):
     return sendmessages(iplist, message)
 
 def generateepochs(iplist, filename, path):
+    for x in iplist: # Be sure the file is already on all of the RFSNs
+        send_csv_file(filename, x)
     message = '2,' + filename + ',' + path + ',headless'
     return sendmessages(iplist, message)
 
@@ -33,12 +35,11 @@ def get_input():
                    "                 No IP addresses have been added.                  \n"
                    "          Please add IP addresses and restart the program.         \n"
                    "-----------------------------------------------------------------  \n")
-        print ("\nEnter a number to select a node: \n\n"
-               "0. All                               ")
+        print ("\nEnter a number to select a node:\n\n0. All")
 
-        # Display node options depending on how many IP addresses there are
-        for x in range(1, len(serverIP)):
-            print( repr(x) + ". RFSN" + repr(x) )
+        # Display node options
+        for x in range(0, len(serverIP)):
+            print(str(x + 1) + ". " + serverIP[x])
         node = raw_input("")[:1]
 
         option = raw_input("Enter a number to select an option\n "
@@ -117,34 +118,38 @@ def recv_timeout(socketIn,timeout=2):
     # Join all parts to make final string
     return ''.join(final_data)
 
-def send_message(messageIn, socketIn):
+def send_message(messageIn, ip):
+    socketIn = setup_socket(x)
     try:
         # Send the TCP packet with the message
         socketIn.sendall(messageIn)
         # Receive the server response
         message = recv_timeout(socketIn, RECVTIMEOUT)
+        socket.close()
         return message
     except:
+        socket.close()
         return "Error sending message, please try again.\n"
 
 def send_messages(iplist, message):
     returning = ''
     for x in iplist:
-        socket = setup_socket(x)
-        returning += send_message(message, socket)
-        socket.close()
+        returning += send_message(message, x)
     return returning
 
-def send_csv_file(fileNameIn, socketIn):
+def send_csv_file(fileNameIn, ip):
     try:
+        socketIn = setup_socket(ip)
         if not fileNameIn.endswith(".csv"):
             fileNameIn = fileNameIn + ".csv"
         outFile = open(fileNameIn)
         fileString = outFile.read()
         received = send_message('3,' + fileNameIn + ',' + fileString, socketIn)
         outFile.close()
+        socketIn.close()
         print received
     except:
+        socketIn.close()
         print "Failed to send CSV file, please try again.\n"
 
 def main():
@@ -155,22 +160,13 @@ def main():
     while True:
         try:
             path, node, option, message, fileName = get_input()
-            if node == '0':
-                server = serverIP[:(len(serverIP)-1)] 
-            else:
-                server = serverIP[int(node)-1], '0'
+            if node == '0': # Selected all
+                print send_messages(serverIP, message)
+            else: # Picked just one
+                print send_messages(serverIP[int(node)-1], message)
 
-            for x in server:
-                if x == '0': break
-                socket = setup_socket(x)
-                if option == '2':
-                    send_csv_file(fileName, socket)
-                received = send_message(message, socket)
-                print received
-                socket.close()
         except KeyboardInterrupt:
             try:
-                socket.close()
                 exit(0)
             except:
                 exit(0)
