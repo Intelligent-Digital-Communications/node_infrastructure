@@ -15,6 +15,17 @@ def help():
           "         updates gains and schedules data captures.              \n"
           "-----------------------------------------------------------------\n")
 
+def getservers():
+    return serverIP
+
+def updategains(iplist, gain, path):
+    message = '1,' + gain + ',' + path
+    return sendmessages(iplist, message)
+
+def generateepochs(iplist, filename, path):
+    message = '2,' + filename + ',' + path + ',headless'
+    return sendmessages(iplist, message)
+
 def get_input():
     try:
         if len(serverIP) <= 1:
@@ -116,6 +127,14 @@ def send_message(messageIn, socketIn):
     except:
         return "Error sending message, please try again.\n"
 
+def send_messages(iplist, message):
+    returning = ''
+    for x in iplist:
+        socket = setup_socket(x)
+        returning += send_message(message, socket)
+        socket.close()
+    return returning
+
 def send_csv_file(fileNameIn, socketIn):
     try:
         if not fileNameIn.endswith(".csv"):
@@ -137,7 +156,7 @@ def main():
         try:
             path, node, option, message, fileName = get_input()
             if node == '0':
-                server = serverIP[:(len(serverIP)-1)]
+                server = serverIP[:(len(serverIP)-1)] 
             else:
                 server = serverIP[int(node)-1], '0'
 
