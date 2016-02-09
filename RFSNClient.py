@@ -3,7 +3,6 @@ from socket import *
 
 EXITCODE = '-1'
 # IP addresses that the Ping server can be bound to
-# DO NOT DELETE THE "0" AT THE END OF THE serverIP LIST!!!!!!!!!!!!!!!!!!!!!!!!!
 serverIP = ("rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
             "rfsn-demo3.vip.gatech.edu")
 serverPort = 5035         # Port number that the Ping server is bound to
