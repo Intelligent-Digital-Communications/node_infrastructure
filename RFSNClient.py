@@ -118,7 +118,7 @@ def recv_timeout(socketIn,timeout=2):
     return ''.join(final_data)
 
 def send_message(messageIn, ip):
-    socketIn = setup_socket(x)
+    socketIn = setup_socket(ip)
     try:
         # Send the TCP packet with the message
         socketIn.sendall(messageIn)
