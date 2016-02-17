@@ -3,8 +3,8 @@ from socket import *
 
 EXITCODE = '-1'
 # IP addresses that the Ping server can be bound to
-serverIP = ("rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
-            "rfsn-demo3.vip.gatech.edu")
+serverIP = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
+            "rfsn-demo3.vip.gatech.edu"]
 serverPort = 5035         # Port number that the Ping server is bound to
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
 
@@ -71,27 +71,29 @@ def get_input():
         exit(1)
 
 def setup_socket(serverName):
-    try:
-        # Get ip address of target from
-        serverName = gethostbyname(serverName)
-        # Create TCP client socket
+    # Get ip address of target from
+    serverName = gethostbyname(serverName)
+    try: # Create TCP client socket
         clientSocket = socket(AF_INET, SOCK_STREAM)
-        # Open the TCP connection
+    except Exception as e:
+        print(e)
+        print("Socket failed to be created.")
+        return None
+    try: # Open the TCP connection
         clientSocket.connect((serverName,serverPort))
-        # Set socket timeout as 1 second
-        clientSocket.settimeout(1)
-        return clientSocket
-    except:
-        return "Request timed out.\n"
+    except Exception as e:
+        print(e)
+        print("Socket failed to connect.")
+        return None
+    clientSocket.settimeout(1)
+    return clientSocket
 
 def recv_timeout(socketIn,timeout=2):
     # Make socket non blocking
     socketIn.setblocking(0)
-
     # Total data partwise in an array
     final_data = [];
     data = '';
-
     # Beginning time
     begin = time.time()
     while True:
@@ -122,13 +124,19 @@ def send_message(messageIn, ip):
     try:
         # Send the TCP packet with the message
         socketIn.sendall(messageIn)
-        # Receive the server response
+    except Exception as e:
+        print(e)
+        print("Failed while sending message!")
+    try: # Receive the server response
         message = recv_timeout(socketIn, RECVTIMEOUT)
-        socket.close()
-        return message
-    except:
-        socket.close()
-        return "Error sending message, please try again.\n"
+    except Exception as e:
+        print(e)
+        print("Probably just timed out. Are you sure clients are running?")
+    try:
+        socketIn.close()
+    except: #If doesn't close, didn't exist
+        return "Failed to send message."
+    return message
 
 def send_messages(iplist, message):
     returning = ''
@@ -162,7 +170,7 @@ def main():
             if node == '0': # Selected all
                 print send_messages(serverIP, message)
             else: # Picked just one
-                print send_messages(serverIP[int(node)-1], message)
+                print send_message(message, serverIP[int(node)-1])
 
         except KeyboardInterrupt:
             try:
