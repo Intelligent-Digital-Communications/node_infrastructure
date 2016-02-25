@@ -101,4 +101,5 @@ def put_epoch_in_schedule(filename, timeobject, atqCmd):
     
     atqCmd.write('at ' + atq_timedate_string + ' -f ' + filename + '\n')
 
-main()
+if __name__ == "__main__":
+	main()
