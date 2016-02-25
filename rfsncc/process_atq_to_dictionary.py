@@ -1,4 +1,5 @@
 import subprocess
+import generate_epochs
 def process_atq_to_dict():
     id_timedate_dict = {}
     p = subprocess.Popen(

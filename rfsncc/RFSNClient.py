@@ -1,4 +1,5 @@
 import sys, time
+import generate_epochs
 from socket import *
 
 EXITCODE = '-1'

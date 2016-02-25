@@ -2,6 +2,7 @@ import sys
 import re
 import os
 import glob
+import generate_epochs
 GAINKEY = "--gain="
 PATHKEY = "--path="
 EXITCODE = -392
