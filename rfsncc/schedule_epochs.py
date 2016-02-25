@@ -2,7 +2,6 @@ import sys
 import os
 import subprocess
 import csv
-import generate_epochs
 from datetime import datetime # This is the datetime class, not module!
 
 PATHKEY = "--path="
