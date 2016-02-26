@@ -82,6 +82,3 @@ def main():
 #modularization
 if __name__ == "__main__":
     main()
-    
-
-
