@@ -31,8 +31,8 @@ def read_csv_from_parameters():
         filename_extension = items[1]
         frequency = items[2]
         length_of_epochs = items[3].strip() # Only necessary here beacuse this
-	    # this item contains a newline as it's the last one on the line
-        
+        # this item contains a newline as it's the last one on the line
+
         # This is the filename for this specific shell script.
         filename = "epoch" + filename_extension + ".sh"
         #And this is how we know where to write it to
@@ -51,13 +51,13 @@ def read_csv_from_parameters():
         + ' --gain=50 --ref=gpsdo --metadata=true --segsize=24999936 --file='
         + filename_for_specrec + ' --starttime="' + time + '" >> '
         + path_for_log_file + ' 2>&1')
-        
+
         epoch_file.write(write_string)
         epoch_file.close()
 
         print("Wrote epoch" + filename_extension + ".sh for starting time "
                 + time)
-        
+
         # Parse the specrec datetime into a datetime object
         twoitems = time.split(' ')
         dateinfo = twoitems[0].split('-')
@@ -65,7 +65,7 @@ def read_csv_from_parameters():
         datetime_object = datetime.datetime(int(dateinfo[0]), int(dateinfo[1]),
             int(dateinfo[2]), int(timeinfo[0]), int(timeinfo[1]),
             int(timeinfo[2]))
-        
+
         # Schedule the epoch about a minute early with put_epoch_in_schedule()
         put_epoch_in_schedule(filename_with_path, datetime_object, atqCmd)
 
@@ -110,8 +110,8 @@ def put_epoch_in_schedule(filename, timeobject, atqCmd):
             + fix_one_digit(str(timeobject.minute)) + " "
             + fix_one_digit(str(timeobject.month)) + "/"
             + fix_one_digit(str(timeobject.day)) + "/" + str(timeobject.year))
-    
+
     atqCmd.write('at ' + atq_timedate_string + ' -f ' + filename + '\n')
 
 if __name__ == "__main__":
-	main()
+    main()
