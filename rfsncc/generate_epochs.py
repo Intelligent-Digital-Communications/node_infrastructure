@@ -40,22 +40,31 @@ def read_csv_from_parameters():
 
         epoch_file = open(filename_with_path, 'w')
         epoch_file.write("#!/bin/bash\n")
-        epoch_file.write('echo "' + filename + '" >> ' + path_for_log_file + '\n')
+        epoch_file.write('echo "' + filename + '" >> ' + path_for_log_file
+                + '\n')
 
-        filename_for_specrec = path + "recordings/epoch" + filename_extension + ".sc16"
+        filename_for_specrec = (path + "recordings/epoch" + filename_extension
+        + ".sc16")
 
-        write_string = 'specrec --args=master_clock_rate=25e6 --rate=25e6 --ant=RX2 --time=' + str(length_of_epochs) + ' --freq=' + frequency + ' --gain=50 --ref=gpsdo --metadata=true --segsize=24999936 --file=' + filename_for_specrec + ' --starttime="' + time + '" >> ' + path_for_log_file + ' 2>&1'
+        write_string = ('specrec --args=master_clock_rate=25e6 --rate=25e6'
+        ' --ant=RX2 --time=' + str(length_of_epochs) + ' --freq=' + frequency
+        + ' --gain=50 --ref=gpsdo --metadata=true --segsize=24999936 --file='
+        + filename_for_specrec + ' --starttime="' + time + '" >> '
+        + path_for_log_file + ' 2>&1')
         
         epoch_file.write(write_string)
         epoch_file.close()
 
-        print("Wrote epoch" + filename_extension + ".sh for starting time " + time)
+        print("Wrote epoch" + filename_extension + ".sh for starting time "
+                + time)
         
         # Parse the specrec datetime into a datetime object
         twoitems = time.split(' ')
         dateinfo = twoitems[0].split('-')
         timeinfo = twoitems[1].split(':')
-        datetime_object = datetime.datetime(int(dateinfo[0]), int(dateinfo[1]), int(dateinfo[2]), int(timeinfo[0]), int(timeinfo[1]), int(timeinfo[2]))
+        datetime_object = datetime.datetime(int(dateinfo[0]), int(dateinfo[1]),
+            int(dateinfo[2]), int(timeinfo[0]), int(timeinfo[1]),
+            int(timeinfo[2]))
         
         # Schedule the epoch about a minute early with put_epoch_in_schedule()
         put_epoch_in_schedule(filename_with_path, datetime_object, atqCmd)
@@ -97,7 +106,10 @@ def fix_one_digit(string):
 def put_epoch_in_schedule(filename, timeobject, atqCmd):
     timeobject = timeobject - datetime.timedelta(seconds=40)
 
-    atq_timedate_string = fix_one_digit(str(timeobject.hour)) + ":" + fix_one_digit(str(timeobject.minute)) + " " + fix_one_digit(str(timeobject.month)) + "/" + fix_one_digit(str(timeobject.day)) + "/" + str(timeobject.year)
+    atq_timedate_string = (fix_one_digit(str(timeobject.hour)) + ":"
+            + fix_one_digit(str(timeobject.minute)) + " "
+            + fix_one_digit(str(timeobject.month)) + "/"
+            + fix_one_digit(str(timeobject.day)) + "/" + str(timeobject.year))
     
     atqCmd.write('at ' + atq_timedate_string + ' -f ' + filename + '\n')
 
