@@ -1,5 +1,5 @@
 #!/bin/bash
-BINDIR=/usr/local/bin/RFSNServer
+BINDIR=/usr/local/bin/NodeListener
 INITD=/etc/init.d
 PYSCRIPT=NodeListener.py
 SHSCRIPT=NodeListener.sh
