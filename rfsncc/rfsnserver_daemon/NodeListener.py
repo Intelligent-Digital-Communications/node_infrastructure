@@ -4,10 +4,10 @@ from socket import *
 serverPort = 5035
 EXITCODE = '-1'
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
-LOG_FILENAME = "/var/log/rfsnserver.log" # Must be root!
+LOG_FILENAME = "/var/log/nodelistener.log" # Must be root!
 
 def help():
-    logging.info("\n--------------------------RFSNServer.py--------------------------\n"
+    logging.info("\n--------------------------NodeListener.py--------------------------\n"
           "         - This application connects to the RFSN Client,         \n"
           "            updates gains and schedules data captures.           \n"
           "-----------------------------------------------------------------\n")
