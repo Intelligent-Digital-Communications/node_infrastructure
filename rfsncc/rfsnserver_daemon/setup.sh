@@ -1,8 +1,8 @@
 #!/bin/bash
-BINDIR=/usr/local/bin/RFSNServer
+BINDIR=/usr/local/bin/NodeListener
 INITD=/etc/init.d
-PYSCRIPT=RFSNServer.py
-SHSCRIPT=RFSNServer.sh
+PYSCRIPT=NodeListener.py
+SHSCRIPT=NodeListener.sh
 # Don't need to touch anything below here!
 PYPATH=$BINDIR/$PYSCRIPT
 SHPATH=$INITD/$SHSCRIPT
