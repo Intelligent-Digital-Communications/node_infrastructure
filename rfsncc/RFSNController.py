@@ -9,7 +9,7 @@ serverPort = 5035         # Port number that the Ping server is bound to
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
 
 def help():
-    print("--------------------------RFSNClient.py--------------------------\n"
+    print("--------------------------RFSNController.py----------------------\n"
           "   - This application connects to the selected RFSN nodes,       \n"
           "         updates gains and schedules data captures.              \n"
           "-----------------------------------------------------------------\n")
