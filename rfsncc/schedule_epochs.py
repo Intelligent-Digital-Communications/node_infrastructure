@@ -52,7 +52,6 @@ def schedule_epoch(line):
     job_misc = lines[1].split(' at ') # 0th line is just a shell warning
 
     # At this point, job_misc[0] is 'job #' and job_misc[1] is 'Sat Nov...'
-    print(job_misc[0].split(' '))
     job_id = job_misc[0].split(' ')[1] # Pull the job id
     job_datetime = datetime.strptime(job_misc[1], "%c") # Create datetime object
 
