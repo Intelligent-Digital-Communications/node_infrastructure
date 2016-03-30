@@ -24,6 +24,8 @@ def process_atqCmd(full_path):
         if line == '':
             # Break when we hit whitespace so that we don't hit the directions
             return
+        if '#' in line:
+            continue # Passes commented out lines
         schedule_epoch(line)
 
 def schedule_epoch(line):
@@ -41,12 +43,16 @@ def schedule_epoch(line):
     if "Cannot open input file" in err:
         print(err)
         return DISPLAYHELPCODE
+    if 'past' in err:
+        print(' '.join(line.split(' ')[1:3]) + ' has already passed.')
+        return
     # Probably launched the file wrong
 
     lines = err.split('\n')
     job_misc = lines[1].split(' at ') # 0th line is just a shell warning
 
     # At this point, job_misc[0] is 'job #' and job_misc[1] is 'Sat Nov...'
+    print(job_misc[0].split(' '))
     job_id = job_misc[0].split(' ')[1] # Pull the job id
     job_datetime = datetime.strptime(job_misc[1], "%c") # Create datetime object
 
@@ -54,7 +60,7 @@ def schedule_epoch(line):
     # TODO: Log the schedules IDs, filenames, and datetimes to a CSV or database
 
 def main():
-    for parameter in sys.argv:
+    for parameter in sys.argv[1:]:
         if PATHKEY in parameter:
             path = parameter.split('=')[1]
             if os.path.exists(path):
