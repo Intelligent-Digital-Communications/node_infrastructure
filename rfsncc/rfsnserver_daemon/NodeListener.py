@@ -1,6 +1,6 @@
 import sys, os, subprocess, time, datetime, logging
 from socket import *
-
+import schedule_epochs
 serverPort = 5035
 EXITCODE = '-1'
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
@@ -133,6 +133,9 @@ def generate_epochs(epochsInfo):
     except:
         return "Error generating epochs. Please try again."
 
+def schedule_epochs(path):
+    process_atqCmd(path)
+	
 def close_serverSocket(serverSocket):
     try:
         serverSocket.close()
