@@ -20,7 +20,7 @@ def read_csv_from_parameters():
     create_needed_directory(path_for_log_file)
     # Create the atqCmd file that will need to be ran later to schedule the
     # records
-    atqCmd = open(path + "atCmd.sh", "w")
+    atqCmd = open(path + "atqCmd.sh", "w")
     atqCmd.write("#!/bin/bash\n")
 
     successfully_written = 0
