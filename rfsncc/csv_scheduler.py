@@ -2,13 +2,11 @@ import os
 import sys
 import datetime
 
-def create_needed_directory(path):
+def schedule_csv(infile):
+    path = os.getcwd() + '/recordings/'
     if not os.path.exists(path):
         os.makedirs(path)
-    return
-
-def schedule_csv(infile):
-    path = os.getcwd()
+    keeptrack = []
     for line in infile:
         items, time = line.split(','), items[0]
         filename_extension, frequency = items[1], items[2]
@@ -20,8 +18,7 @@ def schedule_csv(infile):
 
         epoch_file = open(filename_with_path, 'w')
         epoch_file.write("#!/bin/bash\n")
-        epoch_file.write('echo "' + filename + '" >> ' + path_for_log_file
-                + '\n')
+        epoch_file.write('echo "' + filename + '" >> ' + path_for_log_file + '\n')
 
         filename_for_specrec = (path + "recordings/epoch" + filename_extension
         + ".sc16")
@@ -35,7 +32,6 @@ def schedule_csv(infile):
             int(timeinfo[2]))
         # Give datetime object as time to at
         timeobject = datetime_object- datetime.timedelta(seconds=40)
-        atq_timedate_string = (fix_one_digit(str(timeobject.hour)) + ":"
                 + fix_one_digit(str(timeobject.minute)) + " "
                 + fix_one_digit(str(timeobject.month)) + "/"
                 + fix_one_digit(str(timeobject.day)) + "/" + str(timeobject.year)
@@ -48,13 +44,15 @@ def schedule_csv(infile):
                 '--file=' + filename_for_specrec, r'--starttime="' + time + r'"',
                 r'>>', path_for_log_file, r'2>&1', r'|', r'at',
                 atq_timedate_string ]
-
         p = subprocess.Popen(
             argslist,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
             )
         output, err = p.communicate()
+        keeptrack.append( (argslist, output )
+
+    return keeptrack
 
 def main():
     if len(sys.argv) > 1:

@@ -1,12 +1,12 @@
-import sys, time
+import sys, time, os
 from socket import *
 
 EXITCODE = '-1'
-# IP addresses that the Ping server can be bound to
+DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
 listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
             "rfsn-demo3.vip.gatech.edu"]
-serverPort = 5035         # Port number that the Ping server is bound to
-RECVTIMEOUT = 1           # Receive timeout time for TCP socket
+serverPort = 5035
+RECVTIMEOUT = 1
 
 def help():
     print("--------------------------RFSNController.py----------------------\n"
@@ -14,12 +14,11 @@ def help():
           "         updates gains and schedules data captures.              \n"
           "-----------------------------------------------------------------\n")
 
-
-def updategains(iplist, gain, path):
+def updategains(iplist, gain, path=DEFAULTPATH):
     message = '1,' + gain + ',' + path
     return sendmessages(iplist, message)
 
-def generateepochs(iplist, filename, path):
+def generateepochs(iplist, filename, path=DEFAULTPATH):
     for x in iplist: # Be sure the file is already on all of the RFSNs
         sendcsv_listener(filename, x)
     message = '2,' + filename + ',' + path + ',headless'

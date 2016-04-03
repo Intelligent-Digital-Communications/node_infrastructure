@@ -113,18 +113,12 @@ def generate_epochs(epochsInfo):
     # epochsInfo[3] = nickname for the game, unused at the moment
     path = epochsInfo[2]
     try:
-        if not path.endswith("/"):
-            path = path + "/"
-        if not os.path.exists(path):
-            return "Invalid path to generate epochs."
-    except:
-        return "Invalid path to generate epochs."
-
-    try:
-        currentDirectory = os.getcwd()
-        if not currentDirectory.endswith("/"):
-            currentDirectory = currentDirectory + "/"
-        currentDirectory = currentDirectory + "csv_files/"
+        csvpath = os.getcwd() + '/csv_files/' + epochsInfo[1]
+        if not os.path.exists(csvpath):
+            print("CSV file not found. Breaking.")
+            sys.exit(1)
+        temp = schedule_csv(open(csvpath, 'r'))
+        print(temp)
         err = os.system("python generate_epochs.py " + currentDirectory + epochsInfo[1] + " " + path)
         if err == 0:
             message = "\nEpochs generated for " + str(gethostname())
