@@ -1,4 +1,4 @@
-import sys, time, os
+import sys, time, os, pickle
 from socket import *
 
 EXITCODE = '-1'
@@ -16,13 +16,13 @@ def help():
 
 def updategains(iplist, gain, path=DEFAULTPATH):
     message = '1,' + gain + ',' + path
-    return sendmessages(iplist, message)
+    return __sendmessages(iplist, message)
 
 def generateepochs(iplist, filename, path=DEFAULTPATH):
     for x in iplist: # Be sure the file is already on all of the RFSNs
         sendcsv_listener(filename, x)
     message = '2,' + filename + ',' + path + ',headless'
-    return sendmessages(iplist, message)
+    return __sendmessages(iplist, message)
 
 def __getinput():
     try:
@@ -144,22 +144,21 @@ def __sendmessages(iplist, message):
         returning += __sendmessage(message, x)
     return returning
 
-def sendcsv_listener(fileNameIn, ip):
-    print(fileNameIn)
+def sendcsv_listener(filepath, ip):
+    print('filepath: ' + filepath)
     try:
-        socketIn = setup_socket(ip)
-        if not fileNameIn.endswith(".csv"):
-            fileNameIn = fileNameIn + ".csv"
-        outFile = open(fileNameIn)
-        print(outFile)
-        fileString = outFile.read()
-        outFile.close()
-        received = __sendmessage('99,' + fileNameIn + ',' + fileString, socketIn)
-        socketIn.close()
-        print received
+        if not filepath.endswith(".csv"):
+            filepath = filepath + ".csv"
+        outFile = open(filepath)
     except:
-        socketIn.close()
-        print "Failed to send CSV file, please try again.\n"
+        print('Failed to open ' + filepath)
+        return
+    fileString = outFile.read()
+    print('fileString: ' + fileString)
+    outFile.close()
+    received = __sendmessage('99,' + filepath.split('/')[-1] + ','
+            + fileString, ip)
+    print(received)
 
 def main():
     if len(sys.argv) > 1:
@@ -169,11 +168,16 @@ def main():
     while True:
         try:
             path, node, option, message, fileName = __getinput()
-            if node == '0': # Selected all
-                print __sendmessages(listeners, message)
-            else: # Picked just one
-                print __sendmessage(message, listeners[int(node)-1])
-
+            print(option == '2')
+            sendingto = []
+            if node == '0':
+                sendingto = listeners
+            else:
+                sendingto.append(listeners[int(node)-1])
+            if option == '2':
+                generateepochs(sendingto, fileName)
+            else:
+                __sendmessages(sendingto, message)
         except KeyboardInterrupt:
             try:
                 exit(0)
