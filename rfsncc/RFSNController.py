@@ -25,7 +25,7 @@ def generateepochs(iplist, filename, path):
     message = '2,' + filename + ',' + path + ',headless'
     return sendmessages(iplist, message)
 
-def get_input():
+def __getinput():
     try:
         if len(listeners) <= 1:
             print ("\n-----------------------------------------------------------------\n"
@@ -41,7 +41,7 @@ def get_input():
 
         option = raw_input("Enter a number to select an option\n "
                            "\n1. Update gain                     "
-                           "\n2. Generate epochs               \n"
+                           "\n2. Generate epochs                 "
                            "\n3. Schedule epochs               \n")[:1]
         if option == '1':
             gain = -1
@@ -91,7 +91,7 @@ def setup_socket(serverName):
     clientSocket.settimeout(1)
     return clientSocket
 
-def recv_timeout(socketIn,timeout=2):
+def receive(socketIn,timeout=2):
     # Make socket non blocking
     socketIn.setblocking(0)
     # Total data partwise in an array
@@ -118,11 +118,10 @@ def recv_timeout(socketIn,timeout=2):
                 time.sleep(0.1)
         except:
             pass
-
     # Join all parts to make final string
     return ''.join(final_data)
 
-def send_message(messageIn, ip):
+def __sendmessage(messageIn, ip):
     socketIn = setup_socket(ip)
     try:
         # Send the TCP packet with the message
@@ -131,7 +130,7 @@ def send_message(messageIn, ip):
         print(e)
         print("Failed while sending message!")
     try: # Receive the server response
-        message = recv_timeout(socketIn, RECVTIMEOUT)
+        message = receive(socketIn, RECVTIMEOUT)
     except Exception as e:
         print(e)
         print("Probably just timed out. Are you sure clients are running?")
@@ -141,10 +140,10 @@ def send_message(messageIn, ip):
         return "Failed to send message."
     return message
 
-def send_messages(iplist, message):
+def __sendmessages(iplist, message):
     returning = ''
     for x in iplist:
-        returning += send_message(message, x)
+        returning += __sendmessage(message, x)
     return returning
 
 def send_csv_file(fileNameIn, ip):
@@ -154,7 +153,7 @@ def send_csv_file(fileNameIn, ip):
             fileNameIn = fileNameIn + ".csv"
         outFile = open(fileNameIn)
         fileString = outFile.read()
-        received = send_message('99,' + fileNameIn + ',' + fileString, socketIn)
+        received = __sendmessage('99,' + fileNameIn + ',' + fileString, socketIn)
         outFile.close()
         socketIn.close()
         print received
@@ -169,11 +168,11 @@ def main():
             exit(0)
     while True:
         try:
-            path, node, option, message, fileName = get_input()
+            path, node, option, message, fileName = __getinput()
             if node == '0': # Selected all
-                print send_messages(listeners, message)
+                print __sendmessages(listeners, message)
             else: # Picked just one
-                print send_message(message, listeners[int(node)-1])
+                print __sendmessage(message, listeners[int(node)-1])
 
         except KeyboardInterrupt:
             try:
