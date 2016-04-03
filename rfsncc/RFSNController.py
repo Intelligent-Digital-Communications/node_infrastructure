@@ -40,8 +40,7 @@ def __getinput():
 
         option = raw_input("Enter a number to select an option\n "
                            "\n1. Update gain                     "
-                           "\n2. Generate epochs                 "
-                           "\n3. Schedule epochs               \n")[:1]
+                           "\n2. Schedule and Generate epochs \n")[:1]
         if option == '1':
             gain = -1
             gain = raw_input("Enter the new gain:    \n")[:3]
@@ -58,7 +57,7 @@ def __getinput():
             if not fileName.endswith(".csv"):
                 fileName = fileName + ".csv"
             message = '2,' + fileName
-            path = raw_input("Enter path to generate epochs to:\n")
+            path = '' # raw_input("Enter path to generate epochs to:\n")
             message = message + "," + path
             #message = message + "," + raw_input("Enter the name of the game (unused):\n")
             message = message + ",old_feature"

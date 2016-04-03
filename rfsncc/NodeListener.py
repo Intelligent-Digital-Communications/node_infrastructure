@@ -1,6 +1,6 @@
 import sys, os, subprocess, time, datetime, logging
 from socket import *
-import schedule_epochs
+from csv_scheduler import schedule_csv
 serverPort = 5035
 EXITCODE = '-1'
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
@@ -112,25 +112,21 @@ def generate_epochs(epochsInfo):
     # epochsInfo[2] = path to write files to (generally /opt/fallXX_teamname
     # epochsInfo[3] = nickname for the game, unused at the moment
     path = epochsInfo[2]
+    csvpath = os.getcwd() + '/csv_files/' + epochsInfo[1]
+    if not os.path.exists(csvpath):
+        mess = "CSV file not found. Looked in: " + csvpath
+        logging.info(mess)
+        return mess
     try:
-        csvpath = os.getcwd() + '/csv_files/' + epochsInfo[1]
-        if not os.path.exists(csvpath):
-            print("CSV file not found. Breaking.")
-            sys.exit(1)
         temp = schedule_csv(open(csvpath, 'r'))
-        print(temp)
-        err = os.system("python generate_epochs.py " + currentDirectory + epochsInfo[1] + " " + path)
-        if err == 0:
-            message = "\nEpochs generated for " + str(gethostname())
-        else:
-            message = "There was an error generating the epochs. Please try again."
-        return message
-    except:
-        return "Error generating epochs. Please try again."
+        logging.info(temp)
+        message = str(temp)
+        message += "\nEpochs generated for " + str(gethostname())
+    except Exception as e:
+        message = repr(e) + '\n'
+        message += "There was an error generating the epochs. Please try again."
+    return message
 
-def schedule_epochs(path):
-    process_atqCmd(path)
-	
 def close_serverSocket(serverSocket):
     try:
         serverSocket.close()
@@ -145,13 +141,11 @@ def close_connectionSocket(connectionSocket):
 
 def receive_file(fileStream):
     try:
-        currentDirectory = os.getcwd()
-        if not currentDirectory.endswith("/"):
-            currentDirectory = currentDirectory + "/"
-        if not os.path.exists(currentDirectory + "csv_files/"):
-            os.makedirs(currentDirectory + "csv_files/")
-        currentDirectory = currentDirectory + "csv_files/" + fileStream[1].strip()
-        out_file = open(currentDirectory, 'w')
+        csvdir = os.getcwd() + '/csv_files/'
+        if not os.path.exists(csvdir):
+            os.makedirs(csvdir)
+        csvpath = csvdir + fileStream[1].strip()
+        out_file = open(csvpath, 'w')
         out_file.write(fileStream[2])
         out_file.close()
         return "CSV file transfer complete."
@@ -177,6 +171,7 @@ def main():
                 elif parsedMessage[0] == '2':
                     message = generate_epochs(parsedMessage)
                 elif parsedMessage[0] == '3':
+                    logging.info("DEPRECATED!")
                     message = schedule_epochs(parsedMessage[1])
                 elif parsedMessage[0] == '99':
                     message = receive_file(parsedMessage)

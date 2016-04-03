@@ -1,28 +1,24 @@
 import os
 import sys
 import datetime
+import subprocess
 
 def schedule_csv(infile):
     path = os.getcwd() + '/recordings/'
+    path_for_log_file = path + 'log.txt'
     if not os.path.exists(path):
         os.makedirs(path)
     keeptrack = []
     for line in infile:
-        items, time = line.split(','), items[0]
-        filename_extension, frequency = items[1], items[2]
+        items = line.split(',')
+        time, filename_extension, frequency= items[0], items[1], items[2]
         length_of_epochs = items[3].strip()
 
         # This is the filename for this specific shell script.
         filename = "epoch" + filename_extension + ".sh"
-        filename_with_path = path + filename
-
-        epoch_file = open(filename_with_path, 'w')
-        epoch_file.write("#!/bin/bash\n")
-        epoch_file.write('echo "' + filename + '" >> ' + path_for_log_file + '\n')
 
         filename_for_specrec = (path + "recordings/epoch" + filename_extension
         + ".sc16")
-
         # Parse the specrec datetime into a datetime object
         twoitems = time.split(' ')
         dateinfo = twoitems[0].split('-')
@@ -31,10 +27,12 @@ def schedule_csv(infile):
             int(dateinfo[2]), int(timeinfo[0]), int(timeinfo[1]),
             int(timeinfo[2]))
         # Give datetime object as time to at
-        timeobject = datetime_object- datetime.timedelta(seconds=40)
-                + fix_one_digit(str(timeobject.minute)) + " "
-                + fix_one_digit(str(timeobject.month)) + "/"
-                + fix_one_digit(str(timeobject.day)) + "/" + str(timeobject.year)
+        atq_timedate_string = (
+                str(datetime_object- datetime.timedelta(seconds=40))
+                + fix_one_digit(str(datetime_object.minute)) + " "
+                + fix_one_digit(str(datetime_object.month)) + "/"
+                + fix_one_digit(str(datetime_object.day)) + "/"
+                + str(datetime_object.year))
 
         # TODO gain is hardcoded? Find alternative
         argslist = ['specrec',  '--args=master_clock_rate=25e6',
@@ -44,14 +42,15 @@ def schedule_csv(infile):
                 '--file=' + filename_for_specrec, r'--starttime="' + time + r'"',
                 r'>>', path_for_log_file, r'2>&1', r'|', r'at',
                 atq_timedate_string ]
+        print(argslist)
+        # TODO Crashing HERE VVV Because no specrec? Get it installed! or ssh to nodes!
         p = subprocess.Popen(
             argslist,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
             )
         output, err = p.communicate()
-        keeptrack.append( (argslist, output )
-
+        keeptrack.append( (argslist, output ) )
     return keeptrack
 
 def main():
