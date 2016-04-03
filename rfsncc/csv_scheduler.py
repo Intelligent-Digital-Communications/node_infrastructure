@@ -58,7 +58,18 @@ def schedule_csv(infile):
 	    stderr=subprocess.PIPE,
 	    )
 	output, err = p.communicate()
-	keeptrack.append( (argslist, output, err ) )
+        if 'past' in err:
+            keeptrack.append(' '.join(line.split(' ')[1:3]) + ' has already passed.')
+            return keeptrack
+        # Probably launched the file wrong
+
+        lines = err.split('\n')
+        job_misc = lines[1].split(' at ') # 0th line is just a shell warning
+
+        # At this point, job_misc[0] is 'job #' and job_misc[1] is 'Sat Nov...'
+        job_id = job_misc[0].split(' ')[1] # Pull the job id
+        job_datetime = datetime.strptime(job_misc[1], "%c") # Create datetime object
+        keeptrack.append((argslist, job_id, job_datetime ))
     atqCmd.close()
     return keeptrack
 
