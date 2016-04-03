@@ -24,9 +24,11 @@ def process_atqCmd(full_path):
         if line == '':
             # Break when we hit whitespace so that we don't hit the directions
             return
-        if '#' in line:
+        if line.startswith('#'):
             continue # Passes commented out lines
         schedule_epoch(line)
+
+def __read_csv_for_epochs:
 
 def schedule_epoch(line):
     epoch_path = line.split(' -f ')[1].split(' ')[0]

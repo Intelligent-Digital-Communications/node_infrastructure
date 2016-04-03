@@ -7,35 +7,15 @@ def create_needed_directory(path):
         os.makedirs(path)
     return
 
-def read_csv_from_parameters():
-    infile = open(sys.argv[1], 'r')
-    path = sys.argv[2]
-
-    create_needed_directory(path)
-    # Try to fix the path incase user didn't put the /.
-    if not path.endswith("/"):
-        path = path + "/"
-
-    path_for_log_file = path + "recordings"
-    create_needed_directory(path_for_log_file)
-    # Create the atqCmd file that will need to be ran later to schedule the
-    # records
-    atqCmd = open(path + "atqCmd.sh", "w")
-    atqCmd.write("#!/bin/bash\n")
-
-    successfully_written = 0
+def __read_csv_from_parameters():
+    path = os.getcwd()
     for line in infile:
-        # Mindless parsing...
-        items = line.split(',')
-        time = items[0]
-        filename_extension = items[1]
-        frequency = items[2]
-        length_of_epochs = items[3].strip() # Only necessary here beacuse this
-        # this item contains a newline as it's the last one on the line
+        items, time = line.split(','), items[0]
+        filename_extension, frequency = items[1], items[2]
+        length_of_epochs = items[3].strip()
 
         # This is the filename for this specific shell script.
         filename = "epoch" + filename_extension + ".sh"
-        #And this is how we know where to write it to
         filename_with_path = path + filename
 
         epoch_file = open(filename_with_path, 'w')
@@ -46,13 +26,15 @@ def read_csv_from_parameters():
         filename_for_specrec = (path + "recordings/epoch" + filename_extension
         + ".sc16")
 
-        write_string = ('specrec --args=master_clock_rate=25e6 --rate=25e6'
-        ' --ant=RX2 --time=' + str(length_of_epochs) + ' --freq=' + frequency
-        + ' --gain=50 --ref=gpsdo --metadata=true --segsize=24999936 --file='
-        + filename_for_specrec + ' --starttime="' + time + '" >> '
-        + path_for_log_file + ' 2>&1')
+        # TODO gain is hardcoded? Find alternative
+        write_string = ['specrec',  '--args=master_clock_rate=25e6',
+                '--rate=25e6', '--ant=RX2', '--time=' + str(length_of_epochs),
+                '--freq=' + frequency, '--gain=50', '--ref=gpsdo',
+                '--metadata=true', '--segsize=24999936',
+                '--file=' + filename_for_specrec, '--starttime="' + time + '"',
+                '>>', path_for_log_file, '2>&1']
 
-        epoch_file.write(write_string)
+        print(' '.join(write_string))
         epoch_file.close()
 
         print("Wrote epoch" + filename_extension + ".sh for starting time "
@@ -66,19 +48,17 @@ def read_csv_from_parameters():
             int(dateinfo[2]), int(timeinfo[0]), int(timeinfo[1]),
             int(timeinfo[2]))
 
-        # Schedule the epoch about a minute early with put_epoch_in_schedule()
-        put_epoch_in_schedule(filename_with_path, datetime_object, atqCmd)
-
-        successfully_written += 1
+        # Schedule the epoch about a minute early with __write_epoch_to_atqCmd()
+        __write_epoch_to_atqCmd(filename_with_path, datetime_object, atqCmd)
 
 def main():
     if len(sys.argv) > 1:
-        read_csv_from_parameters()
+        __read_csv_from_parameters()
     else:
         # No args run
-        display_help()
+        help()
 
-def display_help():
+def help():
     print("-------generate_epochs.py Information--------")
     print("Takes a CSV file of start times, filename extensions,"
     + " and frequencies.")
@@ -103,7 +83,7 @@ def fix_one_digit(string):
         return "0" + string
     return string
 
-def put_epoch_in_schedule(filename, timeobject, atqCmd):
+def __write_epoch_to_atqCmd(filename, timeobject, atqCmd):
     timeobject = timeobject - datetime.timedelta(seconds=40)
 
     atq_timedate_string = (fix_one_digit(str(timeobject.hour)) + ":"
