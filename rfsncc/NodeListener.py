@@ -1,4 +1,4 @@
-import sys, os, subprocess, time, datetime, logging
+import sys, os, subprocess, time, datetime, logging, pickle
 from socket import *
 from csv_scheduler import schedule_csv
 serverPort = 5035
@@ -63,10 +63,12 @@ def recv_timeout(socketIn,timeout=2):
 def process_message(connectionSocket):
     try:
         message = recv_timeout(connectionSocket, RECVTIMEOUT)
+        print('proc_mes mess: ' + message)
         if not message or message == 'END':
             return EXITCODE
-        if message[0] == '3':
+        if message.startswith('99'):
             parsedMessage = message.split(',', 2)
+            print('parsed: ' + str(parsedMessage))
         else:
             parsedMessage = message.split(',')
         # If no data is received or an 'END' message is received the while loop
@@ -145,13 +147,14 @@ def close_connectionSocket(connectionSocket):
         pass
 
 def receive_file(fileStream):
-    logging.info(fileStream)
+    logging.info('Filestream: ' + str(fileStream))
+    #logging.info('CSV? ' + str(fileStream[2:]))
     try:
         csvdir = os.getcwd() + '/csv_files/'
         if not os.path.exists(csvdir):
             os.makedirs(csvdir)
         csvpath = csvdir + fileStream[1].strip()
-        logging.info(csvpath)
+        logging.info('csvpath: ' + csvpath)
         out_file = open(csvpath, 'w')
         out_file.write(fileStream[2])
         out_file.close()
@@ -166,11 +169,15 @@ def main():
             exit(0)
     try:
         serverSocket = setup_socket()
+    except:
+	logging.info("Error setting up socket with server.")
+    try:
         while 1:
             # server waits for incoming requests; new socket created on return
             connectionSocket, addr = serverSocket.accept()
             while 1:
                 parsedMessage = process_message(connectionSocket)
+		print('parsed in main: ' + str(parsedMessage))
                 if parsedMessage == '-1':
                     break
                 if parsedMessage[0] == '1':
@@ -190,6 +197,7 @@ def main():
         serverSocket.close()
 
     except KeyboardInterrupt:   # If the user interrupts the program, log to indicate
+	serverSocket.close()
         logging.info("\nExited by user.\n")
         try:
             close_serverSocket(serverSocket)
