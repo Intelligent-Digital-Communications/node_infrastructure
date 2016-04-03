@@ -3,7 +3,7 @@ from socket import *
 
 EXITCODE = '-1'
 # IP addresses that the Ping server can be bound to
-serverIP = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
+listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
             "rfsn-demo3.vip.gatech.edu"]
 serverPort = 5035         # Port number that the Ping server is bound to
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
@@ -14,8 +14,6 @@ def help():
           "         updates gains and schedules data captures.              \n"
           "-----------------------------------------------------------------\n")
 
-def getservers():
-    return serverIP
 
 def updategains(iplist, gain, path):
     message = '1,' + gain + ',' + path
@@ -29,7 +27,7 @@ def generateepochs(iplist, filename, path):
 
 def get_input():
     try:
-        if len(serverIP) <= 1:
+        if len(listeners) <= 1:
             print ("\n-----------------------------------------------------------------\n"
                    "                 No IP addresses have been added.                  \n"
                    "          Please add IP addresses and restart the program.         \n"
@@ -37,8 +35,8 @@ def get_input():
         print ("\nEnter a number to select a node:\n\n0. All")
 
         # Display node options
-        for x in range(0, len(serverIP)):
-            print(str(x + 1) + ". " + serverIP[x])
+        for x in range(0, len(listeners)):
+            print(str(x + 1) + ". " + listeners[x])
         node = raw_input("")[:1]
 
         option = raw_input("Enter a number to select an option\n "
@@ -173,9 +171,9 @@ def main():
         try:
             path, node, option, message, fileName = get_input()
             if node == '0': # Selected all
-                print send_messages(serverIP, message)
+                print send_messages(listeners, message)
             else: # Picked just one
-                print send_message(message, serverIP[int(node)-1])
+                print send_message(message, listeners[int(node)-1])
 
         except KeyboardInterrupt:
             try:
