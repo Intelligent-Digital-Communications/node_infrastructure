@@ -182,6 +182,8 @@ def main():
                 elif parsedMessage[0] == '2':
                     message = generate_epochs(parsedMessage)
                 elif parsedMessage[0] == '3':
+                    message = schedule_epochs(parsedMessage[1])
+                elif parsedMessage[0] == '99':
                     message = receive_file(parsedMessage)
 
                 send_message(connectionSocket, message)
