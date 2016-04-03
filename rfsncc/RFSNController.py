@@ -145,14 +145,16 @@ def __sendmessages(iplist, message):
     return returning
 
 def sendcsv_listener(fileNameIn, ip):
+    print(fileNameIn)
     try:
         socketIn = setup_socket(ip)
         if not fileNameIn.endswith(".csv"):
             fileNameIn = fileNameIn + ".csv"
         outFile = open(fileNameIn)
+        print(outFile)
         fileString = outFile.read()
-        received = __sendmessage('99,' + fileNameIn + ',' + fileString, socketIn)
         outFile.close()
+        received = __sendmessage('99,' + fileNameIn + ',' + fileString, socketIn)
         socketIn.close()
         print received
     except:

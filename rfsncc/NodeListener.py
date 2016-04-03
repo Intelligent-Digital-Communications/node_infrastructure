@@ -7,11 +7,10 @@ RECVTIMEOUT = 1           # Receive timeout time for TCP socket
 LOG_FILENAME = "/var/log/nodelistener.log" # Must be root!
 
 def help():
-    logging.info("\n--------------------------NodeListener.py--------------------------\n"
+    print("\n--------------------------NodeListener.py--------------------------\n"
           "         - This application connects to the RFSN Client,         \n"
           "            updates gains and schedules data captures.           \n"
           "-----------------------------------------------------------------\n")
-    logging.info("Parameters unreadable.")
 
 def setup_socket():
     try:
@@ -113,15 +112,21 @@ def generate_epochs(epochsInfo):
     # epochsInfo[3] = nickname for the game, unused at the moment
     path = epochsInfo[2]
     csvpath = os.getcwd() + '/csv_files/' + epochsInfo[1]
-    if not os.path.exists(csvpath):
-        mess = "CSV file not found. Looked in: " + csvpath
+    try:
+	f = open(csvpath, 'r')
+    except:
+        mess = "CSV file not found. Listener looked in: " + csvpath
         logging.info(mess)
         return mess
     try:
-        temp = schedule_csv(open(csvpath, 'r'))
+        temp = schedule_csv(f)
+    except Exception as e:
+	mess = 'Error scheduling epochs. Error returned: \n' + repr(e)
+	logging.info(repr(e))
+        return repr(e)
+    try:
         logging.info(temp)
-        message = str(temp)
-        message += "\nEpochs generated for " + str(gethostname())
+        message = "\nEpochs generated for " + str(gethostname())
     except Exception as e:
         message = repr(e) + '\n'
         message += "There was an error generating the epochs. Please try again."
@@ -140,17 +145,19 @@ def close_connectionSocket(connectionSocket):
         pass
 
 def receive_file(fileStream):
+    logging.info(fileStream)
     try:
         csvdir = os.getcwd() + '/csv_files/'
         if not os.path.exists(csvdir):
             os.makedirs(csvdir)
         csvpath = csvdir + fileStream[1].strip()
+        logging.info(csvpath)
         out_file = open(csvpath, 'w')
         out_file.write(fileStream[2])
         out_file.close()
         return "CSV file transfer complete."
     except:
-        return 'Error writing CSV file to server.'
+        return 'Error writing CSV file to listener.'
 
 def main():
     if len(sys.argv) > 1:
