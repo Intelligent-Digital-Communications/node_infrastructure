@@ -104,4 +104,5 @@ def main():
                 process_atqCmd(path)
         else:
             print_help()
-main()
+if __name___ = "__main__":
+    main()
