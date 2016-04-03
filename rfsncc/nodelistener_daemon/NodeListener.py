@@ -106,6 +106,7 @@ def update_gains(gainInfo):
 
 def generate_epochs(epochsInfo):
     # inser / just in case the path is not in correct format
+    # TODO Replace with named tuples!
     # epochsInfo[1] = CSV filename to generate epochs from (should have been)
     # uploaded to the current directory prior to this step
     # epochsInfo[2] = path to write files to (generally /opt/fallXX_teamname
