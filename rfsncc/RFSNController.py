@@ -21,7 +21,7 @@ def updategains(iplist, gain, path):
 
 def generateepochs(iplist, filename, path):
     for x in iplist: # Be sure the file is already on all of the RFSNs
-        send_csv_file(filename, x)
+        sendcsv_listener(filename, x)
     message = '2,' + filename + ',' + path + ',headless'
     return sendmessages(iplist, message)
 
@@ -66,7 +66,7 @@ def __getinput():
             print "\n"
 
         if option == '3':
-            path = raw_input("Enter path of atqCmd.sh file (--path=...)")
+            path = raw_input("Enter path of atCmd.sh file")
             message = '3,' + path
             fileName = "NA"
         return path, node, option, message, fileName
@@ -146,7 +146,7 @@ def __sendmessages(iplist, message):
         returning += __sendmessage(message, x)
     return returning
 
-def send_csv_file(fileNameIn, ip):
+def sendcsv_listener(fileNameIn, ip):
     try:
         socketIn = setup_socket(ip)
         if not fileNameIn.endswith(".csv"):
