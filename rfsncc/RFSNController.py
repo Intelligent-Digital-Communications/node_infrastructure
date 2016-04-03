@@ -43,7 +43,8 @@ def get_input():
 
         option = raw_input("Enter a number to select an option\n "
                            "\n1. Update gain                     "
-                           "\n2. Generate epochs               \n")[:1]
+                           "\n2. Generate epochs               \n"
+                           "\n3. Schedule epochs               \n")[:1]
         if option == '1':
             gain = -1
             gain = raw_input("Enter the new gain:    \n")[:3]
@@ -66,6 +67,10 @@ def get_input():
             message = message + ",old_feature"
             print "\n"
 
+        if option == '3':
+            path = raw_input("Enter path of atqCmd.sh file (--path=...)")
+            message = '3,' + path
+            fileName = "NA"
         return path, node, option, message, fileName
     except EOFError:
         exit(1)
@@ -151,7 +156,7 @@ def send_csv_file(fileNameIn, ip):
             fileNameIn = fileNameIn + ".csv"
         outFile = open(fileNameIn)
         fileString = outFile.read()
-        received = send_message('3,' + fileNameIn + ',' + fileString, socketIn)
+        received = send_message('99,' + fileNameIn + ',' + fileString, socketIn)
         outFile.close()
         socketIn.close()
         print received
