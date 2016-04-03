@@ -49,7 +49,7 @@ def get_input():
             gain = -1
             gain = raw_input("Enter the new gain:    \n")[:3]
             while not gain.isdigit() or int(gain) < 0 or int(gain)  > 100:
-                print "\nInvalid gain, please enter a number between 0 and 100.\n"
+                print ("\nInvalid gain, please enter a number between 0 and 100.\n")
                 gain = raw_input("Enter the new gain:    \n")[:3]
             message = '1,' + gain
             path = raw_input("Enter full path to modify gain for:\n")
