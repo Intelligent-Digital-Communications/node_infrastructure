@@ -79,9 +79,5 @@ def main():
         return
     process_files(list_of_files, gain)
     
-#modularization
 if __name__ == "__main__":
     main()
-    
-
-
