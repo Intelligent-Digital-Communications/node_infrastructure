@@ -1,12 +1,12 @@
-import sys, time
+import sys, time, os
 from socket import *
 
 EXITCODE = '-1'
-# IP addresses that the Ping server can be bound to
-serverIP = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
+DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
+listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
             "rfsn-demo3.vip.gatech.edu"]
-serverPort = 5035         # Port number that the Ping server is bound to
-RECVTIMEOUT = 1           # Receive timeout time for TCP socket
+serverPort = 5035
+RECVTIMEOUT = 1
 
 def help():
     print("--------------------------RFSNController.py----------------------\n"
@@ -14,22 +14,19 @@ def help():
           "         updates gains and schedules data captures.              \n"
           "-----------------------------------------------------------------\n")
 
-def getservers():
-    return serverIP
-
-def updategains(iplist, gain, path):
+def updategains(iplist, gain, path=DEFAULTPATH):
     message = '1,' + gain + ',' + path
     return sendmessages(iplist, message)
 
-def generateepochs(iplist, filename, path):
+def generateepochs(iplist, filename, path=DEFAULTPATH):
     for x in iplist: # Be sure the file is already on all of the RFSNs
-        send_csv_file(filename, x)
+        sendcsv_listener(filename, x)
     message = '2,' + filename + ',' + path + ',headless'
     return sendmessages(iplist, message)
 
-def get_input():
+def __getinput():
     try:
-        if len(serverIP) <= 1:
+        if len(listeners) <= 1:
             print ("\n-----------------------------------------------------------------\n"
                    "                 No IP addresses have been added.                  \n"
                    "          Please add IP addresses and restart the program.         \n"
@@ -37,13 +34,13 @@ def get_input():
         print ("\nEnter a number to select a node:\n\n0. All")
 
         # Display node options
-        for x in range(0, len(serverIP)):
-            print(str(x + 1) + ". " + serverIP[x])
+        for x in range(0, len(listeners)):
+            print(str(x + 1) + ". " + listeners[x])
         node = raw_input("")[:1]
 
         option = raw_input("Enter a number to select an option\n "
                            "\n1. Update gain                     "
-                           "\n2. Generate epochs               \n")[:1]
+                           "\n2. Schedule and Generate epochs \n")[:1]
         if option == '1':
             gain = -1
             gain = raw_input("Enter the new gain:    \n")[:3]
@@ -60,12 +57,16 @@ def get_input():
             if not fileName.endswith(".csv"):
                 fileName = fileName + ".csv"
             message = '2,' + fileName
-            path = raw_input("Enter path to generate epochs to:\n")
+            path = '' # raw_input("Enter path to generate epochs to:\n")
             message = message + "," + path
             #message = message + "," + raw_input("Enter the name of the game (unused):\n")
             message = message + ",old_feature"
             print "\n"
 
+        if option == '3':
+            path = raw_input("Enter path of atCmd.sh file")
+            message = '3,' + path
+            fileName = "NA"
         return path, node, option, message, fileName
     except EOFError:
         exit(1)
@@ -88,7 +89,7 @@ def setup_socket(serverName):
     clientSocket.settimeout(1)
     return clientSocket
 
-def recv_timeout(socketIn,timeout=2):
+def receive(socketIn,timeout=2):
     # Make socket non blocking
     socketIn.setblocking(0)
     # Total data partwise in an array
@@ -115,11 +116,10 @@ def recv_timeout(socketIn,timeout=2):
                 time.sleep(0.1)
         except:
             pass
-
     # Join all parts to make final string
     return ''.join(final_data)
 
-def send_message(messageIn, ip):
+def __sendmessage(messageIn, ip):
     socketIn = setup_socket(ip)
     try:
         # Send the TCP packet with the message
@@ -128,7 +128,7 @@ def send_message(messageIn, ip):
         print(e)
         print("Failed while sending message!")
     try: # Receive the server response
-        message = recv_timeout(socketIn, RECVTIMEOUT)
+        message = receive(socketIn, RECVTIMEOUT)
     except Exception as e:
         print(e)
         print("Probably just timed out. Are you sure clients are running?")
@@ -138,20 +138,20 @@ def send_message(messageIn, ip):
         return "Failed to send message."
     return message
 
-def send_messages(iplist, message):
+def __sendmessages(iplist, message):
     returning = ''
     for x in iplist:
-        returning += send_message(message, x)
+        returning += __sendmessage(message, x)
     return returning
 
-def send_csv_file(fileNameIn, ip):
+def sendcsv_listener(fileNameIn, ip):
     try:
         socketIn = setup_socket(ip)
         if not fileNameIn.endswith(".csv"):
             fileNameIn = fileNameIn + ".csv"
         outFile = open(fileNameIn)
         fileString = outFile.read()
-        received = send_message('3,' + fileNameIn + ',' + fileString, socketIn)
+        received = __sendmessage('99,' + fileNameIn + ',' + fileString, socketIn)
         outFile.close()
         socketIn.close()
         print received
@@ -166,11 +166,11 @@ def main():
             exit(0)
     while True:
         try:
-            path, node, option, message, fileName = get_input()
+            path, node, option, message, fileName = __getinput()
             if node == '0': # Selected all
-                print send_messages(serverIP, message)
+                print __sendmessages(listeners, message)
             else: # Picked just one
-                print send_message(message, serverIP[int(node)-1])
+                print __sendmessage(message, listeners[int(node)-1])
 
         except KeyboardInterrupt:
             try:

@@ -24,7 +24,7 @@ def process_atqCmd(full_path):
         if line == '':
             # Break when we hit whitespace so that we don't hit the directions
             return
-        if '#' in line:
+        if line.startswith('#'):
             continue # Passes commented out lines
         schedule_epoch(line)
 
@@ -57,6 +57,44 @@ def schedule_epoch(line):
 
     print("Job ID " + job_id + " scheduled for " + str(job_datetime))
     # TODO: Log the schedules IDs, filenames, and datetimes to a CSV or database
+
+def __read_csv():
+    path = os.getcwd()
+    for line in infile:
+        items, time = line.split(','), items[0]
+        filename_extension, frequency = items[1], items[2]
+        length_of_epochs = items[3].strip()
+
+        # This is the filename for this specific shell script.
+        filename = "epoch" + filename_extension + ".sh"
+        filename_with_path = path + filename
+
+        epoch_file = open(filename_with_path, 'w')
+        epoch_file.write("#!/bin/bash\n")
+        epoch_file.write('echo "' + filename + '" >> ' + path_for_log_file
+                + '\n')
+
+        filename_for_specrec = (path + "recordings/epoch" + filename_extension
+        + ".sc16")
+
+        # TODO gain is hardcoded? Find alternative
+        argslist = ['specrec',  '--args=master_clock_rate=25e6',
+                '--rate=25e6', '--ant=RX2', '--time=' + str(length_of_epochs),
+                '--freq=' + frequency, '--gain=50', '--ref=gpsdo',
+                '--metadata=true', '--segsize=24999936',
+                '--file=' + filename_for_specrec, '--starttime="' + time + '"',
+                '>>', path_for_log_file, '2>&1']
+
+        # Parse the specrec datetime into a datetime object
+        twoitems = time.split(' ')
+        dateinfo = twoitems[0].split('-')
+        timeinfo = twoitems[1].split(':')
+        datetime_object = datetime.datetime(int(dateinfo[0]), int(dateinfo[1]),
+            int(dateinfo[2]), int(timeinfo[0]), int(timeinfo[1]),
+            int(timeinfo[2]))
+
+        # Schedule the epoch about a minute early with __write_epoch_to_atqCmd()
+        __write_epoch_to_atqCmd(filename_with_path, datetime_object, atqCmd)
 
 def main():
     for parameter in sys.argv[1:]:
