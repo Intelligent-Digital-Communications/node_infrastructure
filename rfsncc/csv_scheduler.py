@@ -68,9 +68,10 @@ def schedule_csv(infile):
 
         # At this point, job_misc[0] is 'job #' and job_misc[1] is 'Sat Nov...'
         job_id = job_misc[0].split(' ')[1] # Pull the job id
-        job_datetime = datetime.strptime(job_misc[1], "%c") # Create datetime object
+        job_datetime =datetime.datetime.strptime(job_misc[1], "%c") # Create datetime object
         keeptrack.append((argslist, job_id, job_datetime ))
     atqCmd.close()
+    print("keeptrack:" + str(keeptrack))
     return keeptrack
 
 def main():
