@@ -4,6 +4,15 @@ import sys
 import datetime
 import subprocess
 
+possibleENVpaths = ["~/sdr/setup_env.sh", "~/git-repos/target/setup_env.sh",
+			"~/git_repos/target/setup_env.sh" ]
+
+def findENVfile():
+    for envfile in possibleENVpaths:
+        if os.path.exists(envfile):
+            return envfile
+    return "ERROR"
+
 def schedule_csv(infile):
     path = os.getcwd() + '/recordings/'
     path_for_log_file = path + 'log.txt'
@@ -45,9 +54,14 @@ def schedule_csv(infile):
 		'--file=' + filename_for_specrec, r'--starttime="' + time + r'"',
 		r'>>', path_for_log_file, r'2>&1' ]
 	filename = commandspath + 'epoch' + filename_extension + '.sh'
+	envfile = findENVfile():
+        if "ERROR" in envfile:
+            keeptrack.append("ERROR: Unable to source Environment File."
+		+ " Specrec will fail unless you patch the epoch.sh files to "
+		+ "source the path where specrec is installed.")
 	epoch_file = open(filename, 'w')
-	epoch_file.write('#!/bin/bash\n. ~/sdr/setup_env.sh\necho {} >> {}\n{}'
-			.format(filename, path_for_log_file, ' '.join(argslist)))
+	epoch_file.write('#!/bin/bash\n. {}\necho {} >> {}\n{}'
+			.format(envfile, filename, path_for_log_file, ' '.join(argslist)))
 	epoch_file.close()
 	keeptrack.append(filename)
 	os.chmod(filename, os.stat(filename).st_mode | 0111) # Make exec by everyone
