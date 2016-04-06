@@ -21,8 +21,11 @@ def updategains(iplist, gain, path=DEFAULTPATH):
 def generateepochs(iplist, filename, path=DEFAULTPATH):
     for x in iplist: # Be sure the file is already on all of the RFSNs
         sendcsv_listener(filename, x)
+    filename = filename.split('/')[-1]
     message = '2,' + filename + ',' + path + ',headless'
-    return __sendmessages(iplist, message)
+    returning = __sendmessages(iplist, message)
+    print(returning)
+    return returning
 
 def __getinput():
     try:
@@ -117,6 +120,7 @@ def receive(socketIn,timeout=2):
         except:
             pass
     # Join all parts to make final string
+    print('final_data: ' + str(final_data))
     return ''.join(final_data)
 
 def __sendmessage(messageIn, ip):
@@ -141,10 +145,12 @@ def __sendmessage(messageIn, ip):
 def __sendmessages(iplist, message):
     returning = ''
     for x in iplist:
-        returning += __sendmessage(message, x)
+        returning += str(__sendmessage(message, x))
+    print(returning)
     return returning
 
 def sendcsv_listener(filepath, ip):
+    filepath = '../../media/' + filepath
     print('filepath: ' + filepath)
     try:
         if not filepath.endswith(".csv"):
