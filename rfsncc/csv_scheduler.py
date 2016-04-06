@@ -54,7 +54,7 @@ def schedule_csv(infile):
 		'--file=' + filename_for_specrec, r'--starttime="' + time + r'"',
 		r'>>', path_for_log_file, r'2>&1' ]
 	filename = commandspath + 'epoch' + filename_extension + '.sh'
-	envfile = findENVfile():
+	envfile = findENVfile()
         if "ERROR" in envfile:
             keeptrack.append("ERROR: Unable to source Environment File."
 		+ " Specrec will fail unless you patch the epoch.sh files to "
