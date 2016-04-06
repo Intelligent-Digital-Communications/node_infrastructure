@@ -4,12 +4,12 @@ import sys
 import datetime
 import subprocess
 
-possibleENVpaths = ["~/sdr/setup_env.sh", "~/git-repos/target/setup_env.sh",
-			"~/git_repos/target/setup_env.sh" ]
+possibleENVpaths = ["/home/ops/sdr/setup_env.sh", "/home/ops/git-repos/target/setup_env.sh",
+			"/home/ops/git_repos/target/setup_env.sh" ]
 
 def findENVfile():
     for envfile in possibleENVpaths:
-        if os.path.exists(envfile):
+        if os.path.isfile(envfile):
             return envfile
     return "ERROR"
 
