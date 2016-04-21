@@ -38,7 +38,7 @@ def expected_size(duration_list, sample_rate_list):
 
 def compare_size(size_list, expected_size_list):
     for i in range(len(size_list)):
-        if (abs.(size_list[i] - expected_size_list[i]) < 50000):
+        if (abs(size_list[i] - expected_size_list[i]) < 50000):
             print(filename_extension_list + " is a valid recording")
         else:
             print(filename_extension_list + "is not a valid recording")
@@ -50,7 +50,7 @@ def main():
     expectedSize = expected_size(duration, sampleRate)
     compare_size(actualSize, expectedSize)
 
-if __name__ = "__main__":
+if __name__ == "__main__":
     main()
     
     
