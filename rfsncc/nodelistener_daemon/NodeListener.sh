@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:          RFSNServer
+# Provides:          NodeListener
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
@@ -11,9 +11,9 @@
 ### END INIT INFO
 
 # Change the next 3 lines to suit where you install your script and what you want to call it
-DIR=/usr/local/bin/RFSNServer
-DAEMON=$DIR/RFSNServer.py
-DAEMON_NAME=RFSNServerDaemon
+DIR=/usr/local/bin/NodeListener
+DAEMON=$DIR/NodeListener.py
+DAEMON_NAME=NodeListenerDaemon
 
 # Add any command line options for your daemon here
 DAEMON_OPTS=""

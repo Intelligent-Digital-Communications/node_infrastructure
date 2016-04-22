@@ -1,17 +1,16 @@
-import sys, os, subprocess, time, datetime, logging
+import sys, os, subprocess, time, datetime, logging, pickle
 from socket import *
-
+from csv_scheduler import schedule_csv
 serverPort = 5035
 EXITCODE = '-1'
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
-LOG_FILENAME = "/var/log/rfsnserver.log" # Must be root!
+LOG_FILENAME = "/var/log/nodelistener.log" # Must be root!
 
 def help():
-    logging.info("\n--------------------------RFSNServer.py--------------------------\n"
+    print("\n--------------------------NodeListener.py--------------------------\n"
           "         - This application connects to the RFSN Client,         \n"
           "            updates gains and schedules data captures.           \n"
           "-----------------------------------------------------------------\n")
-    logging.info("Parameters unreadable.")
 
 def setup_socket():
     try:
@@ -64,10 +63,12 @@ def recv_timeout(socketIn,timeout=2):
 def process_message(connectionSocket):
     try:
         message = recv_timeout(connectionSocket, RECVTIMEOUT)
+        print('proc_mes mess: ' + message)
         if not message or message == 'END':
             return EXITCODE
-        if message[0] == '3':
+        if message.startswith('99'):
             parsedMessage = message.split(',', 2)
+            print('parsed: ' + str(parsedMessage))
         else:
             parsedMessage = message.split(',')
         # If no data is received or an 'END' message is received the while loop
@@ -106,29 +107,32 @@ def update_gains(gainInfo):
 
 def generate_epochs(epochsInfo):
     # inser / just in case the path is not in correct format
+    # TODO Replace with named tuples!
+    # epochsInfo[1] = CSV filename to generate epochs from (should have been)
+    # uploaded to the current directory prior to this step
+    # epochsInfo[2] = path to write files to (generally /opt/fallXX_teamname
+    # epochsInfo[3] = nickname for the game, unused at the moment
+    path = epochsInfo[2]
+    csvpath = os.getcwd() + '/csv_files/' + epochsInfo[1]
     try:
-        if not epochsInfo[2].endswith("/"):
-            path = epochsInfo[2] + "/"
-        else:
-            path = epochsInfo[2]
-        if not os.path.exists(path):
-            return "Invalid path to generate epochs."
+	f = open(csvpath, 'r')
     except:
-        return "Invalid path to generate epochs."
-
+        mess = "CSV file not found. Listener looked in: " + csvpath
+        logging.info(mess)
+        return mess
     try:
-        currentDirectory = os.getcwd()
-        if not currentDirectory.endswith("/"):
-            currentDirectory = currentDirectory + "/"
-        currentDirectory = currentDirectory + "csv_files/"
-        err = os.system("python generate_epochs.py " + currentDirectory + epochsInfo[1] + " " + path + epochsInfo[3])
-        if err == 0:
-            message = "\nEpochs generated for " + str(gethostname())
-        else:
-            message = "There was an error generating the epochs. Please try again."
-        return message
-    except:
-        return "Error generating epochs. Please try again."
+        temp = schedule_csv(f)
+    except Exception as e:
+	mess = 'Error scheduling epochs. Error returned: \n' + repr(e)
+	logging.info(repr(e))
+        return repr(e)
+    try:
+        logging.info(temp)
+        message = "\nEpochs generated for " + str(gethostname())
+    except Exception as e:
+        message = repr(e) + '\n'
+        message += "There was an error generating the epochs. Please try again."
+    return message
 
 def close_serverSocket(serverSocket):
     try:
@@ -143,19 +147,20 @@ def close_connectionSocket(connectionSocket):
         pass
 
 def receive_file(fileStream):
+    logging.info('Filestream: ' + str(fileStream))
+    #logging.info('CSV? ' + str(fileStream[2:]))
     try:
-        currentDirectory = os.getcwd()
-        if not currentDirectory.endswith("/"):
-            currentDirectory = currentDirectory + "/"
-        if not os.path.exists(currentDirectory + "csv_files/"):
-            os.makedirs(currentDirectory + "csv_files/")
-        currentDirectory = currentDirectory + "csv_files/" + fileStream[1].strip()
-        out_file = open(currentDirectory, 'w')
+        csvdir = os.getcwd() + '/csv_files/'
+        if not os.path.exists(csvdir):
+            os.makedirs(csvdir)
+        csvpath = csvdir + fileStream[1].strip()
+        logging.info('csvpath: ' + csvpath)
+        out_file = open(csvpath, 'w')
         out_file.write(fileStream[2])
         out_file.close()
         return "CSV file transfer complete."
     except:
-        return 'Error writing CSV file to server.'
+        return 'Error writing CSV file to listener.'
 
 def main():
     if len(sys.argv) > 1:
@@ -164,11 +169,15 @@ def main():
             exit(0)
     try:
         serverSocket = setup_socket()
+    except:
+	logging.info("Error setting up socket with server.")
+    try:
         while 1:
             # server waits for incoming requests; new socket created on return
             connectionSocket, addr = serverSocket.accept()
             while 1:
                 parsedMessage = process_message(connectionSocket)
+		print('parsed in main: ' + str(parsedMessage))
                 if parsedMessage == '-1':
                     break
                 if parsedMessage[0] == '1':
@@ -176,6 +185,9 @@ def main():
                 elif parsedMessage[0] == '2':
                     message = generate_epochs(parsedMessage)
                 elif parsedMessage[0] == '3':
+                    logging.info("DEPRECATED!")
+                    message = schedule_epochs(parsedMessage[1])
+                elif parsedMessage[0] == '99':
                     message = receive_file(parsedMessage)
 
                 send_message(connectionSocket, message)
@@ -185,6 +197,7 @@ def main():
         serverSocket.close()
 
     except KeyboardInterrupt:   # If the user interrupts the program, log to indicate
+	serverSocket.close()
         logging.info("\nExited by user.\n")
         try:
             close_serverSocket(serverSocket)
