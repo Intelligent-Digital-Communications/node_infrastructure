@@ -1,0 +1,3 @@
+Set: {1, $$\frac{1}{4}$$, $$\frac{1}{9}$$, $$\frac{1}{16}$$
+Answer:
+{ $$\frac{1/2^x} | x $$\in$$ Integers, 0 $$\leq$$ x }

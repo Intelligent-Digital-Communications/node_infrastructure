@@ -1,0 +1,33 @@
+#!/bin/bash
+
+relay_on_file="relay_bank1relay0_on.hex"
+relay_off_file="relay_bank1relay0_off.hex"
+relay_status_file="relay_status.hex"
+
+if [ $# -ne 3 ]
+then
+  echo "$0: <ip_addr> <port> on|off|status"
+  echo "Default port is 2101"
+  exit
+fi
+ADDR=$1
+PORT=$2
+OP=$3
+echo $OP
+if [$OP == "on" ]
+then
+  echo "Turning relay ON"
+  cat $relay_on_file | nc $ADDR $PORT | hexdump -C
+elif [ $OP == "off" ]
+then
+  echo "Turning relay OFF"
+  cat $relay_off_file | nc $ADDR $PORT | hexdump -C
+elif [ $OP == "status" ]
+then
+  echo "Fetching relay STATUS"
+  cat $relay_status_file | nc $ADDR $PORT | hexdump -C
+else
+  echo "Invalid Command: $OP, should be: on|off|status"
+fi
+
+
