@@ -22,6 +22,5 @@ def process_atq_to_dict():
         # datetime.strptime(job_misc[1], "%c")
         id_timedate_dict[jobid] = timedate_string
 
-
 for jobid, datetime in process_atq_to_dict().iteritems():
     print('jobid ' + jobid + ' scheduled to run at ' + datetime)

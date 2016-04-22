@@ -6,6 +6,8 @@ GAINKEY = "--gain="
 PATHKEY = "--path="
 EXITCODE = -392
 
+# TODO Replace with sed one liner?
+
 def print_help():
     print("-----------update_gains.py-------------")
     print("   - Looks for epoch*.sh files and changes the gain value within.")

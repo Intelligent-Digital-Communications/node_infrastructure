@@ -17,6 +17,7 @@ def recording_information():
 def epoch_path(filename_extension_list):
     epoch_path_list = []
     for i in filename_extension_list:
+        # TODO hardcoded path
         epochPath = "~node_infrastructure-operations/rfsncc/recordings/"+ i + ".sc16"
         epoch_path_list.append(epochPath)
     return epoch_path_list
