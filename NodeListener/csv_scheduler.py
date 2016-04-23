@@ -49,7 +49,7 @@ def schedule_csv(infile):
 	# TODO gain is hardcoded? Find alternative
 	argslist = ['specrec',  '--args=master_clock_rate=25e6',
 		'--rate=25e6', '--ant=RX2', '--time=' + str(length_of_epochs),
-		'--freq=' + frequency, '--gain=50', '--ref=gpsdo',
+		'--freq=' + frequency + 'e6', '--gain=50', '--ref=gpsdo',
 		'--metadata=true', '--segsize=24999936',
 		'--file=' + filename_for_specrec, r'--starttime="' + time + r'"',
 		r'>>', path_for_log_file, r'2>&1' ]
