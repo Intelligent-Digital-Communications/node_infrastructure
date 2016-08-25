@@ -110,7 +110,7 @@ def help():
     print("Takes a CSV file of start times, filename extensions,"
     + " and frequencies.")
     print("Generates shell scripts for launching specrec according to CSV file\n")
-    print("Also schedules the scripts in the "at" queue.")
+    print("Also schedules the scripts in the 'at' queue.")
     print("Parameters: [CSV filename]")
     print("Example run: python generate_epochs.py /~/csv_files/schedule.csv")
     print("CSV Format: [specrec time string],[extension to epoch],[frequency],[epochLength]")

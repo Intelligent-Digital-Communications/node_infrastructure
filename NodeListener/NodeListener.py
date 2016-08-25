@@ -4,7 +4,7 @@ from csv_scheduler import schedule_csv
 serverPort = 5035
 EXITCODE = '-1'
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
-LOG_FILENAME = "/var/log/nodelistener.log" # Must be root!
+LOG_FILENAME = "nodelistener.log"
 
 def help():
     print("\n--------------------------NodeListener.py--------------------------\n"
