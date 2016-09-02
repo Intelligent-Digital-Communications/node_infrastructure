@@ -34,7 +34,7 @@ def update_gains(gainInfo):
 def generate_epochs(body):
     print(body)
     y = Recording()
-    y.__dict__ = x
+    y.__dict__ = body
     schedule_recordings(y)
 
 def setup_logger():
