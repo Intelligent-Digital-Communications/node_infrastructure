@@ -51,7 +51,7 @@ def schedule_recordings(recordingslist):
 
         # Write the .sh file that we schedule with "at" and schedule it
         atargs = ['at', datetime_object.strftime('%H:%M %m/%d/%Y'), '-f', filename]
-        atqCmd.write(atargs '\n')
+        atqCmd.write(atargs + '\n')
         p = subprocess.Popen(atargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
         # Parse the result of scheduling it
