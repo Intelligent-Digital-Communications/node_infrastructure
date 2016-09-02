@@ -1,6 +1,6 @@
-import sys, os, subprocess, time, datetime, logging, pickle
+import sys, os, subprocess, time, datetime, logging, pickle, hug
 from socket import *
-from csv_scheduler import schedule_csv
+from schedule_recordings import schedule_recordings, Recording
 serverPort = 5035
 EXITCODE = '-1'
 RECVTIMEOUT = 1           # Receive timeout time for TCP socket
@@ -105,34 +105,14 @@ def update_gains(gainInfo):
     except:
         return "Error updating gains on the server. Please try again."
 
-def generate_epochs(epochsInfo):
-    # inser / just in case the path is not in correct format
-    # TODO Replace with named tuples!
-    # epochsInfo[1] = CSV filename to generate epochs from (should have been)
-    # uploaded to the current directory prior to this step
-    # epochsInfo[2] = path to write files to (generally /opt/fallXX_teamname
-    # epochsInfo[3] = nickname for the game, unused at the moment
-    path = epochsInfo[2]
-    csvpath = os.getcwd() + '/csv_files/' + epochsInfo[1]
-    try:
-	f = open(csvpath, 'r')
-    except:
-        mess = "CSV file not found. Listener looked in: " + csvpath
-        logging.info(mess)
-        return mess
-    try:
-        temp = schedule_csv(f)
-    except Exception as e:
-	mess = 'Error scheduling epochs. Error returned: \n' + repr(e)
-	logging.info(repr(e))
-        return repr(e)
-    try:
-        logging.info(temp)
-        message = "\nEpochs generated for " + str(gethostname())
-    except Exception as e:
-        message = repr(e) + '\n'
-        message += "There was an error generating the epochs. Please try again."
-    return message
+@hug.post('/generate_epochs')
+def generate_epochs(body):
+    recs = []
+    for x in body:
+        y = Recording()
+        y.__dict__ = x
+        recs.append(y)
+    schedule_recordings(recs)
 
 def close_serverSocket(serverSocket):
     try:
@@ -170,14 +150,14 @@ def main():
     try:
         serverSocket = setup_socket()
     except:
-	logging.info("Error setting up socket with server.")
+        logging.info("Error setting up socket with server.")
     try:
         while 1:
             # server waits for incoming requests; new socket created on return
             connectionSocket, addr = serverSocket.accept()
             while 1:
                 parsedMessage = process_message(connectionSocket)
-		print('parsed in main: ' + str(parsedMessage))
+                print('parsed in main: ' + str(parsedMessage))
                 if parsedMessage == '-1':
                     break
                 if parsedMessage[0] == '1':
@@ -197,7 +177,7 @@ def main():
         serverSocket.close()
 
     except KeyboardInterrupt:   # If the user interrupts the program, log to indicate
-	serverSocket.close()
+        serverSocket.close()
         logging.info("\nExited by user.\n")
         try:
             close_serverSocket(serverSocket)
