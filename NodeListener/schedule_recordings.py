@@ -7,11 +7,13 @@ import subprocess
 class Recording:
     """ Defines everything you need to know to schedule a record """
 
-    def __init__(self, timedate=None, filename=None, frequency=0, length=0):
+    def __init__(self, timedate=None, recordpath=None, frequency=0,
+            length=0, startearly=40):
         self.timedate = timedate
-        self.filename = filename
+        self.recordpath = filename # ends in Sc16
         self.frequency = frequency
         self.length = length
+        self.startearly = startearly
     
 def schedule_recordings(infile):
     # files are written to /opt/nameofCSV
