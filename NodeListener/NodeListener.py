@@ -33,7 +33,7 @@ def update_gains(gainInfo):
 @hug.post('/generate_epochs')
 def generate_epochs(body):
     recs = []
-    for x in body:
+    for x in body['recordings']:
         y = Recording()
         y.__dict__ = x
         recs.append(y)
