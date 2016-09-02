@@ -10,7 +10,7 @@ class Recording:
     def __init__(self, starttime=None, recordpath=None, frequency=0,
             length=0, startearly=40, logfilepath='log.txt', gain=50):
         self.starttime = starttime
-        self.recordpath = filename # ends in Sc16
+        self.recordpath = recordpath # ends in Sc16
         self.frequency = frequency
         self.length = length
         self.startearly = startearly
