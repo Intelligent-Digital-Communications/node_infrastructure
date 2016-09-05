@@ -1,12 +1,8 @@
-import sys, time, os, pickle
-from socket import *
+import sys, time, os, pickle, urllib2, json
 
-EXITCODE = '-1'
 DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
 listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
             "rfsn-demo3.vip.gatech.edu"]
-serverPort = 5035
-RECVTIMEOUT = 1
 
 def help():
     print("--------------------------RFSNController.py----------------------\n"
@@ -18,14 +14,13 @@ def updategains(iplist, gain, path=DEFAULTPATH):
     message = '1,' + gain + ',' + path
     return __sendmessages(iplist, message)
 
-def generateepochs(iplist, filename, path=DEFAULTPATH):
-    for x in iplist: # Be sure the file is already on all of the RFSNs
-        sendcsv_listener(filename, x)
-    filename = filename.split('/')[-1]
-    message = '2,' + filename + ',' + path + ',headless'
-    returning = __sendmessages(iplist, message)
-    print(returning)
-    return returning
+def schedule(recording, rfsn):
+    url = "http://" + listeners[int(rfsn)] + ":8000/generate_epochs/";
+    print "SCHEDULE URL: ", url
+    opener = urllib2.build_opener(urllib2.HTTPHandler)
+    request = urllib2.Request(url, json.dumps(recording))
+    request.add_header("Content-Type", "application/json")
+    opener.open(request)
 
 def __getinput():
     try:
@@ -73,24 +68,6 @@ def __getinput():
         return path, node, option, message, fileName
     except EOFError:
         exit(1)
-
-def setup_socket(serverName):
-    # Get ip address of target from
-    serverName = gethostbyname(serverName)
-    try: # Create TCP client socket
-        clientSocket = socket(AF_INET, SOCK_STREAM)
-    except Exception as e:
-        print(e)
-        print("Socket failed to be created.")
-        return None
-    try: # Open the TCP connection
-        clientSocket.connect((serverName,serverPort))
-    except Exception as e:
-        print(e)
-        print("Socket failed to connect.")
-        return None
-    clientSocket.settimeout(1)
-    return clientSocket
 
 def receive(socketIn,timeout=2):
     # Make socket non blocking

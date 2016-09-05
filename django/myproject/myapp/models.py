@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from RFSNController import generateepochs
+#from RFSNController import generateepochs
 import os, subprocess
 from subprocess import Popen, PIPE
 class Document(models.Model):
@@ -16,7 +16,7 @@ class Rfsn(models.Model):
         return string
 
     def isonline(self):
-	return True
+        return True
         """output = subprocess.Popen(["ping", '-c', '1', self.hostname],
                 stdout = subprocess.PIPE,
                 stderr = subprocess.PIPE).communicate()
@@ -27,8 +27,8 @@ class Rfsn(models.Model):
 
     def setstatus(self, status):
         return "on"
-	#if status == "on" or status == "off":
-        #    command = "./rfsn_ctl " + hostname + " " + status	
+        #if status == "on" or status == "off":
+        #    command = "./rfsn_ctl " + hostname + " " + status  
         #    os.system(command)        
 
     def getstatus(self):

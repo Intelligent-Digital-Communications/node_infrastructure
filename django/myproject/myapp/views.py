@@ -5,10 +5,14 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django import forms
 
+import json
+
 from myproject.myapp.models import Document, Rfsn
 from myproject.myapp.forms import DocumentForm
+from myproject.myapp.RFSNController import schedule
 
 from django.views.generic.list import ListView
+from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
 def list(request):
@@ -34,7 +38,13 @@ def list(request):
         { 'form': form, 'csvs': Document.objects.all() }
     )
 
-
+@csrf_exempt
+def schedule_recordings(request, hostname):
+    if request.method == 'POST':
+        jsonData = json.loads(request.body)
+        for x in jsonData['recordings']:
+            schedule(x, hostname)
+    return HttpResponse("OK")
 
 from myproject.myapp.models import Rfsn
 
