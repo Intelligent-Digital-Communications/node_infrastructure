@@ -32,10 +32,13 @@ def update_gains(gainInfo):
 
 @hug.post('/generate_epochs')
 def generate_epochs(body):
-    print(body)
-    y = Recording()
-    y.__dict__ = body
-    schedule_recordings(y)
+    passinglist = []
+    for record in body:
+        y = Recording()
+        y.__dict__ = record
+        y.starttime  = datetime.datetime.strptime(y.starttime, "%m/%d/%Y %H:%M");
+        passinglist.append(y)
+    return schedule_recordings(passinglist)
 
 def setup_logger():
     logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)

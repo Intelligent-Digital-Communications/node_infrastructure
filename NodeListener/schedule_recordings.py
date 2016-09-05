@@ -18,25 +18,26 @@ class Recording:
         self.gain = gain
     
 def schedule_recordings(recordingslist):
-    commandspath = path + 'commands/'
+    commandspath = recordingslist[0].recordpath.split('/')[-2]
     if not os.path.exists(commandspath):
         os.makedirs(commandspath)
-    atqCmd = open(commandspath + 'atqCmd.sh', 'w')
+    atqCmd = open(commandspath + '/atqCmd.sh', 'w')
     atqCmd.write('#!/bin/bash\n')
+    log = []
     for recording in recordingslist:
         # Create folder for the file to go to
-        recordfolder = recording.recordpath.split('/')[-1].split('.')[0]
+        recordfolder = recording.recordpath.split('/')[-2]
         if not os.path.exists(recordfolder):
             os.makedirs(recordfolder)
 
-        datetime_object = recording.start - datetime.timedelta(
+        datetime_object = recording.starttime - datetime.timedelta(
                 seconds=recording.startearly)
 
         # Write the sh file that calls specrec
-        args = 'specrec --args=master_clock_rate=25e6 --rate=25e6 --ant=RX2 \
-                --time={length} --freq={freq} --gain={gain} --ref=gpsdo \
-                --metadata=true --segsize=24999936 --file={specrecfilename} \
-                --starttime="{start}" >> {logfilepath} 2>&1'.format(
+        args = ('specrec --args=master_clock_rate=25e6 --rate=25e6 --ant=RX2'
+                '--time={length} --freq={freq} --gain={gain} --ref=gpsdo'
+                '--metadata=true --segsize=24999936 --file={specrecfilename}'
+                '--starttime="{start}" >> {logfilepath} 2>&1').format(
                 length=recording.length, freq=recording.frequency,
                 gain=recording.gain, specrecfilename=recording.recordpath,
                 start=recording.starttime.isoformat(' '),
@@ -51,18 +52,25 @@ def schedule_recordings(recordingslist):
 
         # Write the .sh file that we schedule with "at" and schedule it
         atargs = ['at', datetime_object.strftime('%H:%M %m/%d/%Y'), '-f', filename]
-        atqCmd.write(atargs + '\n')
+        atqCmd.write(' '.join(atargs) + '\n')
         p = subprocess.Popen(atargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
         # Parse the result of scheduling it
         output, err = p.communicate()
-        if 'past' in err: # The one you just scheduled is already over!
-            pass
+        output = output.decode('ascii')
+        err = err.decode('ascii')
+
+        if "past" in err: # The one you just scheduled is already over!
+            raise ValueError(err)
         jobmisc, atdate = err.split('\n')[1].split(' at ')
 
-        job_id = jobmisc.split(' ')[1] # Pull the job id
-        job_datetime = datetime.datetime.strptime(atdate, "%c")
+        info = {
+            'jobId' : jobmisc.split(' ')[1],
+            'jobDateTime' : datetime.datetime.strptime(atdate, "%c").isoformat()
+        }
+        log.append(info)
     atqCmd.close()
+    return { 'log' : log }
 
 def main():
     if len(sys.argv) > 1:
