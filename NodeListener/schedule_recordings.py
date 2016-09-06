@@ -18,7 +18,8 @@ class Recording:
         self.gain = gain
     
 def schedule_recordings(recordingslist):
-    commandspath = recordingslist[0].recordpath.split('/')[-2]
+    commandspath = '/' + '/'.join(recordingslist[0].recordpath.split('/')[:-1])
+    print(commandspath)
     if not os.path.exists(commandspath):
         os.makedirs(commandspath)
     atqCmd = open(commandspath + '/atqCmd.sh', 'w')
@@ -26,7 +27,8 @@ def schedule_recordings(recordingslist):
     log = []
     for recording in recordingslist:
         # Create folder for the file to go to
-        recordfolder = recording.recordpath.split('/')[-2]
+        recordfolder = '/' + '/'.join(recording.recordpath.split('/')[:-1])
+        print(recordfolder)
         if not os.path.exists(recordfolder):
             os.makedirs(recordfolder)
 
@@ -34,9 +36,9 @@ def schedule_recordings(recordingslist):
                 seconds=recording.startearly)
 
         # Write the sh file that calls specrec
-        args = ('specrec --args=master_clock_rate=25e6 --rate=25e6 --ant=RX2'
-                '--time={length} --freq={freq} --gain={gain} --ref=gpsdo'
-                '--metadata=true --segsize=24999936 --file={specrecfilename}'
+        args = ('specrec --args=master_clock_rate=25e6 --rate=25e6 --ant=RX2 '
+                '--time={length} --freq={freq} --gain={gain} --ref=gpsdo '
+                '--metadata=true --segsize=24999936 --file={specrecfilename} '
                 '--starttime="{start}" >> {logfilepath} 2>&1').format(
                 length=recording.length, freq=recording.frequency,
                 gain=recording.gain, specrecfilename=recording.recordpath,
