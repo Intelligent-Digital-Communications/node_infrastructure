@@ -3,30 +3,42 @@ import csv
 import json
 import sys
 
-
-#csvname = sys.argv[1]
-#csvfile = open(csvname, 'r')
-def convert(csv):
-#    csvname = csv
-#    csvfile = open(csvname, 'r')
-#    filename = csvname[:-4]
-#    print(filename)
-#    jsonfilename=filename + ".json"
-#    jsonfile = open(jsonfilename , 'w')
+def convert(csvname):
+    print(csvname)
+    csvfile = open(csvname)
+    firstread = csv.reader(csvfile, "rb" )
+    filename = csvname[:-4]
+    csvfileedit=filename+"-edited.csv"
+    print(csvfileedit)
+    firstwrite = csv.writer(open(csvfileedit))
+    headers = csv.writer(open("headers.csv"))
+    for row in firstread:
+        if("filepath" not in row):
+            firstwrite.writerow(row)
+            print(row)
+        else if ("filepath" in row):
+            headers.writerow(row)
+            print(row)
+    filename = csvname[:-4]
+    print(filename)
+    jsonfilename=filename + ".json"
+    jsonfile = open(jsonfilename , 'w')
     fieldnames = ("starttime","recordpath","frequency","length","startearly","logfilepath","gain")
-    reader = csv.DictReader( csv, fieldnames)
+    reader = csv.DictReader(csvfile, fieldnames)
+#    print(csvfile)
     for row in reader:
-        print(json.dump(row, jsonfile))
+        print(json.dumps(row))
+        jsonfile.write('\n')
     return
-#    jsonfile.write('\n')
 def main():
     print("This is working")
     print(len(sys.argv))
     if len(sys.argv) > 1:
-        with open(sys.argv[1]) as csv:
-            convert(csv)
+        csv=sys.argv[1]
+        print(csv)
+        convert(csv)
     else:
 	print("What?")
     return
-if __name__ ==  " __main__":
+if __name__ ==  "__main__":
     main()
