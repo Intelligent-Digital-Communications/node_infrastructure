@@ -8,7 +8,8 @@ class Recording:
     """ Defines everything you need to know to schedule a record """
 
     def __init__(self, starttime=None, recordpath=None, frequency=0,
-            length=0, startearly=40, logfilepath='log.txt', gain=50):
+            length=0, startearly=40, logfilepath='log.txt', gain=50,
+            include='include/*'):
         self.starttime = starttime
         self.recordpath = recordpath # ends in Sc16
         self.frequency = frequency
@@ -16,6 +17,7 @@ class Recording:
         self.startearly = startearly
         self.logfilepath = logfilepath
         self.gain = gain
+        self.include = include
     
 def schedule_recordings(recordingslist):
     commandspath = '/' + '/'.join(recordingslist[0].recordpath.split('/')[:-1])
