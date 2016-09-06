@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django import forms
 
@@ -42,8 +42,7 @@ def list(request):
 def schedule_recordings(request, hostname):
     if request.method == 'POST':
         jsonData = json.loads(request.body)
-        for x in jsonData['recordings']:
-            schedule(x, hostname)
+        return HttpResponse(schedule(jsonData['recordings'], hostname))
     return HttpResponse("OK")
 
 from myproject.myapp.models import Rfsn

@@ -14,13 +14,15 @@ def updategains(iplist, gain, path=DEFAULTPATH):
     message = '1,' + gain + ',' + path
     return __sendmessages(iplist, message)
 
-def schedule(recording, rfsn):
-    url = "http://" + listeners[int(rfsn)] + ":8000/generate_epochs/";
-    print "SCHEDULE URL: ", url
+def schedule(recordings, rfsn):
+    url = "http://" + listeners[int(rfsn)] + ":5035/generate_epochs/";
+    print("SCHEDULE URL: " + url)
     opener = urllib2.build_opener(urllib2.HTTPHandler)
-    request = urllib2.Request(url, json.dumps(recording))
+    request = urllib2.Request(url, json.dumps(recordings))
+    print(recordings)
     request.add_header("Content-Type", "application/json")
-    opener.open(request)
+    return opener.open(request).read()
+
 
 def __getinput():
     try:
@@ -59,7 +61,7 @@ def __getinput():
             message = message + "," + path
             #message = message + "," + raw_input("Enter the name of the game (unused):\n")
             message = message + ",old_feature"
-            print "\n"
+            print ("\n")
 
         if option == '3':
             path = raw_input("Enter path of atCmd.sh file")
