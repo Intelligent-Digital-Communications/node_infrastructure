@@ -17,13 +17,16 @@ def convert(csv):
     reader = csv.DictReader( csv, fieldnames)
     for row in reader:
         print(json.dump(row, jsonfile))
+    return
 #    jsonfile.write('\n')
 def main():
+    print("This is working")
     print(len(sys.argv))
     if len(sys.argv) > 1:
         with open(sys.argv[1]) as csv:
             convert(csv)
     else:
 	print("What?")
+    return
 if __name__ ==  " __main__":
     main()
