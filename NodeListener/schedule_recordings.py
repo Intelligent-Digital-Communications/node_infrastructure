@@ -10,13 +10,13 @@ class Recording:
     def __init__(self, starttime=None, recordpath=None, frequency=0,
             length=0, startearly=40, logfilepath='log.txt', gain=50,
             include='include/*'):
-        self.starttime = starttime
+        self.starttime  = datetime.datetime.strptime(starttime, "%m/%d/%Y %H:%M")
         self.recordpath = recordpath # ends in Sc16
-        self.frequency = frequency
-        self.length = length
-        self.startearly = startearly
+        self.frequency = float(frequency)
+        self.length = int(length)
+        self.startearly = int(startearly)
         self.logfilepath = logfilepath
-        self.gain = gain
+        self.gain = int(gain)
         self.include = include
     
 def schedule_recordings(recordingslist):

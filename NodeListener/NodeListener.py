@@ -34,10 +34,8 @@ def update_gains(gainInfo):
 def generate_epochs(body):
     passinglist = []
     for record in body:
-        y = Recording()
-        y.__dict__ = record
-        y.starttime  = datetime.datetime.strptime(y.starttime, "%m/%d/%Y %H:%M");
-        passinglist.append(y)
+        passinglist.append(Recording(**record))
+        #y.starttime  = datetime.datetime.strptime(y.starttime, "%m/%d/%Y %H:%M");
     return schedule_recordings(passinglist)
 
 def setup_logger():
