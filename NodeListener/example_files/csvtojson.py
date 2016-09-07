@@ -1,44 +1,20 @@
-from __future__ import division
-import csv
-import json
-import sys
+#!/usr/bin/env python
+import csv, json, sys
 
 def convert(csvname):
-    print(csvname)
-    csvfile = open(csvname)
-    firstread = csv.reader(csvfile, "rb" )
-    filename = csvname[:-4]
-    csvfileedit=filename+"-edited.csv"
-    print(csvfileedit)
-    firstwrite = csv.writer(open(csvfileedit))
-    headers = csv.writer(open("headers.csv"))
-    for row in firstread:
-        if("filepath" not in row):
-            firstwrite.writerow(row)
-            print(row)
-        else if ("filepath" in row):
-            headers.writerow(row)
-            print(row)
-    filename = csvname[:-4]
-    print(filename)
-    jsonfilename=filename + ".json"
-    jsonfile = open(jsonfilename , 'w')
-    fieldnames = ("starttime","recordpath","frequency","length","startearly","logfilepath","gain")
-    reader = csv.DictReader(csvfile, fieldnames)
-#    print(csvfile)
-    for row in reader:
-        print(json.dumps(row))
-        jsonfile.write('\n')
-    return
-def main():
-    print("This is working")
-    print(len(sys.argv))
-    if len(sys.argv) > 1:
-        csv=sys.argv[1]
-        print(csv)
-        convert(csv)
-    else:
-	print("What?")
-    return
+    with open(csvname, 'r') as csvfile:
+        fieldnames = ("starttime","recordpath","frequency","length","startearly",
+                "logfilepath","gain")
+        recordings = []
+        master_dict = { 'recordings' : recordings }
+        reader = csv.DictReader(csvfile, fieldnames)
+        for row in reader:
+            if not row['starttime'].startswith('#'): # Assumes startime is 1st
+                recordings.append(row)
+    return json.dumps(master_dict)
+
 if __name__ ==  "__main__":
-    main()
+    if len(sys.argv) > 1:
+        print(convert(sys.argv[1]))
+    else:
+	print("Give csv name of schedule as parameter.")
