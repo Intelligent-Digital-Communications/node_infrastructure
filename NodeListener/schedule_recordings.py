@@ -20,7 +20,7 @@ class Recording:
         self.include = include
     
 def schedule_recordings(recordingslist):
-    commandspath = '/' + '/'.join(recordingslist[0].recordpath.split('/')[:-1])
+    commandspath = '/'.join(recordingslist[0].recordpath.split('/')[:-1])
     print(commandspath)
     if not os.path.exists(commandspath):
         os.makedirs(commandspath)
@@ -29,7 +29,7 @@ def schedule_recordings(recordingslist):
     log = []
     for recording in recordingslist:
         # Create folder for the file to go to
-        recordfolder = '/' + '/'.join(recording.recordpath.split('/')[:-1])
+        recordfolder = '/'.join(recording.recordpath.split('/')[:-1])
         print(recordfolder)
         if not os.path.exists(recordfolder):
             os.makedirs(recordfolder)
