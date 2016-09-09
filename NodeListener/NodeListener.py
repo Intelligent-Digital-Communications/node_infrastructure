@@ -35,7 +35,6 @@ def generate_epochs(body):
     passinglist = []
     for record in body:
         passinglist.append(Recording(**record))
-        #y.starttime  = datetime.datetime.strptime(y.starttime, "%m/%d/%Y %H:%M");
     return schedule_recordings(passinglist)
 
 def setup_logger():
