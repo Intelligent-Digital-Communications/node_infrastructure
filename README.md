@@ -1,7 +1,8 @@
 # Node Infrastructure - Operations
 
-## TODO:
-Figure out if updating gains under the current configuration works.
-Test: Create test.sh that echos "scheduled state" to file. Schedule it with
-'at' command'. Edit test.sh to echo "edited after scheduled" to file. See which
-one ends up in the file.
+## What's Next
+Python function that takes list of recording objects, checks that they are in atq and/or recorded files are there (if expected).
+
+Static HTML files to more easily interface with REST API
+
+GET on node's schedule: Query listener's atq, return to Controller, Controller pull actual record info from database. Or if atq info shows which file being run, more robust to parse those files for record info
