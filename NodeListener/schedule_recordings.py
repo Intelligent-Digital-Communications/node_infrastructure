@@ -10,31 +10,32 @@ class Recording:
     def __init__(self, starttime=None, recordpath=None, frequency=0,
             length=0, startearly=40, logfilepath='log.txt', gain=50,
             include='include/*'):
-        self.starttime = starttime
+        self.starttime  = datetime.datetime.strptime(starttime, "%m/%d/%Y %H:%M")
         self.recordpath = recordpath # ends in Sc16
-        self.frequency = frequency
-        self.length = length
-        self.startearly = startearly
+        self.frequency = float(frequency)
+        self.length = int(length)
+        self.startearly = int(startearly)
         self.logfilepath = logfilepath
-        self.gain = gain
+        self.gain = int(gain)
         self.include = include
+
+def getfolder(path):
+    return '/'.join(path.split('/')[:-1])
     
 def schedule_recordings(recordingslist):
-    commandspath = '/' + '/'.join(recordingslist[0].recordpath.split('/')[:-1])
-    print(commandspath)
+    commandspath = getfolder(recordingslist[0].recordpath)
+    print('.sh files being written to {}'.format(commandspath))
     if not os.path.exists(commandspath):
         os.makedirs(commandspath)
-    atqCmd = open(commandspath + '/atqCmd.sh', 'w')
+    atqCmd = open(commandspath + '/atqCmd.sh', 'w') # w to a?
     atqCmd.write('#!/bin/bash\n')
     log = []
     for recording in recordingslist:
-        # Create folder for the file to go to
-        recordfolder = '/' + '/'.join(recording.recordpath.split('/')[:-1])
-        print(recordfolder)
+        recordfolder = getfolder(recording.recordpath)
         if not os.path.exists(recordfolder):
             os.makedirs(recordfolder)
 
-        datetime_object = recording.starttime - datetime.timedelta(
+        at_starttime = recording.starttime - datetime.timedelta(
                 seconds=recording.startearly)
 
         # Write the sh file that calls specrec
@@ -52,10 +53,10 @@ def schedule_recordings(recordingslist):
                         .format(filename, recording.logfilepath, args))
         epoch_file.close()
         os.chmod(filename, os.stat(filename).st_mode | int("0111", 8)) # Make exec by everyone
-        # TODO Set to only be executable by the current user for security
+        # TODO Set to only be executable by the current user?
 
         # Write the .sh file that we schedule with "at" and schedule it
-        atargs = ['at', datetime_object.strftime('%H:%M %m/%d/%Y'), '-f', filename]
+        atargs = ['at', at_starttime.strftime('%H:%M %m/%d/%Y'), '-f', filename]
         atqCmd.write(' '.join(atargs) + '\n')
         p = subprocess.Popen(atargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
@@ -85,18 +86,11 @@ def main():
 
 def help():
     print("-------generate_epochs.py Information--------")
-    print("Takes a CSV file of start times, filename extensions,"
-    + " and frequencies.")
-    print("Generates shell scripts for launching specrec according to CSV file\n")
-    print("Also schedules the scripts in the 'at' queue.")
-    print("Parameters: [CSV filename]")
-    print("Example run: python generate_epochs.py /~/csv_files/schedule.csv")
-    print("CSV Format: [specrec time string],[extension to epoch],[frequency],[epochLength]")
-    print("For example: [2015-10-15 08:00:00,0,2406] would result in an epoch0.sh file")
-    print("that would tell specrec to start recording at 2015-10-15 08:00:00")
-    print("at frequency 2406.\n")
+    print("Takes a list of Recording objects and schedules them locally.")
+    print("Generates shell scripts for launching specrec.\n")
+    print("CSV Format: See example_files.")
     print("Default arguments passed to specrec:")
-    print("master_clock_rate = 25e6, rate=25e6, ant=RX2, gain=50, ref=gpsdo")
+    print("master_clock_rate = 25e6, rate=25e6, ant=RX2, ref=gpsdo")
     print("metadata=true, segsize=24999936\n")
     print("Specrec logs are written to [path to write to]/recordings/logs.txt")
 

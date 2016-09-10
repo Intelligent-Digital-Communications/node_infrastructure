@@ -1,32 +1,20 @@
-from __future__ import division
-import csv
-import json
-import sys
+#!/usr/bin/env python
+import csv, json, sys
 
+def convert(csvname):
+    with open(csvname, 'r') as csvfile:
+        fieldnames = ("starttime","recordpath","frequency","length","startearly",
+                "logfilepath","gain")
+        recordings = []
+        master_dict = { 'recordings' : recordings }
+        reader = csv.DictReader(csvfile, fieldnames)
+        for row in reader:
+            if not row['starttime'].startswith('#'): # Assumes startime is 1st
+                recordings.append(row)
+    return json.dumps(master_dict)
 
-#csvname = sys.argv[1]
-#csvfile = open(csvname, 'r')
-def convert(csv):
-#    csvname = csv
-#    csvfile = open(csvname, 'r')
-#    filename = csvname[:-4]
-#    print(filename)
-#    jsonfilename=filename + ".json"
-#    jsonfile = open(jsonfilename , 'w')
-    fieldnames = ("starttime","recordpath","frequency","length","startearly","logfilepath","gain")
-    reader = csv.DictReader( csv, fieldnames)
-    for row in reader:
-        print(json.dump(row, jsonfile))
-    return
-#    jsonfile.write('\n')
-def main():
-    print("This is working")
-    print(len(sys.argv))
+if __name__ ==  "__main__":
     if len(sys.argv) > 1:
-        with open(sys.argv[1]) as csv:
-            convert(csv)
+        print(convert(sys.argv[1]))
     else:
-	print("What?")
-    return
-if __name__ ==  " __main__":
-    main()
+	print("Give csv name of schedule as parameter.")
