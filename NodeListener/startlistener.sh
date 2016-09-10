@@ -1,2 +1,2 @@
 #!/bin/bash
-hug -f NodeListener.py -p 5035
+nohup hug -f NodeListener.py -p 5035 &
