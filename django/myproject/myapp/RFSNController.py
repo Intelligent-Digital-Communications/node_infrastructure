@@ -3,6 +3,8 @@ import sys, time, os, pickle, urllib2, json
 DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
 listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
             "rfsn-demo3.vip.gatech.edu"]
+listeners = ["localhost", "sn1-wifi.vip.gatech.edu:8094", "sn1-wifi.vip.gatech.edu:8095",
+            "sn2-wifi.vip.gatech.edu:8094"]
 
 def help():
     print("--------------------------RFSNController.py----------------------\n"
@@ -15,7 +17,7 @@ def updategains(iplist, gain, path=DEFAULTPATH):
     return __sendmessages(iplist, message)
 
 def schedule(recordings, rfsn):
-    url = "http://" + listeners[int(rfsn)] + ":5035/generate_epochs/";
+    url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
     opener = urllib2.build_opener(urllib2.HTTPHandler)
     request = urllib2.Request(url, json.dumps(recordings))
