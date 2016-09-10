@@ -1,15 +1,11 @@
-import os
-import stat
-import sys
-import datetime
-import subprocess
+import os, shutil, stat, sys, datetime, subprocess
 
 class Recording:
     """ Defines everything you need to know to schedule a record """
 
     def __init__(self, starttime=None, recordpath=None, frequency=0,
             length=0, startearly=40, logfilepath='log.txt', gain=50,
-            include='include/*'):
+            include='include/'):
         self.starttime  = datetime.datetime.strptime(starttime, "%m/%d/%Y %H:%M")
         self.recordpath = recordpath # ends in Sc16
         self.frequency = float(frequency)
@@ -75,6 +71,7 @@ def schedule_recordings(recordingslist):
         }
         log.append(info)
     atqCmd.close()
+    copyfolder(recordingslist[0].include, getfolder(recordingslist[0].recordpath))
     return { 'log' : log }
 
 def main():
@@ -83,6 +80,12 @@ def main():
             schedule_csv(csv)
     else:
         help()
+
+def copyfolder(src, dest):
+    for filename in os.listdir(src):
+        fullsrcpath = os.path.join(src, filename)
+        if os.path.isfile(fullsrcpath):
+            shutil.copy(fullsrcpath, dest)
 
 def help():
     print("-------generate_epochs.py Information--------")
