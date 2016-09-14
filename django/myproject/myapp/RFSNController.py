@@ -19,7 +19,7 @@ def updategains(iplist, gain, path=DEFAULTPATH):
 def schedule(recordings, rfsn):
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
-    opener = urllib.build_opener(urllib2.HTTPHandler)
+    opener = urllib.build_opener(urllib.HTTPHandler)
     request = urllib.Request(url, json.dumps(recordings))
     print(recordings)
     request.add_header("Content-Type", "application/json")

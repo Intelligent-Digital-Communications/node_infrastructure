@@ -9,5 +9,6 @@ urlpatterns = [
     #url(r'^list', RfsnListView.as_view(), name='rfsn-list'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^myapp/', include('myproject.myapp.urls')),
+    url(r'^angular/', include('angular.urls')),
     url(r'^$', RedirectView.as_view(url='/myapp/list/', permanent=True)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
