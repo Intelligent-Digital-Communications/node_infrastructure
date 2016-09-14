@@ -1,4 +1,4 @@
-import sys, time, os, pickle, urllib2, json
+import sys, time, os, pickle, urllib, json
 
 DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
 listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
@@ -19,8 +19,8 @@ def updategains(iplist, gain, path=DEFAULTPATH):
 def schedule(recordings, rfsn):
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
-    opener = urllib2.build_opener(urllib2.HTTPHandler)
-    request = urllib2.Request(url, json.dumps(recordings))
+    opener = urllib.build_opener(urllib2.HTTPHandler)
+    request = urllib.Request(url, json.dumps(recordings))
     print(recordings)
     request.add_header("Content-Type", "application/json")
     return opener.open(request).read()
