@@ -35,7 +35,10 @@ def generate_epochs(body):
     passinglist = []
     for record in body:
         passinglist.append(Recording(**record))
-    return schedule_recordings(passinglist)
+    try:
+        return schedule_recordings(passinglist)
+    except Exception as e:
+        return {'log': 'Exception occurred: ' + e}
 
 def setup_logger():
     logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
