@@ -1,11 +1,12 @@
 import sys, time, os, pickle, urllib, json
+import requests
 from django.core.mail import send_mail
 
 DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
-listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
-            "rfsn-demo3.vip.gatech.edu"]
-#listeners = ["localhost", "sn1-wifi.vip.gatech.edu:8094", "sn1-wifi.vip.gatech.edu:8095",
-#           "sn2-wifi.vip.gatech.edu:8094"]
+#listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
+#            "rfsn-demo3.vip.gatech.edu"]
+listeners = ["localhost", "sn1-wifi.vip.gatech.edu:8094", "sn1-wifi.vip.gatech.edu:8095",
+           "sn2-wifi.vip.gatech.edu:8094"]
 
 def help():
     print("--------------------------RFSNController.py----------------------\n"
@@ -20,12 +21,9 @@ def updategains(iplist, gain, path=DEFAULTPATH):
 def schedule(recordings, rfsn):
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
-    request = urllib.request.Request(url, data=json.dumps(recordings).encode('utf-8'),
-            headers={'content-type:': 'application/json'})
+    req = requests.post(url, json=recordings)
     print(recordings)
-    result = urllib.request.urlopen(request)
-    print("Response received")
-    return result
+    return req
 
 def __getinput():
     try:
