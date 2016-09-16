@@ -1,4 +1,5 @@
 import sys, time, os, pickle, urllib, json
+from django.core.mail import send_mail
 
 DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
 listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
@@ -19,12 +20,12 @@ def updategains(iplist, gain, path=DEFAULTPATH):
 def schedule(recordings, rfsn):
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
-    opener = urllib.build_opener(urllib.HTTPHandler)
-    request = urllib.Request(url, json.dumps(recordings))
+    request = urllib.request.Request(url, data=json.dumps(recordings).encode('utf-8'),
+            headers={'content-type:': 'application/json'})
     print(recordings)
-    request.add_header("Content-Type", "application/json")
-    return opener.open(request).read()
-
+    result = urllib.request.urlopen(request)
+    print("Response received")
+    return result
 
 def __getinput():
     try:

@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.mail import send_mail 
 from django.core.urlresolvers import reverse
 from django import forms
 
@@ -41,8 +42,18 @@ def list(request):
 @csrf_exempt
 def schedule_recordings(request, hostname):
     if request.method == 'POST':
-        jsonData = json.loads(request.body)
-        return HttpResponse(schedule(jsonData['recordings'], hostname))
+        jsonData = json.loads(request.body.decode('utf-8'))
+        result = HttpResponse(schedule(jsonData['recordings'], hostname))
+        print("POSTed, should send email")
+        send_mail(
+            'Schedule Result',
+            'This is a test of the automated email system.' +
+            '\n\n' + result,
+            'idc.gatech@gmail.com',
+            ['rgallaway@gatech.edu', 'orindlincoln@gatech.edu', 'haydenflinner@gmail.com'],
+            fail_silently=False
+        )                                                          
+        return result
     return HttpResponse("OK")
 
 from myproject.myapp.models import Rfsn
