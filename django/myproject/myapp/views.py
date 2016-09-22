@@ -50,7 +50,7 @@ def schedule_recordings(request, hostname):
             'If you\'re seeing this, scheduling was probably successful!' +
             '\n\n' + result.text,
             'idc.gatech@gmail.com',
-            ['rgallaway@gatech.edu', 'haydenflinner@gmail.com'],
+            ['rgallaway@gatech.edu', 'haydenflinner@gmail.com', 'orindlincoln@gatech.edu],
             fail_silently=False
         )                                                          
         return HttpResponse(result)
