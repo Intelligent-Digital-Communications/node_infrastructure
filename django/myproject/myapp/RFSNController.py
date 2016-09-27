@@ -22,7 +22,7 @@ def schedule(recordings, rfsn):
     print("SCHEDULE URL: " + url)
     request = urllib.request.Request(url, data=json.dumps(recordings).encode('utf-8'),
             headers={'content-type:': 'application/json'})
-    print(recordings)
+    print(json.dumps(recordings))
     result = urllib.request.urlopen(request)
     print("Response received")
     return result
