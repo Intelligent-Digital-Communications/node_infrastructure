@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django import forms
 
 import json
+import requests
 
 from myproject.myapp.models import Document, Rfsn
 from myproject.myapp.forms import DocumentForm
@@ -43,17 +44,16 @@ def list(request):
 def schedule_recordings(request, hostname):
     if request.method == 'POST':
         jsonData = json.loads(request.body.decode('utf-8'))
-        result = HttpResponse(schedule(jsonData['recordings'], hostname))
-        print("POSTed, should send email")
+        result = schedule(jsonData['recordings'], hostname)
         send_mail(
-            'Schedule Result',
-            'This is a test of the automated email system.' +
-            '\n\n' + result,
+            'RFSN ' + hostname + 'Schedule Result',
+            'If you\'re seeing this, scheduling was probably successful!' +
+            '\n\n' + result.text,
             'idc.gatech@gmail.com',
-            ['rgallaway@gatech.edu', 'orindlincoln@gatech.edu', 'haydenflinner@gmail.com'],
+            ['rgallaway@gatech.edu', 'haydenflinner@gmail.com', 'orindlincoln@gatech.edu],
             fail_silently=False
         )                                                          
-        return result
+        return HttpResponse(result)
     return HttpResponse("OK")
 
 from myproject.myapp.models import Rfsn
