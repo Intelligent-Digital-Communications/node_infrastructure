@@ -42,8 +42,11 @@ def generate_epochs(body):
 
 @hug.post('/copy_paste')
 def copy_paste():
-    atargs = ['mkdir /home/idcjbod/filedrop/test', ' && ','rsync', '-av', Recording.recordPath, 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test']
-    subprocess.Popen(atargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        atargs = ['mkdir /home/idcjbod/filedrop/test', ' && ','rsync', '-av', Recording.recordPath, 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test']
+        subprocess.Popen(atargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except Exception as e:
+        return {'log': 'Exception occurred: ' + e}
 
 def setup_logger():
     logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
