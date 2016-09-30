@@ -44,10 +44,10 @@ def generate_epochs(body):
 def copy_paste():
     try:
         #Recording.recordpath after -av
-        atargs = ['mkdir ','/home/idcjbod/filedrop/test ', '&& ','rsync ', '-av ', '/opt/test_copy/ ', 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test']
+        atargs = ['mkdir','/home/idcjbod/filedrop/test', '&&','rsync', '-av', '/opt/test_copy/', 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test']
         subprocess.Popen(atargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except Exception as e:
-        return {'log': 'Exception occurred: ' + e}
+        return {'log': 'Exception occurred: ' + str(e)}
 
 def setup_logger():
     logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
