@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail 
 from django.core.urlresolvers import reverse
 from django import forms
-from .forms import uploadFileForm
+from .forms import UploadFileForm
 from .csvtojson import convert
 import json
 import requests
