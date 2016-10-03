@@ -5,7 +5,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail 
 from django.core.urlresolvers import reverse
 from django import forms
-
+from .forms import uploadFileForm
+from .csvtojson import convert
 import json
 import requests
 
@@ -50,7 +51,8 @@ def schedule_recordings(request, hostname):
             'If you\'re seeing this, scheduling was probably successful!' +
             '\n\n' + result.text,
             'idc.gatech@gmail.com',
-            ['rgallaway@gatech.edu', 'haydenflinner@gmail.com', 'orindlincoln@gatech.edu],
+            ['rgallaway@gatech.edu', 'haydenflinner@gmail.com', 'orindlincoln@gatech.edu',
+                'jaison.george@gatech.edu'],
             fail_silently=False
         )                                                          
         return HttpResponse(result)
@@ -76,3 +78,17 @@ def status(request):
     return render(request,'status.html',{'stats':stats})
 
 
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            convert(request.FILES['docfile'])
+            uploaded_file = request.FILES['docfile']
+            fout = open("csv/{}".format(uploaded_file.title), 'wb')
+            for chunk in uploaded_file.chunks():
+                fout.write(chunk)
+            fout.close()
+            return HttpResponseRedirect('hi')
+    else:
+        form = UploadFileForm()
+    return render(request, 'list.html', {'form': form})
