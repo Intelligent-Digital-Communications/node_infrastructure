@@ -16,3 +16,7 @@ class DocumentForm(forms.Form):
 class ScheduleForm(forms.Form):
     docfile = forms.FileField(label='Select a CSV.')
     rfsns = forms.ChoiceField(choices=Rfsn.objects.all())
+
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    file = forms.FileField()
