@@ -9,6 +9,7 @@ from .forms import UploadFileForm
 from .csvtojson import convert
 import json
 import requests
+from io import TextIOWrapper
 
 from myproject.myapp.models import Document, Rfsn
 from myproject.myapp.forms import DocumentForm
@@ -80,15 +81,8 @@ def status(request):
 
 def upload_file(request):
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            convert(request.FILES['docfile'])
-            uploaded_file = request.FILES['docfile']
-            fout = open("csv/{}".format(uploaded_file.title), 'wb')
-            for chunk in uploaded_file.chunks():
-                fout.write(chunk)
-            fout.close()
-            return HttpResponseRedirect('hi')
-    else:
-        form = UploadFileForm()
-    return render(request, 'list.html', {'form': form})
+        uploaded_file = request.FILES['docfile']
+        jsonschedule = convert(TextIOWrapper(uploaded_file.file, encoding='utf-8'))
+        return HttpResponse(jsonschedule)
+    return HttpResponse('bad2')
+    #return render(request, 'list.html', {'form': form})
