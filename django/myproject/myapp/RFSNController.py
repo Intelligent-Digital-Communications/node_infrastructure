@@ -24,6 +24,13 @@ def schedule(recordings, rfsn):
     req = requests.post(url, json=recordings)
     print(recordings)
     return req
+    
+def genericfunction(jsondata, functionname, rfsn):
+    url = "http://" + listeners[int(rfsn)] + functionname;
+    print("SCHEDULE URL: " + url)
+    req = requests.post(url, json=jsondata)
+    print(jsondata)
+    return req
 
 def __getinput():
     try:
