@@ -79,6 +79,7 @@ def status(request):
     return render(request,'status.html',{'stats':stats})
 
 
+@csrf_exempt
 def upload_file(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['docfile']
