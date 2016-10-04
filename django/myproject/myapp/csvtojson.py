@@ -7,8 +7,6 @@ def convert(csvfile):
     recordings = []
     master_dict = { 'recordings' : recordings }
     reader = csv.DictReader(csvfile, fieldnames)
-    print(csvfile)
-    print(csvfile.read())
     for row in reader:
         print(row)
         if not row['starttime'].startswith('#'): # Assumes startime is 1st
