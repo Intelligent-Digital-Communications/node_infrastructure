@@ -37,7 +37,7 @@ def schedule_recordings(recordingslist):
         # Write the sh file that calls specrec
         args = ('specrec --args=master_clock_rate=25e6 --rate=25e6 --ant=RX2 '
                 '--time={length} --freq={freq} --gain={gain} --ref=gpsdo '
-                '--metadata=true --segsize=24999936 --file={specrecfilename} '
+                '--metadata=true --segsize=24999936 --file={specrecfilename}.$(hostname) '
                 '--starttime="{start}" >> {logfilepath} 2>&1').format(
                 length=recording.length, freq=recording.frequency,
                 gain=recording.gain, specrecfilename=recording.recordpath,
