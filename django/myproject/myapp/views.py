@@ -82,8 +82,6 @@ def status(request):
 def upload_file(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['docfile']
-        print("this")
-        print("stuff")
         jsonschedule = convert(TextIOWrapper(uploaded_file.file, encoding='utf-8'))
         return HttpResponse(jsonschedule)
     return HttpResponse('bad2')
