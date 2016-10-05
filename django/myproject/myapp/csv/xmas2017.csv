@@ -1,0 +1,3 @@
+# SPECREC DATETIME, FILEPATH, FREQUENCY, LENGTH (s), SPECREC SPOOLUP TIME (s), LOG PATH, GAIN
+12/25/2017 13:25,/opt/testingdeleteme/epoch0.sc16,2406e6,5,45,/opt/testingdeleteme/log.txt,55
+12/25/2017 13:30,/opt/testingdeleteme/epoch1.sc16,2416e6,5,45,/opt/testingdeleteme/log.txt,55
