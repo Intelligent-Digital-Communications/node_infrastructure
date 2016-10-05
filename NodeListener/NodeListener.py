@@ -1,5 +1,7 @@
-import sys, os, subprocess, time, datetime, logging, pickle, hug
-from schedule_recordings import schedule_recordings, Recording
+import sys, os, subprocess, time, datetime, logging, pickle, hug, json
+from subprocess import Popen
+from RecordingClasses import Recording
+from schedule_recordings import schedule_recordings
 LOG_FILENAME = "nodelistener.log"
 
 def help():
@@ -45,9 +47,16 @@ def copy_paste():
     try:
         #Recording.recordpath after -av
         atargs = ['mkdir ','/home/idcjbod/filedrop/test ', '&& ','rsync ', '-av ', '/opt/test_copy/ ', 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test']
-        subprocess.Popen(atargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        Popen(atargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except Exception as e:
         return {'log': 'Exception occurred: ' + e}
+
+@hug.get('/clear_atq')
+def clear_atq():
+    stdout, _ = Popen('./clearatq.sh', stdout=subprocess.PIPE).communicate()
+    jobids = [int(x) for x in stdout.decode('ascii').split('\n')[:-1]]
+    return json.dumps({ 'cancelledJobIds' : jobids})
+
 
 def setup_logger():
     logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
