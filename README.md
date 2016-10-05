@@ -1,5 +1,3 @@
-# Node Infrastructure - Operations
-
 ## How to Test
 #### Listener Endpoint
 Launch the Listener:
