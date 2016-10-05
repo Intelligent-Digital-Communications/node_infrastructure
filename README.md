@@ -1,6 +1,6 @@
 ## How to Test
 #### Listener Endpoint
-Launch the Listener:
+Launch the Listener locally:
 ````
 hug -f NodeListener.py &
 ````
@@ -11,7 +11,8 @@ curl 0.0.0.0:8000/endpointname
 ````
 
 #### Controller Endpoint
-Add your test to ````myproject/myapp/tests.py````!
+Add your test to ````myproject/myapp/tests.py```` and do:
+````python3 manage.py test```` from the main ````django```` folder.
 
 ## What's Next
 Copy out from Listener to backup server
