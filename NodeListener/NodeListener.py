@@ -1,5 +1,9 @@
-import sys, os, subprocess, time, datetime, logging, pickle, hug
+import sys, os,time, datetime, logging, pickle, hug, traceback
 from schedule_recordings import schedule_recordings, Recording
+from subprocess import PIPE as PIPE
+import subprocess as sp
+
+
 LOG_FILENAME = "nodelistener.log"
 
 def help():
@@ -38,14 +42,21 @@ def generate_epochs(body):
     try:
         return schedule_recordings(passinglist)
     except Exception as e:
-        return {'log': 'Exception occurred: ' + e}
+        traceback.print_exc()
+        return {'log': 'Exception occurred: ' + str(e)}
+
+@hug.post('/remove_jobIds')
+def remove_ids_atq(body):
+    _, err = Popen(['atrm'] + body['jobIds'], stderr=PIPE).communicate()
+    if err:
+        return { 'errors' : err.decode('ascii').strip().split('\n')} # 500?
 
 @hug.post('/copy_paste')
 def copy_paste():
     try:
         #Recording.recordpath after -av
         atargs = ['mkdir','/home/idcjbod/filedrop/test', '&&','rsync', '-av', '/opt/test_copy/', 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test']
-        subprocess.Popen(atargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        sp.Popen(atargs, stdout=PIPE, stderr=PIPE)
     except Exception as e:
         return {'log': 'Exception occurred: ' + str(e)}
 
@@ -56,3 +67,4 @@ def setup_logger():
 if __name__ == "__main__":
     setup_logger()
     main()
+
