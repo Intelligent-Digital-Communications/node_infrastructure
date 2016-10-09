@@ -5,6 +5,10 @@ myApp.config(function ($interpolateProvider) {
 myApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
+            when('/schedule', {
+                templateUrl: static_url + 'angularapp/html/schedule.html',
+                controller: 'myCtrl'
+            }).
             when('/route1', {
                 templateUrl: static_url + 'angularapp/html/test1.html',
                 controller: 'RouteController1'

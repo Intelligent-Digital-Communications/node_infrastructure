@@ -6,21 +6,44 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular-route.min.js"></script>
     <script src="{% static "angularapp/js/app.js" %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "angularapp/css/style.css" %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body ng-app="myApp">
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">Intelligent Digital Communications</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="#/schedule">Schedule Recording</a></li>
+	      <li><a href="#/route1">Test 1</a></li>
+	      <li><a href="#/route2">Test 2</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	<h1>Intelligent Digital Communications</h1>
+	<div class="container-fluid">
+		<h2>RFSNs</h2>
+		<ul>
+	 		<li> - rfsn-demo1.vip.gatech.edu</li>	    
+	        <li> - rfsn-demo2.vip.gatech.edu</li>	    
+	        <li> - rfsn-demo3.vip.gatech.edu</li>	    
+	        <li> - 143.215.249.243</li>	    
+	        <li> - 143.215.249.234</li>	    
+	        <li> - sn1-wifi.vip.gatech.edu 8095</li>	    
+	        <li> - sn1-wifi.vip.gatech.edu 8094</li>	    
+	        <li> - rfsn3.vip.gatech.edu</li>		    
+		</ul>
+		<div ng-view></div>
+		
 
-<div ng-controller = "myCtrl">
-    <input type="file" file-model="myFile"/>
-    <button ng-click="uploadFile()">Submit</button>
-</div>
-
-<a href="#/route1">Route 1</a><br/>
-<a href="#/route2">Route 2</a><br/>
 
 
-
-<div ng-view></div>
+	</div>	
 
 <script>
 var static_url = '{{STATIC_URL}}'
