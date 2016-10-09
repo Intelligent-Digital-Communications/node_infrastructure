@@ -1,8 +1,8 @@
-var module = angular.module("sampleApp", ['ngRoute']);
-module.config(function ($interpolateProvider) {
+var myApp = angular.module("myApp", ['ngRoute']);
+myApp.config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[[').endSymbol(']]');
 })
-module.config(['$routeProvider',
+myApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
             when('/route1', {
@@ -18,15 +18,15 @@ module.config(['$routeProvider',
             });
     }]);
 
-module.controller("RouteController1", function($scope) {
+myApp.controller("RouteController1", function($scope) {
     $scope.test="Angular working for test1"
 });
-module.controller("RouteController2", function($scope) {
+myApp.controller("RouteController2", function($scope) {
     $scope.test="Angular working for test2"
 });
 
 
-module.directive('fileModel', ['$parse', function ($parse) {
+myApp.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
@@ -42,22 +42,24 @@ module.directive('fileModel', ['$parse', function ($parse) {
     };
 }]);
 
-module.service('fileUpload', ['$http', function ($http) {
+myApp.service('fileUpload', ['$http', function ($http) {
     this.uploadFileToUrl = function(file, uploadUrl){
         var fd = new FormData();
-        fd.append('file', file);
+        fd.append('docfile', file);
         $http.post(uploadUrl, fd, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
         })
         .success(function(){
+            alert("Success");
         })
         .error(function(){
+            alert("Uploading file failed");
         });
     }
 }]);
 
-module.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
     
     $scope.uploadFile = function(){
         var file = $scope.myFile;
