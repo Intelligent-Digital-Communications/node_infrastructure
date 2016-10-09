@@ -82,9 +82,9 @@ def status(request):
 @csrf_exempt
 def upload_file(request):
     if request.method == 'POST':
-        uploaded_file = request.FILES['docfile']
+        uploaded_file = request.FILES['file']
         jsonschedule = convert(TextIOWrapper(uploaded_file.file, encoding='utf-8'))
         print(jsonschedule)
         return HttpResponse(jsonschedule)
-    return HttpResponse('bad2')
-    #return render(request, 'list.html', {'form': form})
+    #return HttpResponse('bad2')
+    return render(request, 'main.html')
