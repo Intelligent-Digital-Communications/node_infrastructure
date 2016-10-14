@@ -21,4 +21,5 @@ class Session:
         self.logpath = logpath
         self.startingpath = startingpath
         self.hostname = hostname
+        self.recordingList = []
         
