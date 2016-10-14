@@ -17,9 +17,10 @@ class Recording:
 
 class Session:
 
-    def __init__(self, logpath = 'log.txt', startingpath=None, hostname=None):
+    def __init__(self, logpath = 'log.txt', startingpath=None, hostname=None, 
+            recordings):
         self.logpath = logpath
         self.startingpath = startingpath
         self.hostname = hostname
-        self.recordingList = []
+        self.recordings = recordings
         

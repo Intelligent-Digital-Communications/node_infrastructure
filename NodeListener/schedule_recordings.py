@@ -4,8 +4,10 @@ import os, shutil, stat, sys, datetime, subprocess
 def getfolder(path):
     return '/'.join(path.split('/')[:-1])
     
-def schedule_recordings(recordingslist):
-    commandspath = getfolder(recordingslist[0].recordpath)
+def schedule_recordings(session):
+    recordingslist = session.recordings
+    basePath = session.startingPath
+    commandspath = getfolder(basePath + recordingslist[0].recordpath)
     print('.sh files being written to {}'.format(commandspath))
     if not os.path.exists(commandspath):
         os.makedirs(commandspath)
@@ -58,7 +60,7 @@ def schedule_recordings(recordingslist):
         log.append(info)
     atqCmd.close()
     copyfolder(recordingslist[0].include, getfolder(recordingslist[0].recordpath))
-    return { 'log' : log }
+    return session
 
 def main():
     if len(sys.argv) > 1:
