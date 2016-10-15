@@ -6,19 +6,15 @@ def getfolder(path):
     
 def schedule_recordings(session):
     recordingslist = session.recordings
-    basePath = session.startingPath
-    commandspath = getfolder(basePath + recordingslist[0].recordpath)
+    basepath = session.startingpath
+    commandspath = getfolder(basepath + recordingslist[0].recordpath)
+    logfilepath = basepath + session.logpath
     print('.sh files being written to {}'.format(commandspath))
     if not os.path.exists(commandspath):
         os.makedirs(commandspath)
     atqCmd = open(commandspath + '/atqCmd.sh', 'w') # w to a?
     atqCmd.write('#!/bin/bash\n')
-    log = []
     for recording in recordingslist:
-        recordfolder = getfolder(recording.recordpath)
-        if not os.path.exists(recordfolder):
-            os.makedirs(recordfolder)
-
         at_starttime = recording.starttime - datetime.timedelta(
                 seconds=recording.startearly)
 
@@ -30,11 +26,11 @@ def schedule_recordings(session):
                 length=recording.length, freq=recording.frequency,
                 gain=recording.gain, specrecfilename=recording.recordpath,
                 start=recording.starttime.isoformat(' '),
-                logfilepath = recording.logfilepath)
+                logfilepath = logfilepath)
         filename = recording.recordpath + '.sh'
         epoch_file = open(filename, 'w')
         epoch_file.write('#!/bin/bash\necho {} >> {}\n{}'
-                        .format(filename, recording.logfilepath, args))
+                        .format(filename, logfilepath, args))
         epoch_file.close()
         os.chmod(filename, os.stat(filename).st_mode | int("0111", 8)) # Make exec by everyone
         # TODO Set to only be executable by the current user?
@@ -57,7 +53,6 @@ def schedule_recordings(session):
             'jobId' : jobmisc.split(' ')[1],
             'jobDateTime' : datetime.datetime.strptime(atdate, "%c").isoformat()
         }
-        log.append(info)
     atqCmd.close()
     copyfolder(recordingslist[0].include, getfolder(recordingslist[0].recordpath))
     return session
