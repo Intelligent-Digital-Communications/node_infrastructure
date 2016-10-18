@@ -13,7 +13,7 @@ def convert(csvname):
                 recordings.append(row)
 
         master_dict = { 'recordings' : recordings,
-                'gamename'      : vals[0],
+                'name'      : vals[0],
                 'startingpath'  : vals[1],
                 'logpath'       : vals[2],
                 'rfsnids'       : [int(x) for x in vals[3:]] }
