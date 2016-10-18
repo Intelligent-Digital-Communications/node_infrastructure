@@ -7,7 +7,7 @@ from NodeListener import clear_atq
 class TestScheduleSession(unittest.TestCase):
     def runTest(self):
         r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', frequency=2412e6, length=1)
-        s = Session(startingpath='/tmp/scheduleTest/', hostname='TESTING', recordings=[r])
+        s = Session(startingpath='/tmp/scheduleTest/', rfsnids=[0], recordings=[r])
         returned = schedule_session(s)
         jobid = session.recordings[0].jobid
         self.assertNotNone(jobid)
