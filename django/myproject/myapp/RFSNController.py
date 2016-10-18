@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
 #listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
 #            "rfsn-demo3.vip.gatech.edu"]
-listeners = ["localhost", "sn1-wifi.vip.gatech.edu:8094", "sn1-wifi.vip.gatech.edu:8095",
+listeners = ["localhost:8000", "sn1-wifi.vip.gatech.edu:8094", "sn1-wifi.vip.gatech.edu:8095",
            "sn2-wifi.vip.gatech.edu:8094"]
 
 def help():

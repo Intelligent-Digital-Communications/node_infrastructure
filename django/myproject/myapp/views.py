@@ -59,17 +59,18 @@ def schedule_session(jsonData):
         req = schedule(session, rfsn)
         status = ''
         if req.status_code == 200:
-            status = req.status_code + ' Job scheduled successfully!\n'
+            status = str(req.status_code) + ' Job scheduled successfully!\n'
             reqJson = req.json()
+            print(req.json())
             for i in range(0, len(reqJson['recordings'])):
                 if recordings[i]['uniques'] is None:
                     recordings[i]['uniques'] = {}
                 recordings[i]['uniques'].add(rfsn, reqJson['recordings'][i]['unique'])
         elif req.status_code == 404:
-            status = req.status_code + ' URL not found. Make sure NodeListener is running on the RFSN.\n'
+            status = str(req.status_code) + ' URL not found. Make sure NodeListener is running on the RFSN.\n'
         elif req.status_code == 500:
-            status = req.status_code + ' Server error occurred.\n'
-        results.append('RFSN ' + rfsn + ': ' + status)
+            status = str(req.status_code) + ' Server error occurred.\n'
+        results += ('RFSN ' + str(rfsn) + ': ' + str(status))
 
     send_mail(
             session['name'] + ' Schedule Result',

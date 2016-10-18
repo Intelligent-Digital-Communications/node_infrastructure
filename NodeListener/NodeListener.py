@@ -35,10 +35,11 @@ def update_gains(gainInfo):
 @hug.post('/generate_epochs')
 def generate_epochs(body):
     session = Session(**body)
-    try:
-        return json.dumps(schedule_recordings(session))
+    try: # TODO WRITE JSON SERIALIzER
+        return json.dumps(schedule_recordings(session).__dict__)
     except Exception as e:
-        return {'log': 'Exception occurred: ' + e}
+        print(e)
+        return {'log': 'Exception occurred: ' + str(e)} # TODO RETURN 500
 
 @hug.post('/copy_paste')
 def copy_paste():

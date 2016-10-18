@@ -20,6 +20,8 @@ class Session:
         self.logpath = logpath
         self.startingpath = startingpath
         self.rfsnids = rfsnids
-        self.recordings = recordings
+        self.recordings = []
+        for record in recordings:
+            self.recordings.append(Recording(**record))
         self.include = include
         self.name = name

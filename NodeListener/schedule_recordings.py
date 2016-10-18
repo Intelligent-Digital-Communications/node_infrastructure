@@ -14,6 +14,7 @@ def schedule_recordings(session):
     atqCmd = open(basepath + 'atqCmd.sh', 'w') # w to a?
     atqCmd.write('#!/bin/bash\n')
     for recording in recordingslist:
+        print(recording)
         at_starttime = recording.starttime - datetime.timedelta(
                 seconds=recording.startearly)
 
