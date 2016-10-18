@@ -9,13 +9,13 @@ class TestScheduleSession(unittest.TestCase):
         r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', frequency=2412e6, length=1)
         s = Session(startingpath='/tmp/scheduleTest/', rfsnids=[0], recordings=[r])
         returned = schedule_session(s)
-        jobid = session.recordings[0].jobid
-        self.assertNotNone(jobid)
+        jobid = returned.recordings[0].unique['jobId']
+        self.assertIsNotNone(jobid)
         # This should be uncommented when merged with master branch for new version of removeJobIds
         #remove_jobids(json.dumps({ 'jobIds' : [ jobid ] }))
         # But for now...
-        returned = json.loads(clear_atq().decode('utf-8'))
-        self.assertEqual(int(returned['cancelledJobIds']), jobid)
+        returned = json.loads(clear_atq())
+        self.assertEqual(int(returned['cancelledJobIds'][0]), jobid)
 
 if __name__ == '__main__':
     unittest.main()

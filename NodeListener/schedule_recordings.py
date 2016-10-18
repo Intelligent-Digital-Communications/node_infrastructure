@@ -7,12 +7,11 @@ def getfolder(path):
 def schedule_recordings(session):
     recordingslist = session.recordings
     basepath = session.startingpath
-    commandspath = getfolder(basepath + recordingslist[0].recordpath)
     logfilepath = basepath + session.logpath
-    print('.sh files being written to {}'.format(commandspath))
-    if not os.path.exists(commandspath):
-        os.makedirs(commandspath)
-    atqCmd = open(commandspath + '/atqCmd.sh', 'w') # w to a?
+    print('.sh files being written to {}'.format(basepath))
+    if not os.path.exists(basepath):
+        os.makedirs(basepath)
+    atqCmd = open(basepath + 'atqCmd.sh', 'w') # w to a?
     atqCmd.write('#!/bin/bash\n')
     for recording in recordingslist:
         at_starttime = recording.starttime - datetime.timedelta(
@@ -24,10 +23,10 @@ def schedule_recordings(session):
                 '--metadata=true --segsize=24999936 --file={specrecfilename} '
                 '--starttime="{start}" >> {logfilepath} 2>&1').format(
                 length=recording.length, freq=recording.frequency,
-                gain=recording.gain, specrecfilename=recording.recordpath,
+                gain=recording.gain, specrecfilename=basepath + recording.recordpath,
                 start=recording.starttime.isoformat(' '),
                 logfilepath = logfilepath)
-        filename = recording.recordpath + '.sh'
+        filename = basepath + recording.recordpath + '.sh'
         epoch_file = open(filename, 'w')
         epoch_file.write('#!/bin/bash\necho {} >> {}\n{}'
                         .format(filename, logfilepath, args))
@@ -49,12 +48,12 @@ def schedule_recordings(session):
             raise ValueError(err)
         jobmisc, atdate = err.split('\n')[1].split(' at ')
 
-        info = {
-            'jobId' : jobmisc.split(' ')[1],
+        recording.unique = {
+            'jobId' : int(jobmisc.split(' ')[1]),
             'jobDateTime' : datetime.datetime.strptime(atdate, "%c").isoformat()
         }
     atqCmd.close()
-    copyfolder(recordingslist[0].include, getfolder(recordingslist[0].recordpath))
+    copyfolder(session.include, basepath)
     return session
 
 def main():
