@@ -11,10 +11,12 @@ def convert(csvname):
         for row in reader:
             if not row[0].startswith('#'): # Assumes startime is 1st
                 recordings.append(row)
+
         master_dict = { 'recordings' : recordings,
-                'startingpath'  : vals[0],
-                'logpath'       : vals[1],
-                'rfsnid'        : vals[2] }
+                'gamename'      : vals[0],
+                'startingpath'  : vals[1],
+                'logpath'       : vals[2],
+                'rfsnids'       : [int(x) for x in vals[3:]] }
     return json.dumps(master_dict)
 
 if __name__ ==  "__main__":
