@@ -1,11 +1,11 @@
 [
     {   
         "starttime": "12/12/2016 14:22",
-        "recordpath": "/opt/fall2016_hulkhogan/test.sc16",
+        "recordpath": "testingDeleteMe/test.sc16",
         "frequency": "24e6",
-        "length": 30,
+        "length": 1,
         "startearly": 45,
-        "logfilepath": "/opt/fall2016_hulkhogan/log.txt",
+        "logfilepath": "testingDeleteMe/log.txt",
         "gain": 45
     }
 ]
