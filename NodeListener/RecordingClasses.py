@@ -15,9 +15,9 @@ class Recording:
 
 class Session:
 
-    def __init__(self, recordings, startingpath, rfsnid, include='include/', logpath='log.txt'):
+    def __init__(self, recordings, startingpath, rfsnids, include='include/', logpath='log.txt', name='Default Name'):
         self.logpath = logpath
         self.startingpath = startingpath
-        self.rfsnid = rfsnid
+        self.rfsnids = rfsnids
         self.recordings = recordings
-        
+        self.name = name

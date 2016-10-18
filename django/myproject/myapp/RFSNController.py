@@ -18,11 +18,11 @@ def updategains(iplist, gain, path=DEFAULTPATH):
     message = '1,' + gain + ',' + path
     return __sendmessages(iplist, message)
 
-def schedule(recordings, rfsn):
+def schedule(session, rfsn):
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
-    req = requests.post(url, json=recordings)
-    print(recordings)
+    req = requests.post(url, json=session)
+    print(req)
     return req
     
 def genericfunction(jsondata, functionname, rfsn):

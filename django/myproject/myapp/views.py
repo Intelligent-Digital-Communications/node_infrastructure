@@ -43,21 +43,44 @@ def list(request):
     )
 
 @csrf_exempt
-def schedule_recordings(request, hostname):
+def schedule_recordings(request):
     if request.method == 'POST':
         jsonData = json.loads(request.body.decode('utf-8'))
-        result = schedule(jsonData['recordings'], hostname)
-        send_mail(
-            'RFSN ' + hostname + 'Schedule Result',
-            'If you\'re seeing this, scheduling was probably successful!' +
-            '\n\n' + result.text,
+        result = schedule_session(jsonData)                                                         
+        return HttpResponse(result)
+    return HttpResponse("OK")
+
+def schedule_session(jsonData):
+    session = json.loads(jsonData)
+    rfsnids = session['rfsnids']
+    recordings = session['recordings']
+    results = ''
+    for rfsn in rfsnids:
+        req = schedule(session, rfsn)
+        status = ''
+        if req.status_code == 200:
+            status = req.status_code + ' Job scheduled successfully!\n'
+            reqJson = req.json()
+            for i in range(0, len(reqJson['recordings'])):
+                if recordings[i]['uniques'] is None:
+                    recordings[i]['uniques'] = {}
+                recordings[i]['uniques'].add(rfsn, reqJson['recordings'][i]['unique'])
+        elif req.status_code == 404:
+            status = req.status_code + ' URL not found. Make sure NodeListener is running on the RFSN.\n'
+        elif req.status_code == 500:
+            status = req.status_code + ' Server error occurred.\n'
+        results.append('RFSN ' + rfsn + ': ' + status)
+
+    send_mail(
+            session['name'] + ' Schedule Result',
+            'Results of scheduling recording session for ' + session['name'] + ":\n"
+            + results,
             'idc.gatech@gmail.com',
             ['rgallaway@gatech.edu', 'haydenflinner@gmail.com', 'orindlincoln@gatech.edu',
                 'jaison.george@gatech.edu'],
             fail_silently=False
-        )                                                          
-        return HttpResponse(result)
-    return HttpResponse("OK")
+    )
+    return json.dumps(session)
 
 from myproject.myapp.models import Rfsn
 
@@ -85,6 +108,6 @@ def upload_file(request):
         uploaded_file = request.FILES['docfile']
         jsonschedule = convert(TextIOWrapper(uploaded_file.file, encoding='utf-8'))
         print(jsonschedule)
-        return HttpResponse(jsonschedule)
+        return HttpResponse(schedule_session(jsonschedule))
     #return HttpResponse('bad2')
     return render(request, 'main.html')
