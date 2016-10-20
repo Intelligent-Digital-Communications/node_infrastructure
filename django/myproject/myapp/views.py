@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django import forms
 from .forms import UploadFileForm
 from .csvtojson import convert
+from .NodeListener import *
 import json
 import requests
 from io import TextIOWrapper
@@ -43,10 +44,10 @@ def list(request):
     )
 
 @csrf_exempt
-def schedule_recordings(request):
+def schedule_session(request):
     if request.method == 'POST':
         jsonData = json.loads(request.body.decode('utf-8'))
-        result = schedule_session(jsonData)                                                         
+        result = schedule_session(jsonData)
         return HttpResponse(result)
     return HttpResponse("OK")
 
