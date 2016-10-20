@@ -1,7 +1,11 @@
 import sys, os, subprocess, time, datetime, logging, pickle, hug, json
 from subprocess import Popen
-from RecordingClasses import Recording, Session, Util
-from schedule_session import schedule_session
+try:
+    from .RecordingClasses import Recording, Session, Util
+    from .schedule_session import schedule_session
+except SystemError:
+    from RecordingClasses import Recording, Session, Util
+    from schedule_session import schedule_session
 LOG_FILENAME = "nodelistener.log"
 
 def help():
@@ -36,10 +40,10 @@ def update_gains(gainInfo):
 def generate_epochs(body):
     session = Session(**body)
     try:
-        return Util.dumps(schedule_recordings(session))
+        return Util.dumps(schedule_session(session))
     except Exception as e:
-        print(e)
         return {'log': 'Exception occurred: ' + str(e)} # TODO RETURN 500
+        raise e
 
 @hug.post('/copy_paste')
 def copy_paste():
