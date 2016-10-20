@@ -60,9 +60,9 @@ def schedule_session(jsonData):
         status = ''
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
-            reqJson = req.json()
+            # TODO replace this with using Util loads class
             print(req.json())
-            for i in range(0, len(reqJson['recordings'])):
+            for i in range(0, len(req.json()['recordings'])):
                 if recordings[i]['uniques'] is None:
                     recordings[i]['uniques'] = {}
                 recordings[i]['uniques'].add(rfsn, reqJson['recordings'][i]['unique'])

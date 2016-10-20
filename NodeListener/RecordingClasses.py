@@ -1,6 +1,21 @@
 import os, shutil, stat, sys, datetime, subprocess, json, jsonpickle
 
-class Recording(object):
+class Util(object):
+    def __repr__(self):
+        return self.__str__()
+
+    def __eq__(self, b):
+        return self.__dict__ == b.__dict__
+
+    @staticmethod
+    def dumps(recording):
+        return jsonpickle.encode(recording)
+
+    @staticmethod
+    def loads(dumped):
+        return jsonpickle.decode(dumped)
+
+class Recording(Util):
     """ Defines everything you need to know to schedule a record """
 
     def __init__(self, starttime, recordpath, frequency, length, startearly=40,
@@ -14,24 +29,10 @@ class Recording(object):
         if uniques:
             self.uniques = uniques
 
-    def __repr__(self):
-        return self.__str__()
-
     def __str__(self):
         return '{} {}'.format(self.recordpath, self.starttime.isoformat())
 
-    def __eq__(self, b):
-        return self.__dict__ == b.__dict__
-
-    def json(self):
-        return jsonpickle.encode(self)
-
-    @staticmethod
-    def from_json(dumped):
-        return jsonpickle.decode(dumped)
-
-
-class Session(object):
+class Session(Util):
     """ Collection of Recordings and related metadata. """
 
     def __init__(self, recordings, startingpath, rfsnids, include='include/', logpath='log.txt', name='Default Name'):
@@ -50,18 +51,5 @@ class Session(object):
         self.include = include
         self.name = name
 
-    def __repr__(self):
-        return self.__str__()
-
     def __str__(self):
         return '{} {}'.format(self.name, str(self.recordings))
-
-    def json(self):
-        return jsonpickle.encode(self)
-
-    def __eq__(self, b):
-        return self.__dict__ == b.__dict__
-
-    @staticmethod
-    def from_json(dumped):
-        return jsonpickle.decode(dumped)
