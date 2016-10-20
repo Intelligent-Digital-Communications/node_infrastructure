@@ -1,7 +1,5 @@
-import unittest, json
+import unittest, json, jsonpickle
 from RecordingClasses import Recording, Session
-from RecordingClasses import IDCJSONEncoder as Encoder
-from RecordingClasses import IDCJSONDecoder as Decoder
 from schedule_recordings import schedule_recordings as schedule_session
 #from .NodeListener import remove_ids_atq as remove_jobids
 from NodeListener import clear_atq
@@ -23,9 +21,9 @@ class TestJSONEncoderDecoder(unittest.TestCase):
     def runTest(self):
         r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', frequency=2412e6, length=1)
         s = Session(startingpath='/tmp/scheduleTest/', rfsnids=[0], recordings=[r])
-        dumped = (json.dumps(s, cls=Encoder))
-        loaded = json.loads(dumped, cls=Decoder)
-        print(loaded)
+        dumped = s.json()
+        loaded = Session.from_json(dumped)
+        self.assertEqual(loaded, s)
 
 if __name__ == '__main__':
     unittest.main()
