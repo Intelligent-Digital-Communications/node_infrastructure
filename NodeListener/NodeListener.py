@@ -1,7 +1,7 @@
 import sys, os, subprocess, time, datetime, logging, pickle, hug, json
 from subprocess import Popen
 from RecordingClasses import Recording, Session, Util
-from schedule_recordings import schedule_recordings
+from schedule_session import schedule_session
 LOG_FILENAME = "nodelistener.log"
 
 def help():

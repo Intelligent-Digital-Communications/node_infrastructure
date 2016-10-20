@@ -1,6 +1,6 @@
 import unittest, json, jsonpickle
 from RecordingClasses import Recording, Session, Util
-from schedule_recordings import schedule_recordings as schedule_session
+from schedule_session import schedule_session
 #from .NodeListener import remove_ids_atq as remove_jobids
 from NodeListener import clear_atq
 
