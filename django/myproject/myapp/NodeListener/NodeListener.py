@@ -1,5 +1,5 @@
 import sys, os, subprocess, time, datetime, logging, pickle, hug, json
-from subprocess import Popen
+from subprocess import Popen, PIPE
 try:
     from .RecordingClasses import Recording, Session, Util
     from .schedule_session import schedule_session
@@ -50,7 +50,7 @@ def copy_paste():
     try:
         #Recording.recordpath after -av
         atargs = ['mkdir ','/home/idcjbod/filedrop/test ', '&& ','rsync ', '-av ', '/opt/test_copy/ ', 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test']
-        Popen(atargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        Popen(atargs, stdout=PIPE, stderr=PIPE)
     except Exception as e:
         return {'log': 'Exception occurred: ' + e}
 
