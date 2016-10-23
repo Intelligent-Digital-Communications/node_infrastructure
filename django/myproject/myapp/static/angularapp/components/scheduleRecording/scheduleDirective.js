@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.scheduleRecording', ['ngRoute'])
+angular.module('myApp.scheduleRecordingDirective', ['ngRoute'])
 
 
 .directive('fileModel', ['$parse', function ($parse) {

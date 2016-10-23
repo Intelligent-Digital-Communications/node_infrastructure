@@ -3,7 +3,7 @@
 angular.module('myApp', [
 	'ngRoute',
 	'myApp.scheduleRecordingController',
-	'myApp.scheduleRecording',
+	'myApp.scheduleRecordingDirective',
 	'myApp.scheduleRecordingService'
 ]).
 config(function ($interpolateProvider) {
