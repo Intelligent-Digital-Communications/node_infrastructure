@@ -45,10 +45,11 @@ def generate_epochs(body):
         return {'log': 'Exception occurred: ' + str(e)} # TODO RETURN 500
         raise e
 
-@hug.post('/copy_paste')
-def copy_paste():
+@hug.post('/filedrop')
+def filedrop(body):
     try:
         #Recording.recordpath after -av
+	print(body)
         fpath = '/home/ops/testfolder'
         atargs = ['rsync', '-av', fpath, 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test']
         Popen(atargs, stdout=PIPE, stderr=PIPE)

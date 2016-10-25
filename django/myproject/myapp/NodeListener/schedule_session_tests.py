@@ -2,7 +2,7 @@ import unittest, json, jsonpickle
 from RecordingClasses import Recording, Session, Util
 from schedule_session import schedule_session
 #from .NodeListener import remove_ids_atq as remove_jobids
-from NodeListener import clear_atq, copy_paste
+from NodeListener import clear_atq, filedrop
 
 class TestScheduleSession(unittest.TestCase):
     def runTest(self):
@@ -26,9 +26,9 @@ class TestJSONEncoderDecoder(unittest.TestCase):
         self.assertEqual(loaded, s)
         self.assertEqual(loaded.recordings[0].length, 1)
 
-class TestCopySession(unittest.TestCase):
+class TestFiledropSession(unittest.TestCase):
     def runTest(self):
-        print(copy_paste())
+        print(filedrop())
 
 if __name__ == '__main__':
     unittest.main()

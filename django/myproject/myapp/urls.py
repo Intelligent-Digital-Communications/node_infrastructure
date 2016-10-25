@@ -5,6 +5,8 @@ from myproject.myapp.views import RfsnListView
 from myproject.myapp.views import status
 from myproject.myapp.views import schedule_session
 from myproject.myapp.views import upload_file
+from myproject.myapp.views import generic_function
+from myproject.myapp.views import filedrop
 #from myapp.views import RfsnListView
 
 urlpatterns = [
@@ -13,6 +15,7 @@ urlpatterns = [
     url(r'^upload_file/$', upload_file, name='upload_file'),
     url(r'^status/$', status, name='status'),
     url(r'^schedule_session/(?P<hostname>\w{0,50})/$', schedule_session, 
-        name='schedule_session')
+        name='schedule_session'),
+    url(r'^filedrop/(?P<hostname>\w{0,50})/$', filedrop, name='filedrop'),
 ]
 
