@@ -49,7 +49,7 @@ def generate_epochs(body):
 def filedrop(body):
     try:
         #Recording.recordpath after -av
-	print(body)
+        print(body)
         fpath = '/home/ops/testfolder'
         atargs = ['rsync', '-av', fpath, 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test']
         Popen(atargs, stdout=PIPE, stderr=PIPE)
