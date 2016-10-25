@@ -13,7 +13,7 @@ class Util(object):
 
     @staticmethod
     def loads(dumped):
-        return jsonpickle.decode(dumped)
+        return jsonpickle.decode(dumped, keys=False)
 
 class Recording(Util):
     """ Defines everything you need to know to schedule a record """
@@ -26,8 +26,7 @@ class Recording(Util):
         self.length = int(length)
         self.startearly = int(startearly)
         self.gain = int(gain)
-        if uniques:
-            self.uniques = uniques
+        self.uniques = uniques
 
     def __str__(self):
         return '{} {}'.format(self.recordpath, self.starttime.isoformat())

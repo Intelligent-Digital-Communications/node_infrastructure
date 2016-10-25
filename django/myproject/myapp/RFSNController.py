@@ -22,7 +22,6 @@ def schedule(session, rfsn):
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
     req = requests.post(url, json=session)
-    print(req)
     return req
     
 def genericfunction(jsondata, functionname, rfsn):

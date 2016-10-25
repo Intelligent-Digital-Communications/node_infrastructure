@@ -45,7 +45,7 @@ def schedule_session(session):
             raise ValueError(err)
         jobmisc, atdate = err.split('\n')[1].split(' at ')
 
-        recording.unique = {
+        recording.uniques = {
             'jobId' : int(jobmisc.split(' ')[1]),
             'jobDateTime' : datetime.datetime.strptime(atdate, "%c").isoformat()
         }

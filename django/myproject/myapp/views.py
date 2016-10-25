@@ -7,8 +7,11 @@ from django.core.urlresolvers import reverse
 from django import forms
 from .forms import UploadFileForm
 from .csvtojson import convert
-from .NodeListener import *
+
+from .NodeListener import RecordingClasses
+import jsonpickle
 import json
+import re, sys
 import requests
 from io import TextIOWrapper
 
@@ -59,14 +62,16 @@ def schedule_session(jsonData):
     for rfsn in rfsnids:
         req = schedule(session, rfsn)
         status = ''
+        #print(req)
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
             # TODO replace this with using Util loads class
-            print(req.json())
-            for i in range(0, len(req.json()['recordings'])):
-                if recordings[i]['uniques'] is None:
-                    recordings[i]['uniques'] = {}
-                recordings[i]['uniques'].add(rfsn, reqJson['recordings'][i]['unique'])
+            sys.modules['RecordingClasses'] = RecordingClasses
+            print(req.text)
+            req_session = jsonpickle.decode(jsonpickle.decode(req.text))
+            recordings = req_session.recordings
+            for i in range(len(recordings)):
+                recordings[i].uniques[rfsn] = req_session.recordings[i].uniques
         elif req.status_code == 404:
             status = str(req.status_code) + ' URL not found. Make sure NodeListener is running on the RFSN.\n'
         elif req.status_code == 500:
@@ -74,15 +79,15 @@ def schedule_session(jsonData):
         results += ('RFSN ' + str(rfsn) + ': ' + str(status))
 
     send_mail(
-            session['name'] + ' Schedule Result',
-            'Results of scheduling recording session for ' + session['name'] + ":\n"
+            session.name + ' Schedule Result',
+            'Results of scheduling recording session for ' + session.name + ":\n"
             + results,
             'idc.gatech@gmail.com',
             ['rgallaway@gatech.edu', 'haydenflinner@gmail.com', 'orindlincoln@gatech.edu',
                 'jaison.george@gatech.edu'],
             fail_silently=False
     )
-    return json.dumps(session)
+    return jsonpickle.encode(session)
 
 from myproject.myapp.models import Rfsn
 

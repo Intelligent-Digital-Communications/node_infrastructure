@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import csv, json, sys
+from .RecordingClasses import Util
 
 def convert(csvfile):
     fieldnames = ["starttime","recordpath","frequency","length","startearly", "gain"]
@@ -18,6 +19,8 @@ def convert(csvfile):
             'startingpath'  : vals[1],
             'logpath'       : vals[2],
             'rfsnids'       : [int(x) for x in vals[3:]] }
+    # TODO Create session, recordings, use Util encoder.
+
     return json.dumps(master_dict)
 
 if __name__ ==  "__main__":
