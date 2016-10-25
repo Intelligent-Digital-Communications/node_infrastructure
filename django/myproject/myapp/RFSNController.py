@@ -24,11 +24,17 @@ def schedule(session, rfsn):
     req = requests.post(url, json=session)
     return req
     
-def genericfunction(jsondata, functionname, rfsn):
-    url = "http://" + listeners[int(rfsn)] + functionname;
-    print("SCHEDULE URL: " + url)
-    req = requests.post(url, json=jsondata)
-    print(jsondata)
+#def genericfunction(jsondata, functionname, rfsn):
+#    url = "http://" + listeners[int(rfsn)] + functionname;
+#    print("SCHEDULE URL: " + url)
+#    req = requests.post(url, json=jsondata)
+#    print(jsondata)
+#    return req
+
+def copypaste(data, rfsn):
+    url = "http://" + listeners[int(rfsn)] + "/filedrop/";
+    print("CopyPaste URL: " + url)
+    req = requests.post(url, json=data)
     return req
 
 if __name__ == "__main__":

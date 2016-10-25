@@ -3,12 +3,9 @@
 <html lang="en">
 <head>
     <title>AngularJS Routes example</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular-route.min.js"></script>
-    <script src="{% static "angularapp/js/app.js" %}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static "angularapp/css/style.css" %}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "angularapp/assets/css/style.css" %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
@@ -20,8 +17,8 @@
 	    </div>
 	    <ul class="nav navbar-nav">
 	      <li><a href="#/schedule">Schedule Recording</a></li>
-	      <li><a href="#/route1">Test 1</a></li>
-	      <li><a href="#/route2">Test 2</a></li>
+	      <li><a href="#/">Test 1</a></li>
+	      <li><a href="#/">Test 2</a></li>
 	    </ul>
 	  </div>
 	</nav>
@@ -48,5 +45,11 @@
 <script>
 var static_url = '{{STATIC_URL}}'
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular-route.min.js"></script>
+<script src="{% static "angularapp/app.module.js" %}"></script>
+<script src="{% static "angularapp/components/scheduleRecording/scheduleController.js" %}"></script>
+<script src="{% static "angularapp/components/scheduleRecording/scheduleDirective.js" %}"></script>
+<script src="{% static "angularapp/components/scheduleRecording/scheduleService.js" %}"></script>
 </body>
 </html>
