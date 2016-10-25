@@ -5,7 +5,6 @@ from myproject.myapp.views import RfsnListView
 from myproject.myapp.views import status
 from myproject.myapp.views import schedule_session
 from myproject.myapp.views import upload_file
-from myproject.myapp.views import generic_function
 from myproject.myapp.views import filedrop
 #from myapp.views import RfsnListView
 

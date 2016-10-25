@@ -8,7 +8,7 @@ from django import forms
 from .forms import UploadFileForm
 from .csvtojson import convert
 
-from .NodeListener import RecordingClasses
+from .NodeListener import *
 import jsonpickle
 import json
 import re, sys
@@ -60,7 +60,7 @@ def filedrop(request, hostname):
     if request.method == 'POST':
         #message = request.GET.get('message')
         #print(message)
-	jsonData = json.loads(request.body.decode('utf-8'))
+        jsonData = json.loads(request.body.decode('utf-8'))
         result = filedrop(jsonData)
         return HttpResponse(result)
     #print('TRNKRYNO')
@@ -74,13 +74,9 @@ def schedule_session(jsonData):
     for rfsn in rfsnids:
         req = schedule(session, rfsn)
         status = ''
-        #print(req)
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
-            # TODO replace this with using Util loads class
-            sys.modules['RecordingClasses'] = RecordingClasses
-            print(req.text)
-            req_session = jsonpickle.decode(jsonpickle.decode(req.text))
+            req_session = Util.loads(jsonpickle.decode(req.text))
             recordings = req_session.recordings
             for i in range(len(recordings)):
                 recordings[i].uniques[rfsn] = req_session.recordings[i].uniques

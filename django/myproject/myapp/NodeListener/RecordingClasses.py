@@ -13,6 +13,10 @@ class Util(object):
 
     @staticmethod
     def loads(dumped):
+        print("Inside util: ", sys.modules)
+        print('name: ', __name__)
+        print('Result: ', sys.modules[__name__])
+        sys.modules['RecordingClasses'] = sys.modules[__name__]
         return jsonpickle.decode(dumped, keys=False)
 
 class Recording(Util):

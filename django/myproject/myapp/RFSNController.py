@@ -31,7 +31,7 @@ def schedule(session, rfsn):
 #    print(jsondata)
 #    return req
 
-def copypaste(data, rfsn):
+def filedrop(data, rfsn):
     url = "http://" + listeners[int(rfsn)] + "/filedrop/";
     print("CopyPaste URL: " + url)
     req = requests.post(url, json=data)
