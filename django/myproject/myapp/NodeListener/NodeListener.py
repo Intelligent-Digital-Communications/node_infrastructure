@@ -38,7 +38,7 @@ def update_gains(gainInfo):
 
 @hug.post('/generate_epochs')
 def generate_epochs(body):
-    session = Session(**body)
+    session = Util.loads(body)
     try:
         return Util.dumps(schedule_session(session))
     except Exception as e:

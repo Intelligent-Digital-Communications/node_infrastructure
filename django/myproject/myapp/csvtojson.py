@@ -12,16 +12,17 @@ def convert(csvfile):
             record = {}
             for index in range(len(row)):
                 record[fieldnames[index]] = row[index]
-            recordings.append(record)
+            recordings.append(Recording(**record))
 
     master_dict = { 'recordings' : recordings,
             'name'      : vals[0],
             'startingpath'  : vals[1],
             'logpath'       : vals[2],
             'rfsnids'       : [int(x) for x in vals[3:]] }
-    # TODO Create session, recordings, use Util encoder.
 
-    return json.dumps(master_dict)
+    return Util.dumps(Session(**master_dict))
+
+
 
 if __name__ ==  "__main__":
     if len(sys.argv) > 1:

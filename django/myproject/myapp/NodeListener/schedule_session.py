@@ -1,6 +1,7 @@
 import os, shutil, stat, sys, datetime, subprocess
 
 def schedule_session(session):
+    print(session)
     recordingslist = session.recordings
     basepath = session.startingpath
     logfilepath = basepath + session.logpath

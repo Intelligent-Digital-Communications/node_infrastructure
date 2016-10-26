@@ -1,4 +1,4 @@
-import os, shutil, stat, sys, datetime, subprocess, json, jsonpickle
+import os, shutil, stat, sys, datetime, subprocess, json, jsonpickle, re
 
 class Util(object):
     def __repr__(self):
@@ -12,12 +12,21 @@ class Util(object):
         return jsonpickle.encode(recording)
 
     @staticmethod
-    def loads(dumped):
-        print("Inside util: ", sys.modules)
-        print('name: ', __name__)
-        print('Result: ', sys.modules[__name__])
+    def loads(passsed_in):
         sys.modules['RecordingClasses'] = sys.modules[__name__]
-        return jsonpickle.decode(dumped, keys=False)
+        # This patches in the module's actual name to the global level.
+        # Possibly wouldn't be needed if module was set up correctly or registered somehow?
+        # Could move to init?
+
+        prefix = 'myproject.myapp.NodeListener.'
+        possible = jsonpickle.decode(re.sub(prefix, '', passsed_in))
+
+        if isinstance(possible, str):
+            return jsonpickle.decode(possible)
+        if isinstance(possible, dict): # Try without taking out the prefix...
+            possible = jsonpickle.decode(passsed_in)
+        # Must have succeeded!
+        return possible
 
 class Recording(Util):
     """ Defines everything you need to know to schedule a record """

@@ -1,6 +1,7 @@
 import sys, time, os, pickle, urllib, json
 import requests
 from django.core.mail import send_mail
+from .NodeListener import *
 
 DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
 #listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
@@ -21,7 +22,7 @@ def updategains(iplist, gain, path=DEFAULTPATH):
 def schedule(session, rfsn):
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
-    req = requests.post(url, json=session)
+    req = requests.post(url, json=Util.dumps(session))
     return req
     
 #def genericfunction(jsondata, functionname, rfsn):

@@ -67,19 +67,18 @@ def filedrop(request, hostname):
     return HttpResponse("OK")
 
 def schedule_session(jsonData):
-    session = json.loads(jsonData)
-    rfsnids = session['rfsnids']
-    recordings = session['recordings']
+    session = Util.loads(jsonData)
     results = ''
-    for rfsn in rfsnids:
+    for rfsn in session.rfsnids:
         req = schedule(session, rfsn)
         status = ''
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
-            req_session = Util.loads(jsonpickle.decode(req.text))
-            recordings = req_session.recordings
-            for i in range(len(recordings)):
-                recordings[i].uniques[rfsn] = req_session.recordings[i].uniques
+            req_session = Util.loads(req.text)
+            for i in range(len(session.recordings)):
+                if session.recordings[i].uniques == None:
+                    session.recordings[i].uniques = {}
+                session.recordings[i].uniques[rfsn] = req_session.recordings[i].uniques
         elif req.status_code == 404:
             status = str(req.status_code) + ' URL not found. Make sure NodeListener is running on the RFSN.\n'
         elif req.status_code == 500:
@@ -122,7 +121,6 @@ def upload_file(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['docfile']
         jsonschedule = convert(TextIOWrapper(uploaded_file.file, encoding='utf-8'))
-        print(jsonschedule)
         return HttpResponse(schedule_session(jsonschedule))
     #return HttpResponse('bad2')
     return render(request, 'main.html')
