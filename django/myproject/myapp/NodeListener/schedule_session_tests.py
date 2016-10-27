@@ -22,8 +22,6 @@ class TestJSONEncoderDecoder(unittest.TestCase):
         r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', frequency=2412e6, length=1)
         s = Session(startingpath='/tmp/scheduleTest/', rfsnids=[0], recordings=[r])
         dumped = Util.dumps(s)
-        print(sys.modules)
-        #print('DUMPED', repr(dumped))
         loaded = Util.loads(dumped)
         self.assertEqual(loaded, s)
         self.assertEqual(loaded.recordings[0].length, 1)
