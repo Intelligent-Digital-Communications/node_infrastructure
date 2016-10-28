@@ -57,6 +57,15 @@ def filedrop(body):
     except Exception as e:
         return {'log': 'Exception occurred: ' + str(e)}
 
+@hug.post('/get_atq')
+def getatq(body):
+    try:
+        stdout, _ = Popen('./getatq.sh', stdout=subprocess.PIPE).communicate()
+        jobids = [int(x) for x in stdout.decode('ascii').split('\n')[:-1]]
+        return json.dumps({ 'JobIds' : jobids})
+    except Exception as e:
+        return {'log': 'Exception occurred: ' + str(e)}
+
 @hug.get('/clear_atq')
 def clear_atq():
     stdout, _ = Popen('./clearatq.sh', stdout=subprocess.PIPE).communicate()

@@ -38,5 +38,11 @@ def filedrop(data, rfsn):
     req = requests.post(url, json=data)
     return req
 
+def getatq():
+    url = "http://" + listeners[int(1)] + "/getatq/";
+    print("GetATQ URL: " + url)
+    req = requests.post(url)
+    return req
+
 if __name__ == "__main__":
     main()

@@ -19,6 +19,7 @@ from myproject.myapp.models import Document, Rfsn
 from myproject.myapp.forms import DocumentForm
 from myproject.myapp.RFSNController import schedule
 from myproject.myapp.RFSNController import filedrop
+from myproject.myapp.RFSNController import getatq
 
 from django.views.generic.list import ListView
 from django.views.decorators.csrf import csrf_exempt
@@ -62,6 +63,18 @@ def filedrop(request, hostname):
         #print(message)
         jsonData = json.loads(request.body.decode('utf-8'))
         result = filedrop(jsonData)
+        return HttpResponse(result)
+    #print('TRNKRYNO')
+    return HttpResponse("OK")
+
+@csrf_exempt
+def getatq(request, hostname):
+    if request.method == 'POST':
+        #message = request.GET.get('message')
+        #print(message)
+        #jsonData = json.loads(request.body.decode('utf-8'))
+	jsonData = json.loads(request.body.decode('utf-8'))
+        result = getatq()
         return HttpResponse(result)
     #print('TRNKRYNO')
     return HttpResponse("OK")
