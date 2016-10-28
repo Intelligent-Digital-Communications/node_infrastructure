@@ -50,10 +50,16 @@ def filedrop(body):
     try:
         #Recording.recordpath after -av
         print(body)
-        hey = json.loads(body)
-        print(hey['rfsnid'])
-        fpath = '/home/ops/testfolder'
-        atargs = ['rsync', '-av', fpath, 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test', '']
+        jsonData = json.loads(body)
+        date = jsonData['date']         #20161029
+        game = jsonData['game']         #duke
+        rfsnid = jsonData['rfsnid']     #1
+        spath = jsonData['spath']       #/home/ops/testfolder
+        dpath = jsonData['dpath']       #/home/idcjbod/filedrop/test
+
+        dpath = 'uploader@idc2.vip.gatech.edu:' + dpath + '/' + date + '_' + game + '/' + 'rfsn' + rfsnid + '/' + 'pred/'
+        print(dpath)
+        atargs = ['rsync', '-av', spath, dpath, '']
         Popen(atargs, stdout=PIPE, stderr=PIPE)
         return 'success'
     except Exception as e:
