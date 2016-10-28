@@ -50,8 +50,9 @@ def filedrop(body):
     try:
         #Recording.recordpath after -av
         print(body)
+        print(body.get.GET('fpath'));
         fpath = '/home/ops/testfolder'
-        atargs = ['rsync', '-av', fpath, 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test']
+        atargs = ['rsync', '-av', fpath, 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test', '']
         Popen(atargs, stdout=PIPE, stderr=PIPE)
         return 'success'
     except Exception as e:
