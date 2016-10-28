@@ -3,7 +3,7 @@ from RecordingClasses import Recording, Session, Util
 from schedule_session import schedule_session
 #from .NodeListener import remove_ids_atq as remove_jobids
 from NodeListener import clear_atq, filedrop
-
+'''
 class TestScheduleSession(unittest.TestCase):
     def runTest(self):
         r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', frequency=2412e6, length=1)
@@ -27,7 +27,7 @@ class TestJSONEncoderDecoder(unittest.TestCase):
         loaded = Util.loads(dumped)
         self.assertEqual(loaded, s)
         self.assertEqual(loaded.recordings[0].length, 1)
-
+'''
 class TestFiledropSession(unittest.TestCase):
     def runTest(self):
         passing = {'fpath': '/home/ops/testfolder', 'rfsnid':1, 'ipath':'/home/idcjbod/filedrop/test'}
