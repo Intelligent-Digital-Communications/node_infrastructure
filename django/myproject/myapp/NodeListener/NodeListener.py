@@ -59,7 +59,7 @@ def filedrop(body):
 
         dpath = 'uploader@idc2.vip.gatech.edu:' + dpath + '/' + date + '_' + game + '/' + 'rfsn' + rfsnid + '/' + 'pred/'
         print(dpath)
-        atargs = ['mkdir -p', dpath, '&&', 'rsync', '-av', spath, dpath, '']
+        atargs = ['mkdir', '-p', dpath, '&&', 'rsync', '-av', spath, dpath, '']
         Popen(atargs, stdout=PIPE, stderr=PIPE)
         return 'success'
     except Exception as e:
