@@ -68,7 +68,7 @@ def filedrop(body):
         atargs = ['rsync', '-av', fpath, commonpath]
         Popen(atargs, stdout=PIPE, stderr=PIPE)
         print(atargs)
-        atargs = ['rsync', '-av', spath, folderpath]
+        atargs = ['rsync', '-av', spath, dpath]
         Popen(atargs, stdout=PIPE, stderr=PIPE)
         print(atargs)
 
