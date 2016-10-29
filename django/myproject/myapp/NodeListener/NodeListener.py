@@ -55,7 +55,7 @@ def filedrop(body):
         game = jsonData['game']         #duke
         rfsnid = jsonData['rfsnid']     #1
         spath = jsonData['spath']       #/home/ops/testfolder
-        fpath = jsonData['fpath']       #/test
+        fpath = jsonData['fpath']       #test
         commonpath = 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop'
 
         folderpath = fpath + '/' + date + '_' + game + '/' + 'rfsn' + rfsnid + '/' + 'pred/'        #/test/20161029_duke/rfsn1/pred/
@@ -67,8 +67,10 @@ def filedrop(body):
         print(atargs)
         atargs = ['rsync', '-av', fpath, commonpath]
         Popen(atargs, stdout=PIPE, stderr=PIPE)
+        print(atargs)
         atargs = ['rsync', '-av', spath, folderpath]
         Popen(atargs, stdout=PIPE, stderr=PIPE)
+        print(atargs)
 
         return 'success'
     except Exception as e:
