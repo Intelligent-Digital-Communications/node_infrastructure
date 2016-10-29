@@ -59,7 +59,7 @@ def filedrop(body):
         commonpath = 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop'
 
         folderpath = fpath + '/' + date + '_' + game + '/' + 'rfsn' + rfsnid + '/' + 'pred/'        #/test/20161029_duke/rfsn1/pred/
-        dpath = commonpath + '/' + fpath      #uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test/20161029_duke/rfsn1/pred/
+        dpath = commonpath + '/' + folderpath      #uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test/20161029_duke/rfsn1/pred/
 
 
         atargs = ['mkdir', '-p', folderpath]#, '&&', 'rsync', '-av', spath, dpath, '']
