@@ -55,13 +55,20 @@ def filedrop(body):
         game = jsonData['game']         #duke
         rfsnid = jsonData['rfsnid']     #1
         spath = jsonData['spath']       #/home/ops/testfolder
-        dpath = jsonData['dpath']       #/home/idcjbod/filedrop/test
+        fpath = jsonData['fpath']       #/test
+        commonpath = 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop'
 
-        dpath = 'uploader@idc2.vip.gatech.edu:' + dpath + '/' + date + '_' + game + '/' + 'rfsn' + rfsnid + '/' + 'pred/'
-        print(dpath)
-        atargs = ['mkdir', '-p', dpath]#, '&&', 'rsync', '-av', spath, dpath, '']
-        print(atargs)
+        folderpath = fpath + '/' + date + '_' + game + '/' + 'rfsn' + rfsnid + '/' + 'pred/'        #/test/20161029_duke/rfsn1/pred/
+        dpath = commonpath + fpath      #uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test/20161029_duke/rfsn1/pred/
+
+
+        atargs = ['mkdir', '-p', folderpath]#, '&&', 'rsync', '-av', spath, dpath, '']
         Popen(atargs, stdout=PIPE, stderr=PIPE)
+        atargs = ['rsync', '-av', fpath, commonpath]
+        Popen(atargs, stdout=PIPE, stderr=PIPE)
+        atargs = ['rsync', '-av', spath, folderpath]
+        Popen(atargs, stdout=PIPE, stderr=PIPE)
+
         return 'success'
     except Exception as e:
         return {'log': 'Exception occurred: ' + str(e)}
