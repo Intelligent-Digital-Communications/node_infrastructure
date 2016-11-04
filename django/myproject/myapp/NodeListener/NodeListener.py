@@ -63,9 +63,10 @@ def filedrop(body):
         dpath = commonpath + '/' + folderpath      #uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test/20161029_duke/rfsn1/pred/
 
 	###############################################################################
-        logfilepath = '/log'
+        logfilepath = ''
+        #args = ('rsync -av {spath} {dpath}').format(
         args = ('rsync -av {spath} {dpath} >> {logfilepath} 2>&1').format(
-        spath=spath, dpath = dpath, logfilepath = logfilepath)
+        spath=spath, dpath = dpath)
 
         filename = 'delayedrsync.sh'
         epoch_file = open(filename, 'w')
