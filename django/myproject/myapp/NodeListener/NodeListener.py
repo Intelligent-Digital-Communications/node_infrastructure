@@ -64,14 +64,14 @@ def filedrop(body):
 
 	###############################################################################
         logfilepath = ''
-        #args = ('rsync -av {spath} {dpath}').format(
-        args = ('rsync -av {spath} {dpath} >> {logfilepath} 2>&1').format(
+	#args = ('rsync -av {spath} {dpath} >> {logfilepath} 2>&1').format(
+        args = ('rsync -av {spath} {dpath}').format(
         spath=spath, dpath = dpath)
 
         filename = 'delayedrsync.sh'
         epoch_file = open(filename, 'w')
-        epoch_file.write('#!/bin/bash\necho {} >> {}\n{}'
-                        .format(filename, logfilepath, args))
+        epoch_file.write('#!/bin/bash\necho {}\n{}'
+                        .format(filename, args))
         epoch_file.close()
         os.chmod(filename, os.stat(filename).st_mode | int("0111", 8)) # Make exec by everyone	
 	#################################################################################
