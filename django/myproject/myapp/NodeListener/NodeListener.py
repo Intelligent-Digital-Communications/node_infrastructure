@@ -51,6 +51,7 @@ def filedrop(body):
         #Recording.recordpath after -av
         print(body)
         jsonData = json.loads(body)
+        scheduletime = jsonData['scheduletime']		#2:30 PM 10/21/2014
         date = jsonData['date']         #20161029
         game = jsonData['game']         #duke
         rfsnid = jsonData['rfsnid']     #1
@@ -61,16 +62,32 @@ def filedrop(body):
         folderpath = fpath + '/' + date + '_' + game + '/' + 'rfsn' + rfsnid + '/' + 'pred/'        #/test/20161029_duke/rfsn1/pred/
         dpath = commonpath + '/' + folderpath      #uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test/20161029_duke/rfsn1/pred/
 
+	###############################################################################
+        logfilepath = '/log'
+        args = ('rsync -av {spath} {dpath} >> {logfilepath} 2>&1').format(
+        spath=spath, dpath = dpath, logfilepath = logfilepath)
 
+        filename = 'delayedrsync.sh'
+        epoch_file = open(filename, 'w')
+        epoch_file.write('#!/bin/bash\necho {} >> {}\n{}'
+                        .format(filename, logfilepath, args))
+        epoch_file.close()
+        os.chmod(filename, os.stat(filename).st_mode | int("0111", 8)) # Make exec by everyone	
+	#################################################################################
         atargs = ['mkdir', '-p', folderpath]#, '&&', 'rsync', '-av', spath, dpath, '']
         Popen(atargs, stdout=PIPE, stderr=PIPE)
         print(atargs)
         atargs = ['rsync', '-av', fpath, commonpath]
         Popen(atargs, stdout=PIPE, stderr=PIPE)
         print(atargs)
-        atargs = ['rsync', '-av', spath, dpath]
+        atargs = ['at', '-f', 'delayedrsync.sh', scheduletime]
         Popen(atargs, stdout=PIPE, stderr=PIPE)
         print(atargs)
+        #atargs = ['rsync', '-av', spath, dpath]
+        #Popen(atargs, stdout=PIPE, stderr=PIPE)
+        #print(atargs)
+
+        
 
         return 'success'
     except Exception as e:

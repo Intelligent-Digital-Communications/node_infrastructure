@@ -30,7 +30,7 @@ class TestJSONEncoderDecoder(unittest.TestCase):
 '''
 class TestFiledropSession(unittest.TestCase):
     def runTest(self):
-        passing = {'spath': '/home/ops/testfolder/', 'rfsnid':'1', 'fpath':'test', 'date':'20161029', 'game':'duke'}
+        passing = {'spath': '/home/ops/testfolder/', 'rfsnid':'1', 'fpath':'test', 'date':'20161029', 'game':'duke', 'scheduletime': '2:30 PM 10/21/2014'}
         print(filedrop(json.dumps(passing)))
 
 if __name__ == '__main__':
