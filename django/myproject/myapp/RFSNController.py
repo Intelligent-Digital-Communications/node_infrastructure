@@ -24,7 +24,7 @@ def schedule(session, rfsn):
     print("SCHEDULE URL: " + url)
     req = requests.post(url, json=Util.dumps(session))
     return req
-    
+
 #def genericfunction(jsondata, functionname, rfsn):
 #    url = "http://" + listeners[int(rfsn)] + functionname;
 #    print("SCHEDULE URL: " + url)
@@ -32,10 +32,14 @@ def schedule(session, rfsn):
 #    print(jsondata)
 #    return req
 
-def filedrop(data, rfsn):
-    url = "http://" + listeners[int(rfsn)] + "/filedrop/";
+def file_drop(data, hostname):
+    print(data['rfsnid'])
+    rfsn = data['rfsnid']
+    jsonData = Util.dumps(data)
+    #url = "http://" + listeners[int(rfsn)] + "/filedrop/";
+    url = "http://" + "rfsn-demo1.vip.gatech.edu:8000"	+ "/filedrop/";
     print("CopyPaste URL: " + url)
-    req = requests.post(url, json=data)
+    req = requests.post(url, data=json.dumps(data))
     return req
 
 def getatq():
