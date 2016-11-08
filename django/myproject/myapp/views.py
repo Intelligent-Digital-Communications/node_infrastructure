@@ -73,7 +73,7 @@ def getatq(request, hostname):
         #message = request.GET.get('message')
         #print(message)
         #jsonData = json.loads(request.body.decode('utf-8'))
-	jsonData = json.loads(request.body.decode('utf-8'))
+        jsonData = json.loads(request.body.decode('utf-8'))
         result = getatq()
         return HttpResponse(result)
     #print('TRNKRYNO')
