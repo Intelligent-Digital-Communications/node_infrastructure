@@ -7,7 +7,7 @@ from .NodeListener import *
 import os
 
 # Example test for posting a CSV, need to create a jsonSessionDict
-'''
+
 class ScheduleAndCancelTestCase(TestCase):
     def test_schedule_then_cancel(self):
         c = Client()
@@ -25,3 +25,4 @@ class TestFiledropSession(TestCase):
         response = c.post('/myapp/filedrop/1/', passing)
         print(response)
         #print(filedrop(json.dumps(passing)))
+'''
