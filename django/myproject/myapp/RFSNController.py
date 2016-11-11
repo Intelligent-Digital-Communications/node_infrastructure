@@ -1,4 +1,4 @@
-import sys, time, os, pickle, urllib, json
+import sys, time, os, pickle, urllib, json, datetime
 import requests
 from django.core.mail import send_mail
 from .NodeListener import *
@@ -23,8 +23,12 @@ def schedule(session, rfsn):
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
     req = requests.post(url, json=Util.dumps(session))
+    formattedDate = session.recordings[0].strftime("%d%m%Y");
+    formattedScheduleTime = (session.recordings[0].replace(hour=0) + datetime.timedelta(days=1)).strftime("%H:%M %m/%d/%Y");
+    data = {'spath': session.startingpath, 'rfsnid': rfsn, 'fpath':'test', 'date': formattedDate, 'game':'gatech', 'scheduletime': formattedScheduleTime }
+    file_drop(data, rfsn);
     return req
-    
+
 #def genericfunction(jsondata, functionname, rfsn):
 #    url = "http://" + listeners[int(rfsn)] + functionname;
 #    print("SCHEDULE URL: " + url)
@@ -32,10 +36,14 @@ def schedule(session, rfsn):
 #    print(jsondata)
 #    return req
 
-def filedrop(data, rfsn):
-    url = "http://" + listeners[int(rfsn)] + "/filedrop/";
+def file_drop(data, hostname):
+    print(data['rfsnid'])
+    rfsn = data['rfsnid']
+    jsonData = Util.dumps(data)
+    #url = "http://" + listeners[int(rfsn)] + "/filedrop/";
+    url = "http://" + "rfsn-demo1.vip.gatech.edu:8000"	+ "/filedrop/";
     print("CopyPaste URL: " + url)
-    req = requests.post(url, json=data)
+    req = requests.post(url, data=json.dumps(data))
     return req
 
 def getatq():

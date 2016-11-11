@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
-from django.core.mail import send_mail 
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django import forms
 from .forms import UploadFileForm
@@ -18,7 +18,7 @@ from io import TextIOWrapper
 from myproject.myapp.models import Document, Rfsn
 from myproject.myapp.forms import DocumentForm
 from myproject.myapp.RFSNController import schedule
-from myproject.myapp.RFSNController import filedrop
+from myproject.myapp.RFSNController import file_drop
 from myproject.myapp.RFSNController import getatq
 
 from django.views.generic.list import ListView
@@ -41,7 +41,7 @@ def list(request):
             return HttpResponseRedirect(reverse('list'))
     else:
         form = DocumentForm()  # A empty, unbound form
-    
+
     return render(
         request,
         'list.html',
@@ -59,12 +59,15 @@ def schedule_session(request):
 @csrf_exempt
 def filedrop(request, hostname):
     if request.method == 'POST':
-        #message = request.GET.get('message')
-        #print(message)
-        jsonData = json.loads(request.body.decode('utf-8'))
-        result = filedrop(jsonData)
+        data = request.POST
+        #print(jsonData)
+        print(hostname)
+        #print(json.loads(request.body.decode('utf-8'))
+        #jsonData = json.loads(request.body.decode('utf-8'))
+        #print(jsonData)
+        result = file_drop(data, hostname)
+        print(result)
         return HttpResponse(result)
-    #print('TRNKRYNO')
     return HttpResponse("OK")
 
 @csrf_exempt
@@ -73,7 +76,7 @@ def getatq(request, hostname):
         #message = request.GET.get('message')
         #print(message)
         #jsonData = json.loads(request.body.decode('utf-8'))
-	jsonData = json.loads(request.body.decode('utf-8'))
+        jsonData = json.loads(request.body.decode('utf-8'))
         result = getatq()
         return HttpResponse(result)
     #print('TRNKRYNO')
