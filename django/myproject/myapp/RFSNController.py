@@ -4,8 +4,8 @@ from django.core.mail import send_mail
 from .NodeListener import *
 
 DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
-listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
-            "rfsn-demo3.vip.gatech.edu"]
+listeners = ["localhost", "rfsn-demo1.vip.gatech.edu:8000", "rfsn-demo2.vip.gatech.edu:8000",
+            "rfsn-demo3.vip.gatech.edu:8000"]
 #listeners = ["localhost:8000", "sn1-wifi.vip.gatech.edu:8094", "sn1-wifi.vip.gatech.edu:8095",
 #           "sn2-wifi.vip.gatech.edu:8094"]
 
@@ -20,6 +20,7 @@ def updategains(iplist, gain, path=DEFAULTPATH):
     return __sendmessages(iplist, message)
 
 def schedule(session, rfsn):
+    print(rfsn)
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
     req = requests.post(url, data=Util.dumps(session))
@@ -34,8 +35,8 @@ def file_drop(session, rfsn):
         'date': formattedDate, 'game':'gatech',
         'scheduletime': formattedScheduleTime, }
     jsonData = Util.dumps(data)
-    url = "http://" + listeners[int(rfsn)] + "/filedrop/";
-    #url = "http://" + "rfsn-demo1.vip.gatech.edu:8000"	+ "/filedrop/";
+    url = "http://" + listeners[int(rfsn)] + "/filedrop/"
+    print("http://" + "rfsn-demo1.vip.gatech.edu:8000"	+ "/filedrop/")
     print("CopyPaste URL: " + url)
     req = requests.post(url, data=jsonData)
     return req
