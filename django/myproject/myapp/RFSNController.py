@@ -22,7 +22,7 @@ def updategains(iplist, gain, path=DEFAULTPATH):
 def schedule(session, rfsn):
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
-    req = requests.post(url, json=Util.dumps(session))
+    req = requests.post(url, data=Util.dumps(session))
     formattedDate = session.recordings[0].strftime("%d%m%Y");
     formattedScheduleTime = (session.recordings[0].replace(hour=0) + datetime.timedelta(days=1)).strftime("%H:%M %m/%d/%Y");
     data = {'spath': session.startingpath, 'rfsnid': rfsn, 'fpath':'test', 'date': formattedDate, 'game':'gatech', 'scheduletime': formattedScheduleTime }
