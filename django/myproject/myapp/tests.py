@@ -12,7 +12,7 @@ class ScheduleAndCancelTestCase(TestCase):
     def test_schedule_then_cancel(self):
         c = Client()
         with open('myproject/myapp/csv/controller_test_schedule.csv', 'rb') as csv:
-            response = c.post('/myapp/upload_file/', { 'docfile' : csv, 'rfsns' : [0] })
+            response = c.post('/myapp/upload_file/', { 'docfile' : csv, 'rfsns' : [1] })
             self.assertTrue(response.status_code == 200)
             self.assertEqual(len(mail.outbox), 1)
             s = Util.loads(response.content.decode('utf-8'))
