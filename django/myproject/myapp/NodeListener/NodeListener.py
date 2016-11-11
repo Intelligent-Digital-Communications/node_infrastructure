@@ -85,10 +85,6 @@ def filedrop(body):
         stdout, stderr = Popen(atargs, stdout=PIPE, stderr=PIPE).communicate()
         print(stderr.decode('ascii'))
         print(stdout.decode('ascii'))
-        #atargs = ['rsync', '-av', spath, dpath]
-        #Popen(atargs, stdout=PIPE, stderr=PIPE)
-        #print(atargs)
-        print('HEYYYYYYYY MAMI')
         return 'success'
     except Exception as e:
         return {'log': 'Exception occurred: ' + str(e)}
