@@ -48,8 +48,8 @@ def generate_epochs(body):
 @hug.post('/filedrop')
 def filedrop(body):
     try:
-        #Recording.recordpath after -av
         print(body)
+        #Recording.recordpath after -av
         jsonData = json.loads(body)
         scheduletime = jsonData['scheduletime']		#2:30 PM 10/21/2014
         date = jsonData['date']         #20161029
@@ -59,7 +59,7 @@ def filedrop(body):
         fpath = jsonData['fpath']       #test
         commonpath = 'uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop'
 
-        folderpath = fpath + '/' + date + '_' + game + '/' + 'rfsn' + rfsnid + '/' + 'pred/'        #/test/20161029_duke/rfsn1/pred/
+        folderpath = fpath + '/' + date + '_' + game + '/' + 'rfsn' + str(rfsnid) + '/' + 'pred/'        #/test/20161029_duke/rfsn1/pred/
         dpath = commonpath + '/' + folderpath      #uploader@idc2.vip.gatech.edu:/home/idcjbod/filedrop/test/20161029_duke/rfsn1/pred/
 
 	###############################################################################
@@ -68,7 +68,7 @@ def filedrop(body):
         args = ('rsync -av {spath} {dpath}').format(
         spath=spath, dpath = dpath)
 
-        filename = 'delayedrsync.sh'
+        filename = spath +'/' + 'delayedrsync.sh'
         epoch_file = open(filename, 'w')
         epoch_file.write('#!/bin/bash\necho {}\n{}'
                         .format(filename, args))
@@ -82,14 +82,13 @@ def filedrop(body):
         Popen(atargs, stdout=PIPE, stderr=PIPE)
         print(atargs)
         atargs = ['at', '-f', 'delayedrsync.sh', scheduletime]
-        Popen(atargs, stdout=PIPE, stderr=PIPE)
-        print(atargs)
+        stdout, stderr = Popen(atargs, stdout=PIPE, stderr=PIPE).communicate()
+        print(stderr.decode('ascii'))
+        print(stdout.decode('ascii'))
         #atargs = ['rsync', '-av', spath, dpath]
         #Popen(atargs, stdout=PIPE, stderr=PIPE)
         #print(atargs)
-
-        
-
+        print('HEYYYYYYYY MAMI')
         return 'success'
     except Exception as e:
         return {'log': 'Exception occurred: ' + str(e)}
