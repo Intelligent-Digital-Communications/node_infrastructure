@@ -4,8 +4,8 @@ from django.core.mail import send_mail
 from .NodeListener import *
 
 DEFAULTPATH = '' # Listener-side path! '' == Local folder of listener.py UNUSED
-listeners = ["localhost", "rfsn-demo1.vip.gatech.edu", "rfsn-demo2.vip.gatech.edu",
-            "rfsn-demo3.vip.gatech.edu"]
+listeners = ["localhost", "rfsn-demo1.vip.gatech.edu:8000", "rfsn-demo2.vip.gatech.edu:8000",
+            "rfsn-demo3.vip.gatech.edu:8000"]
 #listeners = ["localhost:8000", "sn1-wifi.vip.gatech.edu:8094", "sn1-wifi.vip.gatech.edu:8095",
 #           "sn2-wifi.vip.gatech.edu:8094"]
 
@@ -20,13 +20,15 @@ def updategains(iplist, gain, path=DEFAULTPATH):
     return __sendmessages(iplist, message)
 
 def schedule(session, rfsn):
+    print(rfsn)
     url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
     req = requests.post(url, data=Util.dumps(session))
-    formattedDate = session.recordings[0].strftime("%d%m%Y");
-    formattedScheduleTime = (session.recordings[0].replace(hour=0) + datetime.timedelta(days=1)).strftime("%H:%M %m/%d/%Y");
+    formattedDate = session.recordings[-1].starttime.strftime("%d%m%Y");
+    formattedScheduleTime = (session.recordings[-1].starttime.replace(hour=0) + datetime.timedelta(days=1)).strftime("%H:%M %m/%d/%Y");
     data = {'spath': session.startingpath, 'rfsnid': rfsn, 'fpath':'test', 'date': formattedDate, 'game':'gatech', 'scheduletime': formattedScheduleTime }
-    file_drop(data, rfsn);
+    result = file_drop(data, rfsn)
+    print(result)
     return req
 
 #def genericfunction(jsondata, functionname, rfsn):
@@ -40,8 +42,8 @@ def file_drop(data, hostname):
     print(data['rfsnid'])
     rfsn = data['rfsnid']
     jsonData = Util.dumps(data)
-    url = "http://" + listeners[int(rfsn)] + "/filedrop/";
-    #url = "http://" + "rfsn-demo1.vip.gatech.edu:8000"	+ "/filedrop/";
+    url = "http://" + listeners[int(rfsn)] + "/filedrop/"
+    print("http://" + "rfsn-demo1.vip.gatech.edu:8000"	+ "/filedrop/")
     print("CopyPaste URL: " + url)
     req = requests.post(url, data=json.dumps(data))
     return req
