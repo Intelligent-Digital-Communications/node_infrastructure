@@ -81,7 +81,7 @@ def filedrop(body):
         atargs = ['rsync', '-av', fpath, commonpath]
         Popen(atargs, stdout=PIPE, stderr=PIPE)
         print(atargs)
-        atargs = ['at', '-f', 'delayedrsync.sh', scheduletime]
+        atargs = ['at', '-f', spath + '/'+ 'delayedrsync.sh', scheduletime]
         stdout, stderr = Popen(atargs, stdout=PIPE, stderr=PIPE).communicate()
         print(stderr.decode('ascii'))
         print(stdout.decode('ascii'))
