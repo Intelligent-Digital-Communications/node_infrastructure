@@ -12,7 +12,7 @@ Go to `django/myproject/myapp/NodeListener` and run `python3 schedule_session_te
 
 #### Integration Testing
 1. Go to `django/myproject/myapp/NodeListener` and run `hug -f NodeListener.py`.
-⋅⋅* [If testing something involving scheduling] Create a scheduling CSV that schedules on ID 0 instead of 1,2,3 (currently, refer to the end of the first line of the CSV).
+  * [If testing something involving scheduling] Create a scheduling CSV that schedules on ID 0 instead of 1,2,3 (currently, refer to the end of the first line of the CSV).
 2. Navigate to `django` and run `python3 manage.py runserver 0.0.0.0:8080`.
 3. Click this link: http://localhost:8080
 
