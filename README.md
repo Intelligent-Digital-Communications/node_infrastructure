@@ -12,15 +12,18 @@ Go to `django/myproject/myapp/NodeListener` and run `python3 schedule_session_te
 
 #### Integration Testing
 1. Go to `django/myproject/myapp/NodeListener` and run `hug -f NodeListener.py`.
-..* [If testing something involving scheduling] Create a scheduling CSV that schedules on ID 0 instead of 1,2,3 (currently, refer to the end of the first line of the CSV).
+⋅⋅* [If testing something involving scheduling] Create a scheduling CSV that schedules on ID 0 instead of 1,2,3 (currently, refer to the end of the first line of the CSV).
 2. Navigate to `django` and run `python3 manage.py runserver 0.0.0.0:8080`.
 3. Click this link: http://localhost:8080
 
 #### Deployment
 On RFSNS, simply navigate to NodeListener folder and run `./startlistener.sh`.
+
 On idc-dev, simply navigate to django folder and run `./startserver.sh`.
 
 ## FAQ
 `Connection refused error`: The Listener isn't running or the Controller is looking at the wrong address for it. If you get this during a Controller test, be sure that you have a Listener running locally.
+
 `ImportError`: You're missing a Python module that we require. `pip3 install {}` where `{}` == the name of the module given in the ImportError.
+
 `I can't reach the Controller page`: Be sure the django server is running on idc-dev, it may be down for upgrades.
