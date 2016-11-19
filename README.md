@@ -1,7 +1,7 @@
 # Node Infrastructure - Operations
 
 ## What's Next
-Refer to Issues Page
+Refer to [Issues Page](https://github.gatech.edu/hflinner3/node_infrastructure-operations/issues)
 
 ## Building/Testing
 #### Controller Testing
