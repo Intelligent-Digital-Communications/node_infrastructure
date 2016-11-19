@@ -16,7 +16,6 @@ class Util(object):
         sys.modules['RecordingClasses'] = sys.modules[__name__]
         # This patches in the module's actual name to the global level.
         # Possibly wouldn't be needed if module was set up correctly or registered somehow?
-        # Could move to init?
 
         prefix = 'myproject.myapp.NodeListener.'
         possible = jsonpickle.decode(re.sub(prefix, '', passsed_in))

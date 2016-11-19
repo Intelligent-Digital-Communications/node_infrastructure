@@ -1,7 +1,6 @@
 import unittest, json, jsonpickle, sys
 from RecordingClasses import Recording, Session, Util
 from schedule_session import schedule_session
-#from .NodeListener import remove_ids_atq as remove_jobids
 from NodeListener import clear_atq, filedrop
 '''
 class TestScheduleSession(unittest.TestCase):
@@ -30,7 +29,9 @@ class TestJSONEncoderDecoder(unittest.TestCase):
 '''
 class TestFiledropSession(unittest.TestCase):
     def runTest(self):
-        passing = {'spath': '/home/ops/testfolder/', 'rfsnid':'1', 'fpath':'test', 'date':'20161029', 'game':'duke', 'scheduletime': '2:30 PM 11/15/2016'}
+        passing = {'spath': '/home/ops/testfolder/', 'rfsnid':'1',
+                'fpath':'test', 'date':'20161029', 'game':'duke',
+                'scheduletime': '2:30 PM 11/15/2016'}
         print(filedrop(json.dumps(passing)))
 
 if __name__ == '__main__':

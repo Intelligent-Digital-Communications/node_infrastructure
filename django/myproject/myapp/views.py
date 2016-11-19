@@ -60,11 +60,7 @@ def schedule_session(request):
 def filedrop(request, hostname):
     if request.method == 'POST':
         data = request.POST
-        #print(jsonData)
         print(hostname)
-        #print(json.loads(request.body.decode('utf-8'))
-        #jsonData = json.loads(request.body.decode('utf-8'))
-        #print(jsonData)
         result = file_drop(data, hostname)
         print(result)
         return HttpResponse(result)
@@ -73,13 +69,9 @@ def filedrop(request, hostname):
 @csrf_exempt
 def getatq(request, hostname):
     if request.method == 'POST':
-        #message = request.GET.get('message')
-        #print(message)
-        #jsonData = json.loads(request.body.decode('utf-8'))
         jsonData = json.loads(request.body.decode('utf-8'))
         result = getatq()
         return HttpResponse(result)
-    #print('TRNKRYNO')
     return HttpResponse("OK")
 
 def schedule_session(jsonData):
@@ -121,8 +113,6 @@ class RfsnListView(ListView):
         context['now'] = timezone.now()
         return context
 
-#from myproject.myapp.models import Rfsn
-
 def status(request):
     nodes = Rfsn.objects.all()
     stats = []
@@ -131,12 +121,10 @@ def status(request):
 
     return render(request,'status.html',{'stats':stats})
 
-
 @csrf_exempt
 def upload_file(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['docfile']
         jsonschedule = convert(TextIOWrapper(uploaded_file.file, encoding='utf-8'))
         return HttpResponse(schedule_session(jsonschedule))
-    #return HttpResponse('bad2')
     return render(request, 'main.html')
