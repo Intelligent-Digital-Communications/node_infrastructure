@@ -8,13 +8,13 @@ Refer to [Issues Page](https://github.gatech.edu/hflinner3/node_infrastructure-o
 Navigate to `django` folder and run `python3 manage.py test`.
 
 #### Listener Testing
-Navigate to `django/myproject/myapp/NodeListener` and run `python3 schedule_session_tests.py`.
+Go to `django/myproject/myapp/NodeListener` and run `python3 schedule_session_tests.py`.
 
 #### Integration Testing
-Navigate to `django/myproject/myapp/NodeListener` and run `hug -f NodeListener.py`.
-Create a scheduling CSV that schedules on ID 0 instead of 1,2,3 (currently, refer to the end of the first line of the CSV).
-Navigate to `django` and run `python3 manage.py runserver 0.0.0.0:8080`.
-Click this link: http://localhost:8080
+1. Go to `django/myproject/myapp/NodeListener` and run `hug -f NodeListener.py`.
+..* [If testing something involving scheduling] Create a scheduling CSV that schedules on ID 0 instead of 1,2,3 (currently, refer to the end of the first line of the CSV).
+2. Navigate to `django` and run `python3 manage.py runserver 0.0.0.0:8080`.
+3. Click this link: http://localhost:8080
 
 #### Deployment
 On RFSNS, simply navigate to NodeListener folder and run `./startlistener.sh`.
