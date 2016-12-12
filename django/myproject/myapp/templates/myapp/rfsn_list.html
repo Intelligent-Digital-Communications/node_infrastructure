@@ -1,0 +1,8 @@
+<h1>RFSNs</h1>
+<ul>
+    {% for rfsn in object_list %}
+        <li>{{ rfsn.hostname|date }} - {{ rfsn.hostname }}</li>
+    {% empty %}
+        <li> No epochs yet.</li>
+    {% endfor %}
+</ul>

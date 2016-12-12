@@ -1,3 +1,0 @@
-# Jackson Labs LC-X0 USB Permissions
-# Typically shows up as /dev/ttyUSB0 as FT232 USB-Serial
-SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", MODE:="0666"

@@ -1,0 +1,11 @@
+[
+    {   
+        "starttime": "12/12/2016 14:22",
+        "recordpath": "testingDeleteMe/test.sc16",
+        "frequency": "24e6",
+        "length": 1,
+        "startearly": 45,
+        "logfilepath": "testingDeleteMe/log.txt",
+        "gain": 45
+    }
+]

@@ -1,0 +1,13 @@
+{
+  "recordings":[
+    {   
+        "starttime": "09/06/2016 13:45",
+        "recordpath": "/opt/fall2016_hulkhogan/afterUHDfix.sc16",
+        "frequency": "2402e6",
+        "length": 30,
+        "startearly": 45,
+        "logfilepath": "/opt/fall2016_hulkhogan/log.txt",
+        "gain": 45
+    }
+  ]
+}

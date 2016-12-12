@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <title>AngularJS Routes example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "angularapp/assets/css/style.css" %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body ng-app="myApp">
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">Intelligent Digital Communications</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="#/schedule">Schedule Recording</a></li>
+	      <li><a href="#/">Test 1</a></li>
+	      <li><a href="#/">Test 2</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	<h1>Intelligent Digital Communications</h1>
+	<div class="container-fluid">
+		<h2>RFSNs</h2>
+		<ul>
+	 		<li> - rfsn-demo1.vip.gatech.edu</li>	    
+	        <li> - rfsn-demo2.vip.gatech.edu</li>	    
+	        <li> - rfsn-demo3.vip.gatech.edu</li>	    
+	        <li> - 143.215.249.243</li>	    
+	        <li> - 143.215.249.234</li>	    
+	        <li> - sn1-wifi.vip.gatech.edu 8095</li>	    
+	        <li> - sn1-wifi.vip.gatech.edu 8094</li>	    
+	        <li> - rfsn3.vip.gatech.edu</li>		    
+		</ul>
+		<div ng-view></div>
+		
+
+
+
+	</div>	
+
+<script>
+var static_url = '{{STATIC_URL}}'
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular-route.min.js"></script>
+<script src="{% static "angularapp/app.module.js" %}"></script>
+<script src="{% static "angularapp/components/scheduleRecording/scheduleController.js" %}"></script>
+<script src="{% static "angularapp/components/scheduleRecording/scheduleDirective.js" %}"></script>
+<script src="{% static "angularapp/components/scheduleRecording/scheduleService.js" %}"></script>
+</body>
+</html>
