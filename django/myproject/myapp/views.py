@@ -15,8 +15,8 @@ import re, sys
 import requests
 from io import TextIOWrapper
 
-from myproject.myapp.models import Document, Rfsn
-from myproject.myapp.forms import DocumentForm
+from myproject.myapp.models import Document#, Rfsn
+#from myproject.myapp.forms import DocumentForm
 from myproject.myapp.RFSNController import schedule
 from myproject.myapp.RFSNController import file_drop
 from myproject.myapp.RFSNController import getatq
@@ -28,7 +28,7 @@ from django.utils import timezone
 def list(request):
     # Handle file upload
     if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
+        #form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
             newdoc = Document(docfile=request.FILES['docfile'])
             newdoc.save()
@@ -104,10 +104,10 @@ def schedule_session(jsonData):
     )
     return jsonpickle.encode(session)
 
-from myproject.myapp.models import Rfsn
+from myproject.myapp.models import RFSN
 
 class RfsnListView(ListView):
-    model = Rfsn
+    model = RFSN
     def get_context_data(self, **kwargs):
         context = super(RfsnListView, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
