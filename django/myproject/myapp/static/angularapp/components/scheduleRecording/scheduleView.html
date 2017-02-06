@@ -1,7 +1,17 @@
-<div>	
+<div>
 	<h2>Schedule a Recording</h2>
 	<div ng-controller = "scheduleController">
 	    <input id="file" type="file" file-model="myFile"/>
 	    <button class="btn btn-primary" ng-click="uploadFile()">Submit</button>
+
+        <form novalidate>
+            First Name:<br>
+            <input type="text" ng-model="user.firstName"><br>
+            Last Name:<br>
+            <input type="text" ng-model="user.lastName">
+            <br><br>
+            <button ng-click="reset()">RESET</button>
+          </form>
+          <p>form = [[user]]</p>
 	</div>
-</div>	
+</div>
