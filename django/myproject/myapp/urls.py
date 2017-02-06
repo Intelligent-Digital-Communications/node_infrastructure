@@ -6,6 +6,7 @@ from myproject.myapp.views import status
 from myproject.myapp.views import schedule_session
 from myproject.myapp.views import upload_file
 from myproject.myapp.views import filedrop
+from myproject.myapp.views import getatq
 #from myapp.views import RfsnListView
 
 urlpatterns = [
@@ -16,5 +17,6 @@ urlpatterns = [
     url(r'^schedule_session/(?P<hostname>\w{0,50})/$', schedule_session, 
         name='schedule_session'),
     url(r'^filedrop/(?P<hostname>\w{0,50})/$', filedrop, name='filedrop'),
+    url(r'^getatq/(?P<hostname>\w{0,50})/$', getatq, name='getatq'),
 ]
 
