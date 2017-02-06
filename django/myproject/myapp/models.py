@@ -25,6 +25,7 @@ class RFSN(models.Model):
     def __str__(self):
         return self.hostname
 
+"""
 class SpecrecArgField(models.CompositeField):
     length = models.IntegerField()
     freq = models.IntegerField()
@@ -42,3 +43,4 @@ class Recording(models.Model):
 
     def __str__(self):
         return ' '.join(str(self.rfsn), self.at_datetime)
+"""
