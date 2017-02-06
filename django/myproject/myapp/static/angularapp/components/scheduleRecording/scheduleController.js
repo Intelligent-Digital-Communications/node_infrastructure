@@ -11,7 +11,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         fileUpload.uploadFileToUrl(file, uploadUrl);
     };
 
-    $scope.user = {Date:"John", Time:"Doe"};
+    $scope.user = {Date:"2016-12-01", Time:"00:00"};
     $scope.reset = function() {
         //$scope.user = angular.copy($scope.master);
         console.log($scope.user);
