@@ -25,12 +25,14 @@ class RFSN(models.Model):
     def __str__(self):
         return self.hostname
 
+"""
 class SpecrecArgField(models.CompositeField):
     length = models.IntegerField()
     freq = models.IntegerField()
     sample_rate = models.IntegerField()
     start = models.DateTimeField('Specrec begin recording time')
     full_commands = models.CharField()
+"""
 
 class Recording(models.Model):
     rfsn = models.ForeignKey(RFSN, on_delete=models.CASCADE)
