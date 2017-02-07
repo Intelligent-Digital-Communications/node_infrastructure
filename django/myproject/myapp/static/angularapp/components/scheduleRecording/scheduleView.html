@@ -3,20 +3,26 @@
 	<div ng-controller = "scheduleController">
 	    <input id="file" type="file" file-model="myFile"/>
 	    <button class="btn btn-primary" ng-click="uploadFile()">Submit</button>
+            <div class="container">
+                <h2>Schedule Recording Form</h2
+                <form novalidate>
+	              <label for="name">File Name:</label>
+	              <input type="text" ng-model="recording.name"><br>
 
-        <form novalidate>
-            Date:<br>
-            <input type="date" ng-model="user.Date"><br>
-						Time:<br>
-            <input type="time" ng-model="user.Time"><br>
-            Name:<br>
-            <input type="text" ng-model="user.Name"><br>
-            Length:<br>
-            <input type="text" ng-model="user.length"><br>
-            <br>
-            <br><br>
-            <button ng-click="reset()">RESET</button>
-          </form>
-          <p>form = [[user]]</p>
+	              <label for="date">Date:</label>
+	              <input type="date" ng-model="recording.date"><br>
+
+		      <label for="time">Time:</label>
+	              <input type="time" ng-model="recording.time"><br>
+
+	              <label for="length">Length:</label>
+	              <input type="text" ng-model="recording.length"><br>
+
+	              <label for="frequency">Frequency (megahertz):</label>
+	              <input type="number" ng-model="recording.frequency"><br>
+
+	              <button ng-click="reset()">Console Log</button>
+                </form>
+            </div>
 	</div>
 </div>
