@@ -1,12 +1,13 @@
 import sys, time, os, pickle, urllib, json, datetime
 import requests
+from myproject.myapp.models import *
 from django.core.mail import send_mail
 from .NodeListener import *
 
 """ Issues commands to NodeListeners. """
 
 # TEST ENV
-listeners = ["localhost", "rfsn-demo1.vip.gatech.edu:8000",
+listeners = ["localhost:8000", "rfsn-demo1.vip.gatech.edu:8000",
         "rfsn-demo2.vip.gatech.edu:8000", "rfsn-demo3.vip.gatech.edu:8000"]
 
 # PRODUCTION
@@ -19,10 +20,14 @@ listeners = ["localhost:8000", "sn1-wifi.vip.gatech.edu:8094",
 def schedule(session, rfsn):
     """Schedules a Session on an RFSN."""
     print(rfsn)
-    url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
+    name = "RFSN " + str(rfsn);
+    hostname = listeners[int(rfsn)].split(":")
+    rfsn_model = RFSN(name=name, hostname=hostname[0], port=hostname[1])
+    rfsn_model.save()
+    url = "http://" + hostname[0] + ":" + hostname[1] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
     req = requests.post(url, data=Util.dumps(session))
-    file_drop(session, rfsn);
+    file_drop(session, rfsn)
     return req
 
 def file_drop(session, rfsn):
