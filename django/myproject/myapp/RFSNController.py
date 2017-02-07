@@ -7,8 +7,8 @@ from .NodeListener import *
 """ Issues commands to NodeListeners. """
 
 # TEST ENV
-listeners = ["localhost:8000", "rfsn-demo1.vip.gatech.edu:8000",
-        "rfsn-demo2.vip.gatech.edu:8000", "rfsn-demo3.vip.gatech.edu:8000"]
+listeners = ["localhost:8000", "rfsn1:5035",
+        "rfsn2:5035", "rfsn3:5035"]
 
 # PRODUCTION
 '''
@@ -33,7 +33,7 @@ def schedule(session, rfsn):
 def file_drop(session, rfsn):
     """Schedules a copy-back of recorded data the day after records."""
     last_time = session.recordings[-1].starttime
-    formatted_date = last_time.strftime("%d%m%Y");
+    formatted_date = last_time.strftime("%d%m%Y")
     formatted_schedule_time = (last_time.replace(hour=((rfsn-1)*2))
         + datetime.timedelta(days=1)).strftime("%H:%M %m/%d/%Y")
     data = {'spath': session.startingpath, 'rfsnid': rfsn, 'fpath':'test',
