@@ -1,18 +1,10 @@
 cycler==0.10.0
 defusedxml==0.4.1
-dj-database-url==0.4.2
 Django==1.10.1
-django-allauth==0.30.0
 django-composite-field==0.7.6
-django-mptt==0.8.7
-django-rest-auth==0.9.0
-djangorestframework==3.5.3
-djangorestframework-jwt==1.9.0
-gunicorn==19.6.0
 jsonpickle==0.9.4
 matplotlib==1.5.3
 numpy==1.11.2
-oauthlib==2.0.1
 PyJWT==1.4.2
 pyparsing==2.1.10
 python-dateutil==2.6.0
@@ -21,4 +13,3 @@ pytz==2016.7
 requests==2.13.0
 requests-oauthlib==0.7.0
 six==1.10.0
-whitenoise==3.3.0
