@@ -43,7 +43,7 @@ def filedrop(body):
 
         filename = spath +'/' + 'delayedrsync.sh'
         epoch_file = open(filename, 'w')
-        args = ('rsync -av {spath} {dpath}').format(spath=spath, dpath=dpath)
+        args = ('rsync -av {spath} {dpath} &>> output.txt').format(spath=spath, dpath=dpath)
         epoch_file.write('#!/bin/bash\necho {}\n{}'.format(filename, args))
         epoch_file.close()
         os.chmod(filename, os.stat(filename).st_mode | int("0111", 8)) # Make exec by everyone	
