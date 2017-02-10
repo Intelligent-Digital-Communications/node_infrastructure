@@ -15,7 +15,7 @@ import re, sys
 import requests
 from io import TextIOWrapper
 
-from myproject.myapp.models import Document#, Rfsn
+from myproject.myapp.models import *
 #from myproject.myapp.forms import DocumentForm
 from myproject.myapp.RFSNController import schedule
 from myproject.myapp.RFSNController import file_drop
@@ -84,9 +84,19 @@ def schedule_session(jsonData):
             status = str(req.status_code) + ' Job scheduled successfully!\n'
             req_session = Util.loads(req.text)
             for i in range(len(session.recordings)):
-                if session.recordings[i].uniques == None:
-                    session.recordings[i].uniques = {}
-                session.recordings[i].uniques[rfsn] = req_session.recordings[i].uniques
+                current_local_rec = session.recordings[i]
+                current_remote_rec = req_session.recordings[i]
+                if current_local_rec.uniques == None:
+                    current_local_rec.uniques = {}
+
+                rec_model = RecordingModel(rfsn=RFSN.objects.get(pk=rfsn))
+                rec_model.specrec_args_freq = current_remote_rec.frequency
+                rec_model.specrec_args_length = current_remote_rec.length
+                rec_model.specrec_args_start = current_remote_rec.starttime
+                rec_model.unix_jobid = current_remote_rec.uniques[jobId]
+                rec_model.at_datetime = current_remote_rec.uniques[jobDateTime]
+                rec_model.save()
+                current_local_rec.uniques[rfsn] = current_remote_rec.uniques
         elif req.status_code == 404:
             status = str(req.status_code) + ' URL not found. Make sure NodeListener is running on the RFSN.\n'
         elif req.status_code == 500:
@@ -104,10 +114,8 @@ def schedule_session(jsonData):
     )
     return jsonpickle.encode(session)
 
-from myproject.myapp.models import RFSN
-
 class RfsnListView(ListView):
-    model = RFSN
+    #model = RFSN
     def get_context_data(self, **kwargs):
         context = super(RfsnListView, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
