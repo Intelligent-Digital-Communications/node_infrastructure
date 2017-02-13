@@ -13,7 +13,8 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
 
     $scope.recording = {};
     $scope.reset = function() {
-        //$scope.user = angular.copy($scope.master);
+        $scope.recording.starttime = $scope.recording.date + " " + $scope.recording.time;
+
         console.log($scope.recording);
     };
 
