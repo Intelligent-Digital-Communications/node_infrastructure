@@ -12,10 +12,21 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
     };
 
     $scope.recording = {};
-    $scope.reset = function() {
-        $scope.recording.starttime = $scope.recording.date + " " + $scope.recording.time;
+    $scope.recordings = [{}];
 
-        console.log($scope.recording);
+    $scope.reset = function() {
+
+        for(var i = 0; i < $scope.recordings.length; i++) {
+            $scope.recordings[i].starttime = $scope.recordings[i].date + " " + $scope.recordings[i].time;
+            $scope.recordings[i].recordpath = "/opt/test/epoch0.sc16"
+            $scope.recordings[i].logfilepath = "/opt/test/log.txt"
+        }
+        $scope.newObject = {"recordings" : $scope.recordings}
+        console.log($scope.newObject);
     };
+
+    $scope.addTo = function(array, template) {
+    array.push(template);
+  };
 
 }]);

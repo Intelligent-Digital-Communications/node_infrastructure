@@ -74,6 +74,7 @@ def getatq(request, hostname):
         return HttpResponse(result)
     return HttpResponse("OK")
 
+@csrf_exempt
 def schedule_session(jsonData):
     session = Util.loads(jsonData)
     results = ''
