@@ -17,6 +17,14 @@ angular.module('myApp.scheduleRecordingService', ['ngRoute'])
 	        .error(function(){
 	            alert("Uploading file failed");
 	        });
-	    }
+	    },
+
+        uploadForm: function(object) {
+            $http.post("/myapp/schedule_form/", object).success(function() {
+                alert("Success");
+            }).error(function(){
+                alert("Failed");
+            });
+        }
 	}
 }]);

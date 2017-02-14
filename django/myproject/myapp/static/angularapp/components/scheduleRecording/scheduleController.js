@@ -18,11 +18,13 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
 
         for(var i = 0; i < $scope.recordings.length; i++) {
             $scope.recordings[i].starttime = $scope.recordings[i].date + " " + $scope.recordings[i].time;
-            $scope.recordings[i].recordpath = "/opt/test/epoch0.sc16"
-            $scope.recordings[i].logfilepath = "/opt/test/log.txt"
+            $scope.recordings[i].recordpath = "/opt/test/epoch" + i + ".sc16";
+            $scope.recordings[i].logfilepath = "/opt/test/log" + i + ".txt";
+            $scope.recordings[i].rfsnids = [1,2,3];
         }
         $scope.newObject = {"recordings" : $scope.recordings}
         console.log($scope.newObject);
+        fileUpload.uploadForm($scope.newObject);
     };
 
     $scope.addTo = function(array, template) {
