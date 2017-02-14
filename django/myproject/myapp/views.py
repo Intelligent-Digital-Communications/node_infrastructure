@@ -49,10 +49,9 @@ def list(request):
     )
 
 @csrf_exempt
-def schedule_session(request):
+def schedule_a_session(request):
     if request.method == 'POST':
-        jsonData = json.loads(request.body.decode('utf-8'))
-        result = schedule_session(jsonData)
+        result = schedule_session(request.body.decode('utf-8'))
         return HttpResponse(result)
     return HttpResponse("OK")
 
@@ -74,6 +73,7 @@ def getatq(request, hostname):
         return HttpResponse(result)
     return HttpResponse("OK")
 
+@csrf_exempt
 def schedule_session(jsonData):
     session = Util.loads(jsonData)
     results = ''
