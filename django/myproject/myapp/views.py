@@ -90,6 +90,8 @@ def schedule_session(jsonData):
                     current_local_rec.uniques = {}
 
                 rec_model = RecordingModel(rfsn=RFSN.objects.get(pk=rfsn))
+                # Error here in testing because pk doesn't match from schedule.
+                # Match on hostname instead of pk?
                 rec_model.specrec_args_freq = current_remote_rec.frequency
                 rec_model.specrec_args_length = current_remote_rec.length
                 rec_model.specrec_args_start = current_remote_rec.starttime
