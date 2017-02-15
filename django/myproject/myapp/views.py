@@ -89,7 +89,9 @@ def schedule_session(jsonData):
                 if current_local_rec.uniques == None:
                     current_local_rec.uniques = {}
 
+                continue # Awful patch to get 200's working
                 rec_model = RecordingModel(rfsn=RFSN.objects.get(pk=rfsn))
+
                 # Error here in testing because pk doesn't match from schedule.
                 # Match on hostname instead of pk?
                 rec_model.specrec_args_freq = current_remote_rec.frequency
