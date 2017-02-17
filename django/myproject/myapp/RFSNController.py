@@ -34,7 +34,12 @@ def file_drop(session, rfsn):
     """Schedules a copy-back of recorded data the day after records."""
     last_time = session.recordings[-1].starttime
     formatted_date = last_time.strftime("%d%m%Y")
-    formatted_schedule_time = (last_time.replace(hour=((rfsn-1)*2))
+    hour = (rfsn-1) * 2
+    if hour < 0:
+        #Probably local testing because rfsn = 0, log it and replace
+        print("ERROR: Copy-back schedule time failed! Scheduling for 2:00AM...")
+        hour = 2
+    formatted_schedule_time = (last_time.replace(hour=hour)
         + datetime.timedelta(days=1)).strftime("%H:%M %m/%d/%Y")
     data = {'spath': session.startingpath, 'rfsnid': rfsn, 'fpath':'test',
         'date': formatted_date, 'game':'gatech',
