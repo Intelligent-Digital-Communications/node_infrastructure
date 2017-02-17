@@ -28,7 +28,7 @@ class ScheduleSoonAndCancelTestCase(TestCase):
             csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
             csvwriter.writerow(['TestGame1','/opt/spring17/','spring17_test.log','1','2','3'])
             for i in range(1,10):
-                csvwriter.writerow([(now + timedelta(minutes=1*i)).strftime('%DD/%MM/%YYYY %H:%M:%S'), 'epoch_test' + str(i) + '.sc16', '2.41E+09','5','60','55'])
+                csvwriter.writerow([(now + timedelta(minutes=1*i)).strftime('%d/%m/%Y %H:%M:%S'), 'epoch_test' + str(i) + '.sc16', '2.41E+09','5','60','55'])
 
 '''
 class TestFiledropSession(TestCase):
