@@ -13,21 +13,38 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
 
     $scope.recording = {};
     $scope.recordings = [{}];
+    $scope.session = {};
 
-    $scope.reset = function() {
+    $scope.submitForm = function() {
 
         for(var i = 0; i < $scope.recordings.length; i++) {
-
-            $scope.recordings[i].starttime = $scope.recordings[i].date + " " + $scope.recordings[i].time;
+            var date = parseDate($scope.recordings[i].date);
+            $scope.recordings[i].starttime = date + " " + $scope.recordings[i].time;
             $scope.recordings[i].recordpath = "/opt/test/epoch" + i + ".sc16";
+            $scope.recordings[i].frequency = $scope.recordings[i].frequency * 1000000;
             delete $scope.recordings[i].date;
             delete $scope.recordings[i].time;
-            delete $scope.recordings[i].name;
         }
-        $scope.newObject = {"recordings" : $scope.recordings, "name": "test", "startingpath": "/opt/test", "logpath": "/opt/test", "rfsnids": [0]}
-        console.log($scope.newObject);
-        fileUpload.uploadForm($scope.newObject);
+
+        $scope.session = {
+            "recordings" : $scope.recordings,
+            "name": $scope.session.name, 
+            "startingpath": $scope.session.startingpath, 
+            "logpath": $scope.session.logpath , 
+            "rfsnids": [0]
+        }
+        console.log($scope.session);
+        fileUpload.uploadForm($scope.session);
+        $scope.recording = {};
+        $scope.recordings = [{}];
+        $scope.session = {};
     };
+
+    var parseDate = function(date) {
+        var arr = date.split("-");
+        var newStr = arr[1] + "/" + arr[2] + "/" + arr[0];
+        return newStr; 
+    }
 
     $scope.addTo = function(array, template) {
     array.push(template);

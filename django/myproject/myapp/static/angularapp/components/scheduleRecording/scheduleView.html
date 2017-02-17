@@ -6,12 +6,19 @@
             <div class="container">
                 <h2>Schedule Recording Form</h2
                 <form novalidate>
-                  <div ng-repeat ="recording in recordings" ng-form="recordingForm" >
-	              <label for="name">File Name:</label>
-	              <input type="text" ng-model="recording.name"><br>
+                  <label for="name">Session Name:</label>
+	              <input type="text" ng-model="session.name"><br>
 
+	              <label for="startingpath">Starting Path</label>
+	              <input type="text" ng-model="session.startingpath"><br>
+
+	              <label for="logpath">Log Path</label>
+	              <input type="text" ng-model="session.logpath"><br>
+
+                  <div ng-repeat ="recording in recordings" ng-form="recordingForm" >
+	              
 	              <label for="date">Date:</label>
-	              <input type="text" ng-model="recording.date"><br>
+	              <input type="date" ng-model="recording.date"><br>
 
 		          <label for="time">Time:</label>
 	              <input type="time" ng-model="recording.time"><br>
@@ -29,7 +36,7 @@
 	              <input type="number" ng-model="recording.frequency"><br>
 	              </div>
 	              <button ng-click="addTo(recordings,{})">Add</button>
-	              <button ng-click="reset()">Console Log</button>
+	              <button ng-click="submitForm()">Submit Form</button>
                 </form>
             </div>
 	</div>
