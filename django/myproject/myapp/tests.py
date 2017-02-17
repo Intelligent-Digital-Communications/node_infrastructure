@@ -6,6 +6,7 @@ from .csvtojson import convert
 from .NodeListener import *
 #from NodeListener import filedrop
 import os
+import csv
 
 # Example test for posting a CSV, need to create a jsonSessionDict
 '''
@@ -22,7 +23,7 @@ class ScheduleAndCancelTestCase(TestCase):
 
 class ScheduleSoonAndCancelTestCase(TestCase):
     def test_schedule_soon_then_cancel(self):
-        with open('myproject/myapp/csv/controller_test_schedule.csv', 'wb') as csv:
+        with open('myproject/myapp/csv/controller_test_schedule.csv', 'wb') as csvfile:
             now = datetime.datetime.now()
             csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
             cvswriter.writerow(['TestGame1','/opt/spring17/','spring17_test.log','1','2','3'])
