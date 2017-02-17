@@ -51,7 +51,9 @@ def list(request):
 @csrf_exempt
 def schedule_a_session(request):
     if request.method == 'POST':
-        result = schedule_session(request.body.decode('utf-8'))
+        req = Util.loads(request.body.decode('utf-8'))
+        req = Session(**req)
+        result = schedule_session(req)
         return HttpResponse(result)
     return HttpResponse("OK")
 
@@ -74,8 +76,10 @@ def getatq(request, hostname):
     return HttpResponse("OK")
 
 @csrf_exempt
-def schedule_session(jsonData):
-    session = Util.loads(jsonData)
+def schedule_session(session):
+    
+    print(session)
+    print("HEYOOO")
     results = ''
     for rfsn in session.rfsnids:
         req = schedule(session, rfsn)
@@ -138,5 +142,7 @@ def upload_file(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['docfile']
         jsonschedule = convert(TextIOWrapper(uploaded_file.file, encoding='utf-8'))
-        return HttpResponse(schedule_session(jsonschedule))
+        print(jsonschedule)
+        session = Util.loads(jsonschedule)
+        return HttpResponse(schedule_session(session))
     return render(request, 'main.html')

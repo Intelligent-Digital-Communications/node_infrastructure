@@ -17,12 +17,14 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
     $scope.reset = function() {
 
         for(var i = 0; i < $scope.recordings.length; i++) {
+
             $scope.recordings[i].starttime = $scope.recordings[i].date + " " + $scope.recordings[i].time;
             $scope.recordings[i].recordpath = "/opt/test/epoch" + i + ".sc16";
-            $scope.recordings[i].logfilepath = "/opt/test/log" + i + ".txt";
-            $scope.recordings[i].rfsnids = [1,2,3];
+            delete $scope.recordings[i].date;
+            delete $scope.recordings[i].time;
+            delete $scope.recordings[i].name;
         }
-        $scope.newObject = {"recordings" : $scope.recordings}
+        $scope.newObject = {"recordings" : $scope.recordings, "name": "test", "startingpath": "/opt/test", "logpath": "/opt/test", "rfsnids": [0]}
         console.log($scope.newObject);
         fileUpload.uploadForm($scope.newObject);
     };
