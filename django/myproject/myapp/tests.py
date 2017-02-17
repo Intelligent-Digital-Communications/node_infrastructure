@@ -26,9 +26,11 @@ class ScheduleSoonAndCancelTestCase(TestCase):
         with open('myproject/myapp/csv/controller_test_schedule.csv', 'w', newline='') as csvfile:
             now = datetime.datetime.now()
             csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            csvwriter.writerow(['TestGame1','/opt/spring17/','spring17_test.log','1','2','3'])
+            #change 1,2,3 to 0 for local testing
+            csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/', 'spring17_test.log', '1', '2', '3'])
             for i in range(1,10):
-                csvwriter.writerow([(now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'), 'epoch_test' + str(i) + '.sc16', '2.41E+09','3','60','55'])
+                csvwriter.writerow([(now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'), 
+                'epoch_test' + str(i) + '.sc16', '2.41E+09', '3', '60', '55'])
         
         c = Client()
         with open('myproject/myapp/csv/controller_test_schedule.csv', 'rb') as csvfile:
