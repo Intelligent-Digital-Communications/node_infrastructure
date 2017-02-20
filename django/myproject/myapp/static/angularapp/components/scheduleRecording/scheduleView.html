@@ -35,7 +35,7 @@
 	              <label for="frequency">Frequency (megahertz):</label>
 	              <input type="number" ng-model="recording.frequency"><br>
 	              </div>
-	              <button ng-click="addTo(recordings,{})">Add</button>
+	              <button ng-click="addTo(recordings,{'frequency': recordings[0].frequency, 'gain': recordings[0].gain, 'date' : recordings[0].date, 'length' : recordings[0].length, 'startearly' : recordings[0].startearly, 'time' : recordings[0].time})">Add</button>
 	              <button ng-click="submitForm()">Submit Form</button>
                 </form>
             </div>
