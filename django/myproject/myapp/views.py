@@ -77,7 +77,8 @@ def getatq(request, hostname):
 def schedule_session(jsonData):
     session = Util.loads(jsonData)
     results = ''
-    for rfsn in session.rfsnids:
+    rfsn_list = RFSN.objects.filter(pk__in=session.rfsnids)
+    for rfsn in rfsn_list:
         req = schedule(session, rfsn)
         status = ''
         if req.status_code == 200:
@@ -89,17 +90,16 @@ def schedule_session(jsonData):
                 if current_local_rec.uniques == None:
                     current_local_rec.uniques = {}
 
-                continue # Awful patch to get 200's working
-                rec_model = RecordingModel(rfsn=RFSN.objects.get(pk=rfsn))
+                rfsn = RecordingModel(rfsn=RFSN.objects.get(hostname=))
 
                 # Error here in testing because pk doesn't match from schedule.
                 # Match on hostname instead of pk?
-                rec_model.specrec_args_freq = current_remote_rec.frequency
-                rec_model.specrec_args_length = current_remote_rec.length
-                rec_model.specrec_args_start = current_remote_rec.starttime
-                rec_model.unix_jobid = current_remote_rec.uniques[jobId]
-                rec_model.at_datetime = current_remote_rec.uniques[jobDateTime]
-                rec_model.save()
+                rfsn.specrec_args_freq = current_remote_rec.frequency
+                rfsn.specrec_args_length = current_remote_rec.length
+                rfsn.specrec_args_start = current_remote_rec.starttime
+                rfsn.unix_jobid = current_remote_rec.uniques[jobId]
+                rfsn.at_datetime = current_remote_rec.uniques[jobDateTime]
+                rfsn.save()
                 current_local_rec.uniques[rfsn] = current_remote_rec.uniques
         elif req.status_code == 404:
             status = str(req.status_code) + ' URL not found. Make sure NodeListener is running on the RFSN.\n'

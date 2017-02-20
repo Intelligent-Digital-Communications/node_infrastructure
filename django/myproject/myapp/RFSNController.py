@@ -20,11 +20,7 @@ listeners = ["localhost:8000", "sn1-wifi.vip.gatech.edu:8094",
 def schedule(session, rfsn):
     """Schedules a Session on an RFSN."""
     print(rfsn)
-    name = "RFSN " + str(rfsn);
-    hostname = listeners[int(rfsn)].split(":")
-    rfsn_model = RFSN(name=name, hostname=hostname[0], port=hostname[1])
-    rfsn_model.save()
-    url = "http://" + hostname[0] + ":" + hostname[1] + "/generate_epochs/";
+    url = "http://" + rfsn.hostname + ":" + rfsn.port + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
     req = requests.post(url, data=Util.dumps(session))
     file_drop(session, rfsn)
