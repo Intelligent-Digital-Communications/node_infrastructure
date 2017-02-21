@@ -30,7 +30,7 @@ def file_drop(session, rfsn):
     """Schedules a copy-back of recorded data the day after records."""
     last_time = session.recordings[-1].starttime
     formatted_date = last_time.strftime("%d%m%Y")
-    hour = (rfsn.pk-1) * 2
+    hour = ((rfsn.pk-1) * 2) % 8 # Never start copying later than 8AM
     if hour < 0:
         #Probably local testing because rfsn = 0, log it and replace
         print("ERROR: Copy-back schedule time failed! Scheduling for 2:00AM...")
