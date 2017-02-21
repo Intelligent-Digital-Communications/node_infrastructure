@@ -78,6 +78,8 @@ def schedule_session(jsonData):
     session = Util.loads(jsonData)
     results = ''
     rfsn_list = RFSN.objects.filter(pk__in=session.rfsnids)
+    print("IDs looking for {}".format(session.rfsnids))
+    print("Matched {}".format(rfsn_list))
     for rfsn in rfsn_list:
         req = schedule(session, rfsn)
         status = ''
@@ -90,16 +92,16 @@ def schedule_session(jsonData):
                 if current_local_rec.uniques == None:
                     current_local_rec.uniques = {}
 
-                rfsn = RecordingModel(rfsn=RFSN.objects.get(hostname=))
 
-                # Error here in testing because pk doesn't match from schedule.
-                # Match on hostname instead of pk?
-                rfsn.specrec_args_freq = current_remote_rec.frequency
-                rfsn.specrec_args_length = current_remote_rec.length
-                rfsn.specrec_args_start = current_remote_rec.starttime
-                rfsn.unix_jobid = current_remote_rec.uniques[jobId]
-                rfsn.at_datetime = current_remote_rec.uniques[jobDateTime]
-                rfsn.save()
+                rec = RecordingModel(rfsn=rfsn,
+                        unix_jobid = current_remote_rec.uniques['jobId'],
+                        local_path = 'ERROR', backup_path = 'ERROR',
+                        at_datetime = current_remote_rec.uniques['jobDateTime'])
+                rec.specrec_args_freq = current_remote_rec.frequency
+                rec.specrec_args_length = current_remote_rec.length
+                rec.specrec_args_start = current_remote_rec.starttime
+                rec.specrec_args_sample_rate = 392 # TODO FIXME
+                rec.save()
                 current_local_rec.uniques[rfsn] = current_remote_rec.uniques
         elif req.status_code == 404:
             status = str(req.status_code) + ' URL not found. Make sure NodeListener is running on the RFSN.\n'
