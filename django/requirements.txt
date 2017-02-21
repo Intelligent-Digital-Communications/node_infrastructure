@@ -11,3 +11,4 @@ pytz==2016.7
 requests==2.13.0
 requests-oauthlib==0.7.0
 six==1.10.0
+IPython==1.2.2
