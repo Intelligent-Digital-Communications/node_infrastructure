@@ -20,7 +20,8 @@ angular.module('myApp.scheduleRecordingService', ['ngRoute'])
 	    },
 
         uploadForm: function(object) {
-            $http.post("/myapp/schedule_form/", object).success(function() {
+        	$http.post("/myapp/schedule_form/", object)
+        	.success(function() {
                 alert("Success");
             }).error(function(){
                 alert("Failed");
