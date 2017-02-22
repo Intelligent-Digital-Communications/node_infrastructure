@@ -15,8 +15,8 @@ import re, sys
 import requests
 from io import TextIOWrapper
 
-from myproject.myapp.models import Document, Rfsn
-from myproject.myapp.forms import DocumentForm
+from myproject.myapp.models import *
+#from myproject.myapp.forms import DocumentForm
 from myproject.myapp.RFSNController import schedule
 from myproject.myapp.RFSNController import file_drop
 from myproject.myapp.RFSNController import getatq
@@ -28,7 +28,7 @@ from django.utils import timezone
 def list(request):
     # Handle file upload
     if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
+        #form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
             newdoc = Document(docfile=request.FILES['docfile'])
             newdoc.save()
@@ -49,10 +49,11 @@ def list(request):
     )
 
 @csrf_exempt
-def schedule_session(request):
+def schedule_a_session(request):
     if request.method == 'POST':
-        jsonData = json.loads(request.body.decode('utf-8'))
-        result = schedule_session(jsonData)
+        req = Util.loads(request.body.decode('utf-8'))
+        req = Session(**req)
+        result = schedule_session(req)
         return HttpResponse(result)
     return HttpResponse("OK")
 
@@ -74,8 +75,11 @@ def getatq(request, hostname):
         return HttpResponse(result)
     return HttpResponse("OK")
 
-def schedule_session(jsonData):
-    session = Util.loads(jsonData)
+@csrf_exempt
+def schedule_session(session):
+    
+    print(session)
+    print("HEYOOO")
     results = ''
     for rfsn in session.rfsnids:
         req = schedule(session, rfsn)
@@ -84,9 +88,23 @@ def schedule_session(jsonData):
             status = str(req.status_code) + ' Job scheduled successfully!\n'
             req_session = Util.loads(req.text)
             for i in range(len(session.recordings)):
-                if session.recordings[i].uniques == None:
-                    session.recordings[i].uniques = {}
-                session.recordings[i].uniques[rfsn] = req_session.recordings[i].uniques
+                current_local_rec = session.recordings[i]
+                current_remote_rec = req_session.recordings[i]
+                if current_local_rec.uniques == None:
+                    current_local_rec.uniques = {}
+
+                continue # Awful patch to get 200's working
+                rec_model = RecordingModel(rfsn=RFSN.objects.get(pk=rfsn))
+
+                # Error here in testing because pk doesn't match from schedule.
+                # Match on hostname instead of pk?
+                rec_model.specrec_args_freq = current_remote_rec.frequency
+                rec_model.specrec_args_length = current_remote_rec.length
+                rec_model.specrec_args_start = current_remote_rec.starttime
+                rec_model.unix_jobid = current_remote_rec.uniques[jobId]
+                rec_model.at_datetime = current_remote_rec.uniques[jobDateTime]
+                rec_model.save()
+                current_local_rec.uniques[rfsn] = current_remote_rec.uniques
         elif req.status_code == 404:
             status = str(req.status_code) + ' URL not found. Make sure NodeListener is running on the RFSN.\n'
         elif req.status_code == 500:
@@ -104,10 +122,8 @@ def schedule_session(jsonData):
     )
     return jsonpickle.encode(session)
 
-from myproject.myapp.models import Rfsn
-
 class RfsnListView(ListView):
-    model = Rfsn
+    #model = RFSN
     def get_context_data(self, **kwargs):
         context = super(RfsnListView, self).get_context_data(**kwargs)
         context['now'] = timezone.now()
@@ -126,5 +142,7 @@ def upload_file(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['docfile']
         jsonschedule = convert(TextIOWrapper(uploaded_file.file, encoding='utf-8'))
-        return HttpResponse(schedule_session(jsonschedule))
+        print(jsonschedule)
+        session = Util.loads(jsonschedule)
+        return HttpResponse(schedule_session(session))
     return render(request, 'main.html')

@@ -1,13 +1,14 @@
 import sys, time, os, pickle, urllib, json, datetime
 import requests
+from myproject.myapp.models import *
 from django.core.mail import send_mail
 from .NodeListener import *
 
 """ Issues commands to NodeListeners. """
 
 # TEST ENV
-listeners = ["localhost", "rfsn-demo1.vip.gatech.edu:8000",
-        "rfsn-demo2.vip.gatech.edu:8000", "rfsn-demo3.vip.gatech.edu:8000"]
+listeners = ["localhost:8000", "rfsn1:5035",
+        "rfsn2:5035", "rfsn3:5035"]
 
 # PRODUCTION
 '''
@@ -19,17 +20,26 @@ listeners = ["localhost:8000", "sn1-wifi.vip.gatech.edu:8094",
 def schedule(session, rfsn):
     """Schedules a Session on an RFSN."""
     print(rfsn)
-    url = "http://" + listeners[int(rfsn)] + "/generate_epochs/";
+    name = "RFSN " + str(rfsn);
+    hostname = listeners[int(rfsn)].split(":")
+    rfsn_model = RFSN(name=name, hostname=hostname[0], port=hostname[1])
+    rfsn_model.save()
+    url = "http://" + hostname[0] + ":" + hostname[1] + "/generate_epochs/";
     print("SCHEDULE URL: " + url)
     req = requests.post(url, data=Util.dumps(session))
-    file_drop(session, rfsn);
+    file_drop(session, rfsn)
     return req
 
 def file_drop(session, rfsn):
     """Schedules a copy-back of recorded data the day after records."""
     last_time = session.recordings[-1].starttime
-    formatted_date = last_time.strftime("%d%m%Y");
-    formatted_schedule_time = (last_time.replace(hour=((rfsn-1)*2))
+    formatted_date = last_time.strftime("%d%m%Y")
+    hour = (rfsn-1) * 2
+    if hour < 0:
+        #Probably local testing because rfsn = 0, log it and replace
+        print("ERROR: Copy-back schedule time failed! Scheduling for 2:00AM...")
+        hour = 2
+    formatted_schedule_time = (last_time.replace(hour=hour)
         + datetime.timedelta(days=1)).strftime("%H:%M %m/%d/%Y")
     data = {'spath': session.startingpath, 'rfsnid': rfsn, 'fpath':'test',
         'date': formatted_date, 'game':'gatech',

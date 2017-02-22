@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from myproject.myapp.models import Rfsn
+#from myproject.myapp.models import Rfsn
 
+"""
 class DocumentForm(forms.Form):
     docfile = forms.FileField(label='Select a CSV schedule.')
     mylist = [] 
@@ -16,6 +17,7 @@ class DocumentForm(forms.Form):
 class ScheduleForm(forms.Form):
     docfile = forms.FileField(label='Select a CSV.')
     rfsns = forms.ChoiceField(choices=Rfsn.objects.all())
+"""
 
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
