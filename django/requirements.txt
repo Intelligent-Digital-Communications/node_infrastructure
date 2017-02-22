@@ -1,0 +1,14 @@
+cycler==0.10.0
+defusedxml==0.4.1
+Django==1.10.1
+django-composite-field==0.7.6
+jsonpickle==0.9.4
+PyJWT==1.4.2
+pyparsing==2.1.10
+python-dateutil==2.6.0
+python3-openid==3.0.10
+pytz==2016.7
+requests==2.13.0
+requests-oauthlib==0.7.0
+six==1.10.0
+IPython==1.2.2

@@ -1,7 +1,43 @@
-<div>	
+<div>
 	<h2>Schedule a Recording</h2>
 	<div ng-controller = "scheduleController">
 	    <input id="file" type="file" file-model="myFile"/>
 	    <button class="btn btn-primary" ng-click="uploadFile()">Submit</button>
+            <div class="container">
+                <h2>Schedule Recording Form</h2
+                <form novalidate>
+                  <label for="name">Session Name:</label>
+	              <input type="text" ng-model="session.name"><br>
+
+	              <label for="startingpath">Starting Path</label>
+	              <input type="text" ng-model="session.startingpath"><br>
+
+	              <label for="logpath">Log Path</label>
+	              <input type="text" ng-model="session.logpath"><br>
+
+                  <div ng-repeat ="recording in recordings" ng-form="recordingForm" >
+	              
+	              <label for="date">Date:</label>
+	              <input type="date" ng-model="recording.date"><br>
+
+		          <label for="time">Time:</label>
+	              <input type="time" ng-model="recording.time"><br>
+
+	              <label for="length">Length:</label>
+	              <input type="number" ng-model="recording.length"><br>
+
+                  <label for="startearly">Start Early:</label>
+                  <input type="number" ng-model="recording.startearly"><br>
+
+                  <label for="gain">Gain:</label>
+	              <input type="number" ng-model="recording.gain"><br>
+
+	              <label for="frequency">Frequency (megahertz):</label>
+	              <input type="number" ng-model="recording.frequency"><br>
+	              </div>
+	              <button ng-click="addTo(recordings,{'frequency': recordings[0].frequency, 'gain': recordings[0].gain, 'date' : recordings[0].date, 'length' : recordings[0].length, 'startearly' : recordings[0].startearly, 'time' : recordings[0].time})">Add</button>
+	              <button ng-click="submitForm()">Submit Form</button>
+                </form>
+            </div>
 	</div>
-</div>	
+</div>

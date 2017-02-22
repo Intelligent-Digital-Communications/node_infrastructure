@@ -1,4 +1,9 @@
 import os, shutil, stat, sys, datetime, subprocess
+"""
+Takes a Session object and schedules it locally.
+1. Generates .sh files that execute specrec.
+2. Puts those .sh files in the atq just before their given time.
+"""
 
 def schedule_session(session):
     print(session)
@@ -54,23 +59,11 @@ def schedule_session(session):
     copyfolder(session.include, basepath)
     return session
 
-def main():
-    if len(sys.argv) > 1:
-        print('Command line running is no longer supported.')
-    else:
-        help()
-
 def copyfolder(src, dest):
     for filename in os.listdir(src):
         fullsrcpath = os.path.join(src, filename)
         if os.path.isfile(fullsrcpath):
             shutil.copy(fullsrcpath, dest)
 
-def help():
-    print("-------generate_epochs.py Information--------")
-    print("Takes a Session object and schedules it locally.")
-    print("Generates shell scripts for launching specrec.\n")
-    print("CSV Format: See example_files.")
-
 if __name__ == "__main__":
-    main()
+    print('This module does not support being run from the command line.')
