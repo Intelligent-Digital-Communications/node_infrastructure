@@ -42,4 +42,4 @@ class RecordingModel(models.Model):
     backup_path = models.CharField(max_length=1000)
 
     def __str__(self):
-        return ' '.join(str(self.rfsn), self.at_datetime)
+        return ' '.join([str(self.rfsn), str(self.at_datetime)])

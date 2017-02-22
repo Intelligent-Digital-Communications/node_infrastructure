@@ -4,6 +4,7 @@ from django.core import mail
 from datetime import datetime, timedelta
 from .csvtojson import convert
 from .NodeListener import *
+from .models import RFSN, RecordingModel
 #from NodeListener import filedrop
 import os
 import csv
@@ -22,12 +23,18 @@ class ScheduleAndCancelTestCase(TestCase):
 '''
 
 class ScheduleSoonAndCancelTestCase(TestCase):
+    def setUp(self):
+        RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
+
     def test_schedule_soon_then_cancel(self):
         with open('myproject/myapp/csv/controller_test_schedule.csv', 'w', newline='') as csvfile:
             now = datetime.datetime.now()
             csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
             #change 1,2,3 to 0 for local testing
-            csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/', 'spring17_test.log', '1', '2', '3'])
+            #csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
+                #'spring17_test.log', '1', '2', '3'])
+            csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
+                'spring17_test.log', '0'])
             for i in range(1,10):
                 csvwriter.writerow([(now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'), 
                 'epoch_test' + str(i) + '.sc16', '2.41E+09', '3', '60', '55'])
@@ -39,6 +46,10 @@ class ScheduleSoonAndCancelTestCase(TestCase):
             self.assertEqual(len(mail.outbox), 1)
             s = Util.loads(response.content.decode('utf-8'))
             print(s)
+
+    def tearDown(self):
+        print(RecordingModel.objects.all())
+
 
 '''
 class TestFiledropSession(TestCase):

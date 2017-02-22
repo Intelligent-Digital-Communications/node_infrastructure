@@ -20,11 +20,7 @@ listeners = ["localhost:8000", "sn1-wifi.vip.gatech.edu:8094",
 def schedule(session, rfsn):
     """Schedules a Session on an RFSN."""
     print(rfsn)
-    name = "RFSN " + str(rfsn);
-    hostname = listeners[int(rfsn)].split(":")
-    rfsn_model = RFSN(name=name, hostname=hostname[0], port=hostname[1])
-    rfsn_model.save()
-    url = "http://" + hostname[0] + ":" + hostname[1] + "/generate_epochs/";
+    url = "http://{}:{}/generate_epochs/".format(rfsn.hostname,rfsn.port)
     print("SCHEDULE URL: " + url)
     req = requests.post(url, data=Util.dumps(session))
     file_drop(session, rfsn)
@@ -34,18 +30,18 @@ def file_drop(session, rfsn):
     """Schedules a copy-back of recorded data the day after records."""
     last_time = session.recordings[-1].starttime
     formatted_date = last_time.strftime("%d%m%Y")
-    hour = (rfsn-1) * 2
+    hour = ((rfsn.pk-1) * 2) % 8 # Never start copying later than 8AM
     if hour < 0:
         #Probably local testing because rfsn = 0, log it and replace
         print("ERROR: Copy-back schedule time failed! Scheduling for 2:00AM...")
         hour = 2
     formatted_schedule_time = (last_time.replace(hour=hour)
         + datetime.timedelta(days=1)).strftime("%H:%M %m/%d/%Y")
-    data = {'spath': session.startingpath, 'rfsnid': rfsn, 'fpath':'test',
+    data = {'spath': session.startingpath, 'rfsnid': rfsn.pk, 'fpath':'test',
         'date': formatted_date, 'game':'gatech',
         'scheduletime': formatted_schedule_time, }
     json_data = Util.dumps(data)
-    url = "http://" + listeners[int(rfsn)] + "/filedrop/"
+    url = "http://{}:{}/filedrop/".format(rfsn.hostname, rfsn.port)
     req = requests.post(url, data=json_data)
     return req
 
