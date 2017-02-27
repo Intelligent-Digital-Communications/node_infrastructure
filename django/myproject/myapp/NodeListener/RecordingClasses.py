@@ -30,13 +30,12 @@ class Util(object):
 class Recording(Util):
     """ Defines everything you need to know to schedule a record """
 
-    def __init__(self, starttime, recordpath, frequency, length, startearly=40,
+    def __init__(self, starttime, recordpath, frequency, length,
             gain=50, uniques=None):
         self.starttime  = datetime.datetime.strptime(starttime, "%m/%d/%Y %H:%M")
         self.recordpath = recordpath # ends in Sc16
         self.frequency = float(frequency)
         self.length = int(length)
-        self.startearly = int(startearly)
         self.gain = int(gain)
         self.uniques = uniques
 
@@ -46,11 +45,12 @@ class Recording(Util):
 class Session(Util):
     """ Collection of Recordings and related metadata. """
 
-    def __init__(self, recordings, startingpath, rfsnids, include='include/', logpath='log.txt', name='Default Name'):
+    def __init__(self, recordings, startingpath, rfsnids, include='include/', logpath='log.txt', name='Default Name', startearly=40):
         self.logpath = logpath
         self.startingpath = startingpath
         self.rfsnids = rfsnids
         self.recordings = []
+        self.startearly = int(startearly)
         for record in recordings:
             appending = None
             if not type(record) is Recording:
