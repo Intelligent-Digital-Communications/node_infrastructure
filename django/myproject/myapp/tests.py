@@ -60,3 +60,10 @@ class TestFiledropSession(TestCase):
         print(response)
         #print(filedrop(json.dumps(passing)))
 '''
+
+class GetATQTestCase(TestCase):
+    def test_get_atq(self):
+        for i in range[1,3]:
+            response = c.post('/myapp/getatq/' + str(i), { 'docfile' : csvfile, 'rfsns' : [1] })
+            s = Util.loads(response.content.decode('utf-8'))
+            print(s)
