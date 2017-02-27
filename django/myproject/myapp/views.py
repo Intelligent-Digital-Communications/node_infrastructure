@@ -20,6 +20,7 @@ from myproject.myapp.models import *
 from myproject.myapp.RFSNController import schedule
 from myproject.myapp.RFSNController import file_drop
 from myproject.myapp.RFSNController import getatq
+from myproject.myapp.RFSNController import shutdown
 
 from django.views.generic.list import ListView
 from django.views.decorators.csrf import csrf_exempt
@@ -71,8 +72,15 @@ def filedrop(request, hostname):
 def getatq(request, hostname):
     if request.method == 'POST':
         jsonData = json.loads(request.body.decode('utf-8'))
-        result = getatq()
-        return HttpResponse(result)
+        result = getatq(hostname)
+        return result
+    return HttpResponse("OK")
+
+@csrf_exempt
+def shutdown(request, hostname, command, port):
+    if request.method == 'POST':
+        result = shutdown(command, hostname, port)
+        return result
     return HttpResponse("OK")
 
 @csrf_exempt
