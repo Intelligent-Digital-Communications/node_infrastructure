@@ -27,27 +27,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
 def list(request):
-    # Handle file upload
-    if request.method == 'POST':
-        #form = DocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            newdoc = Document(docfile=request.FILES['docfile'])
-            newdoc.save()
-            for rfsnid in request.POST.getlist('rfsns'):
-                rfsn = Rfsn.objects.filter(id=rfsnid)[0]
-                returned = rfsn.scheduleepochs(newdoc.docfile.name)
-                print('sched_epoch return: ' + str(returned))
-            #print('Name: ' + request.POST['name'])
-            # Redirect to the document list after POST
-            return HttpResponseRedirect(reverse('list'))
-    else:
-        form = DocumentForm()  # A empty, unbound form
-
-    return render(
-        request,
-        'list.html',
-        { 'form': form, 'csvs': Document.objects.all() }
-    )
+    rfsn_objects = RFSN.objects.all()
+    print("LIST: ", rfsn_objects)
+    rfsn_info = {}
+    for rfsn in rfsn_objects:
+        rfsn_info[rfsn.id] = {"name":rfsn.name,
+                                "hostname":rfsn.hostname,
+                                "port":rfsn.port}
+    print(rfsn_info)
+    return HttpResponse(json.dumps(rfsn_info))
 
 @csrf_exempt
 def schedule_a_session(request):
@@ -85,7 +73,7 @@ def shutdown(request, hostname, command, port):
 
 @csrf_exempt
 def schedule_session(session):
-    
+
     print(session)
     print("HEYOOO")
     results = ''
@@ -131,13 +119,6 @@ def schedule_session(session):
             fail_silently=False
     )
     return jsonpickle.encode(session)
-
-class RfsnListView(ListView):
-    #model = RFSN
-    def get_context_data(self, **kwargs):
-        context = super(RfsnListView, self).get_context_data(**kwargs)
-        context['now'] = timezone.now()
-        return context
 
 def status(request):
     nodes = Rfsn.objects.all()

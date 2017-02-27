@@ -65,5 +65,5 @@ def shutdown(command, rfsn, port):
         mkdir_args = ['cat', 'relay_cmds/relay_status.hex', '|', 'nc', rfsn, port, '|', 'hexdump', '-C']
         Popen(mkdir_args, stdout=PIPE, stderr=PIPE)
         print(mkdir_args)
-    else
+    else:
         print("Invalid Command: Should be either 'on', 'off', 'status'")
