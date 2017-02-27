@@ -33,6 +33,7 @@ class ScheduleSoonAndCancelTestCase(TestCase):
             #change 1,2,3 to 0 for local testing
             # csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
             #    'spring17_test.log', '60', '1', '2', '3'])
+            
             csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
                 'spring17_test.log', '60', '1', '2', '3'])
             for i in range(1,10):
