@@ -50,7 +50,6 @@ class Session(Util):
         self.startingpath = startingpath
         self.rfsnids = rfsnids
         self.recordings = []
-        self.startearly = int(startearly)
         for record in recordings:
             appending = None
             if not type(record) is Recording:
@@ -58,7 +57,8 @@ class Session(Util):
             else:
                 appending = record
             self.recordings.append(appending)
-
+            
+        self.startearly = int(startearly)
         self.include = include
         self.name = name
 
