@@ -98,6 +98,7 @@ def schedule_session(session):
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
             req_session = Util.loads(req.text)
+            print req_session
             for i in range(len(session.recordings)):
                 current_local_rec = session.recordings[i]
                 current_remote_rec = req_session.recordings[i]
