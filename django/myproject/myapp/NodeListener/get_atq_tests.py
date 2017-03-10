@@ -1,4 +1,5 @@
 import unittest, json, jsonpickle, sys
+from subprocess import Popen, PIPE
 from RecordingClasses import Recording, Session, Util
 from schedule_session import schedule_session
 from NodeListener import clear_atq, filedrop
