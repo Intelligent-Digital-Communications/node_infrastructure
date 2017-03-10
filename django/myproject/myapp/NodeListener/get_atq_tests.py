@@ -1,4 +1,4 @@
-import unittest, json, jsonpickle, sys
+import unittest, json, jsonpickle, sys, subprocess
 from subprocess import Popen, PIPE
 from RecordingClasses import Recording, Session, Util
 from schedule_session import schedule_session
