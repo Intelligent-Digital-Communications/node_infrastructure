@@ -75,7 +75,7 @@ class GetATQTestCase(TestCase):
     def test_get_atq(self):
         c = Client()
         for i in range(1,2):
-            print i
+            print(str(i))
             response = c.post('/myapp/getatq/' + str(i))
             s = Util.loads(response.content.decode('utf-8'))
             print(s)
