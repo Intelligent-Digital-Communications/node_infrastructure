@@ -9,10 +9,10 @@ class TestGetATQ(unittest.TestCase):
         try:
             stdout, _ = Popen('./getatq.sh', stdout=subprocess.PIPE).communicate()
             jobids = [int(x) for x in stdout.decode('ascii').split('\n')[:-1]]
-            print json.dumps({ 'JobIds' : jobids})
+            print(json.dumps({ 'JobIds' : jobids}))
             return json.dumps({ 'JobIds' : jobids})
         except Exception as e:
-            print {'log': 'Exception occurred: ' + str(e)}
+            print({'log': 'Exception occurred: ' + str(e)})
             return {'log': 'Exception occurred: ' + str(e)}
 
 if __name__ == '__main__':
