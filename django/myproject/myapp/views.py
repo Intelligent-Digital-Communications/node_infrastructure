@@ -73,6 +73,7 @@ def getatq(request, hostname):
     if request.method == 'POST':
         jsonData = json.loads(request.body.decode('utf-8'))
         result = getatq(hostname)
+        print(result)
         return result
     return HttpResponse("OK")
 
