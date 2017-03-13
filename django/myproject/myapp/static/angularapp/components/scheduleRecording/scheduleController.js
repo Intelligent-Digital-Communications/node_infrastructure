@@ -34,6 +34,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             "startingpath": $scope.session.startingpath,
             "startearly": $scope.session.startearly, 
             "logpath": $scope.session.logpath , 
+            "samplerate": $scope.session.samplerate,
             "rfsnids": [0]
         }
         console.log($scope.session);
