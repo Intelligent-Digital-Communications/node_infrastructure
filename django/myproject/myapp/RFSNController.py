@@ -45,8 +45,27 @@ def file_drop(session, rfsn):
     req = requests.post(url, data=json_data)
     return req
 
-def getatq():
-    url = "http://" + listeners[int(1)] + "/getatq/";
-    print("GetATQ URL: " + url)
-    req = requests.post(url)
+def getatq(rfsns):
+    req = ""
+    for rfsn in rfsn_list:
+        url = "http://" + rfsn.hostname + "/getatq/"
+        print("GetATQ URL: " + url)
+        req = req + requests.get(url)
     return req
+
+def shutdown(command, rfsn, port):
+    if command == "on":
+        mkdir_args = ['cat', 'relay_cmds/relay_bank1relay0_on.hex', '|', 'nc', rfsn, port, '|', 'hexdump', '-C']
+        Popen(mkdir_args, stdout=PIPE, stderr=PIPE)
+        print(mkdir_args)
+    elif command == "off":
+        #add extra line for shutting down, waiting until the node shuts down, and then running line below
+        mkdir_args = ['cat', 'relay_cmds/relay_bank1relay0_off.hex', '|', 'nc', rfsn, port, '|', 'hexdump', '-C']
+        Popen(mkdir_args, stdout=PIPE, stderr=PIPE)
+        print(mkdir_args)
+    elif command == "status":
+        mkdir_args = ['cat', 'relay_cmds/relay_status.hex', '|', 'nc', rfsn, port, '|', 'hexdump', '-C']
+        Popen(mkdir_args, stdout=PIPE, stderr=PIPE)
+        print(mkdir_args)
+    else:
+        print("Invalid Command: Should be either 'on', 'off', 'status'")

@@ -20,6 +20,7 @@ from myproject.myapp.models import *
 from myproject.myapp.RFSNController import schedule
 from myproject.myapp.RFSNController import file_drop
 from myproject.myapp.RFSNController import getatq
+from myproject.myapp.RFSNController import shutdown
 
 from django.views.generic.list import ListView
 from django.views.decorators.csrf import csrf_exempt
@@ -68,11 +69,19 @@ def filedrop(request, hostname):
     return HttpResponse("OK")
 
 @csrf_exempt
-def getatq(request, hostname):
+def getatq(request):
+    if request.method == 'GET':
+        rfsn_list = RFSN.objects.filter(pk__in=request.GET.getlist('pks'))
+        result = getatq(rfsn)
+        print(result)
+        return result
+    return HttpResponse("OK")
+
+@csrf_exempt
+def shutdown(request, hostname, command, port):
     if request.method == 'POST':
-        jsonData = json.loads(request.body.decode('utf-8'))
-        result = getatq()
-        return HttpResponse(result)
+        result = shutdown(command, hostname, port)
+        return result
     return HttpResponse("OK")
 
 @csrf_exempt
@@ -90,6 +99,7 @@ def schedule_session(session):
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
             req_session = Util.loads(req.text)
+            print(req_session)
             for i in range(len(session.recordings)):
                 current_local_rec = session.recordings[i]
                 current_remote_rec = req_session.recordings[i]
