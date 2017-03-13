@@ -74,9 +74,6 @@ def shutdown(request, hostname, command, port):
 
 @csrf_exempt
 def schedule_session(session):
-
-    print(session)
-    print("HEYOOO")
     results = ''
     rfsn_list = RFSN.objects.filter(pk__in=session.rfsnids)
     print("IDs looking for {}".format(session.rfsnids))
