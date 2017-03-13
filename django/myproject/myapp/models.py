@@ -38,6 +38,8 @@ class SessionModel(models.Model):
     rfsns = models.ManyToManyField(RFSN)
     log_path = models.CharField(max_length=100)
     starting_path = models.CharField(max_length=100)
+    sample_rate = models.IntegerField()
+    start_early = models.IntegerField()
 
 class RecordingModel(models.Model):
     rfsn = models.ForeignKey(RFSN, on_delete=models.CASCADE)
