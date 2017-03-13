@@ -18,14 +18,14 @@ def schedule_session(session):
     for recording in recordingslist:
         print(recording)
         at_starttime = recording.starttime - datetime.timedelta(
-                seconds=recording.startearly)
+                seconds=session.startearly)
 
         # Write the sh file that calls specrec
-        args = ('specrec --args=master_clock_rate=25e6 --rate=25e6 --ant=RX2 '
+        args = ('specrec --args=master_clock_rate=25e6 --rate={samplerate} --ant=RX2 '
                 '--time={length} --freq={freq} --gain={gain} --ref=gpsdo '
                 '--metadata=true --segsize=24999936 --file={specrecfilename} '
                 '--starttime="{start}" >> {logfilepath} 2>&1').format(
-                length=recording.length, freq=recording.frequency,
+                samplerate=session.samplerate, length=recording.length, freq=recording.frequency,
                 gain=recording.gain, specrecfilename=basepath + recording.recordpath,
                 start=recording.starttime.isoformat(' '),
                 logfilepath = logfilepath)

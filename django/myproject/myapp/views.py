@@ -20,6 +20,7 @@ from myproject.myapp.models import *
 from myproject.myapp.RFSNController import schedule
 from myproject.myapp.RFSNController import file_drop
 from myproject.myapp.RFSNController import getatq
+from myproject.myapp.RFSNController import shutdown
 
 from django.views.generic.list import ListView
 from django.views.decorators.csrf import csrf_exempt
@@ -71,8 +72,15 @@ def filedrop(request, hostname):
 def getatq(request, hostname):
     if request.method == 'POST':
         jsonData = json.loads(request.body.decode('utf-8'))
-        result = getatq()
-        return HttpResponse(result)
+        result = getatq(hostname)
+        return result
+    return HttpResponse("OK")
+
+@csrf_exempt
+def shutdown(request, hostname, command, port):
+    if request.method == 'POST':
+        result = shutdown(command, hostname, port)
+        return result
     return HttpResponse("OK")
 
 @csrf_exempt
@@ -104,7 +112,7 @@ def schedule_session(session):
                 rec.specrec_args_freq = current_remote_rec.frequency
                 rec.specrec_args_length = current_remote_rec.length
                 rec.specrec_args_start = current_remote_rec.starttime
-                rec.specrec_args_sample_rate = 392 # TODO FIXME
+                rec.specrec_args_sample_rate = current_remote_rec.samplerate
                 rec.save()
                 current_local_rec.uniques[rfsn] = current_remote_rec.uniques
         elif req.status_code == 404:

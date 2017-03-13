@@ -14,6 +14,8 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
     $scope.recording = {};
     $scope.recordings = [{}];
     $scope.session = {};
+    $scope.offset = {};
+    $scope.length = $scope.recordings.length;
 
     $scope.submitForm = function() {
 
@@ -29,8 +31,10 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         $scope.session = {
             "recordings" : $scope.recordings,
             "name": $scope.session.name, 
-            "startingpath": $scope.session.startingpath, 
+            "startingpath": $scope.session.startingpath,
+            "startearly": $scope.session.startearly, 
             "logpath": $scope.session.logpath , 
+            "samplerate": $scope.session.samplerate,
             "rfsnids": [0]
         }
         console.log($scope.session);
@@ -46,8 +50,14 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         return newStr; 
     }
 
-    $scope.addTo = function(array, template) {
-    array.push(template);
+    $scope.addTo = function() {
+        $scope.recordings.push({
+            'frequency': $scope.recordings[0].frequency, 
+            'gain': $scope.recordings[0].gain, 
+            'date' : $scope.recordings[0].date, 
+            'length' : $scope.recordings[0].length,
+            'time' : $scope.recordings[0].time
+        });
   };
 
 }]);
