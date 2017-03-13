@@ -68,8 +68,8 @@ def filedrop(body):
     except Exception as e:
         return {'log': 'Exception occurred: ' + str(e)}
 
-@hug.post('/get_atq')
-def getatq(body):
+@hug.get('/get_atq')
+def getatq():
     """Returns job ids that are currently in the atq."""
     try:
         stdout, _ = Popen('./getatq.sh', stdout=subprocess.PIPE).communicate()

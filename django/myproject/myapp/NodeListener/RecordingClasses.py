@@ -50,7 +50,6 @@ class Session(Util):
         self.startingpath = startingpath
         self.rfsnids = rfsnids
         self.recordings = []
-        self.startearly = int(startearly)
         self.samplerate = samplerate
         for record in recordings:
             appending = None
@@ -60,6 +59,8 @@ class Session(Util):
                 appending = record
             self.recordings.append(appending)
 
+        #this line might be wrong because it was holding up ^recordings when i placed it above    
+        self.startearly = int(startearly)
         self.include = include
         self.name = name
 

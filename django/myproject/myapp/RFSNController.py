@@ -45,10 +45,12 @@ def file_drop(session, rfsn):
     req = requests.post(url, data=json_data)
     return req
 
-def getatq(rfsn):
-    url = "http://" + rfsn.hostname + "/getatq/";
-    print("GetATQ URL: " + url)
-    req = requests.post(url)
+def getatq(rfsns):
+    req = ""
+    for rfsn in rfsn_list:
+        url = "http://" + rfsn.hostname + "/getatq/"
+        print("GetATQ URL: " + url)
+        req = req + requests.get(url)
     return req
 
 def shutdown(command, rfsn, port):

@@ -69,10 +69,11 @@ def filedrop(request, hostname):
     return HttpResponse("OK")
 
 @csrf_exempt
-def getatq(request, hostname):
-    if request.method == 'POST':
-        jsonData = json.loads(request.body.decode('utf-8'))
-        result = getatq(hostname)
+def getatq(request):
+    if request.method == 'GET':
+        rfsn_list = RFSN.objects.filter(pk__in=request.GET.getlist('pks'))
+        result = getatq(rfsn)
+        print(result)
         return result
     return HttpResponse("OK")
 
@@ -98,6 +99,7 @@ def schedule_session(session):
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
             req_session = Util.loads(req.text)
+            print(req_session)
             for i in range(len(session.recordings)):
                 current_local_rec = session.recordings[i]
                 current_remote_rec = req_session.recordings[i]

@@ -66,8 +66,19 @@ class TestFiledropSession(TestCase):
 '''
 
 class GetATQTestCase(TestCase):
+    def setUp(self):
+        RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
+        RFSN.objects.create(name="rfsn1", hostname="rfsn1", port=5035, pk=1)
+        RFSN.objects.create(name="rfsn2", hostname="rfsn2", port=5035, pk=2)
+        RFSN.objects.create(name="rfsn3", hostname="rfsn3", port=5035, pk=3)
+
     def test_get_atq(self):
-        for i in range[1,3]:
-            response = c.post('/myapp/getatq/' + str(i), { 'docfile' : csvfile, 'rfsns' : [1] })
+        c = Client()
+        for i in range(1,2):
+            print(str(i))
+            response = c.post('/myapp/getatq/' + str(i))
             s = Util.loads(response.content.decode('utf-8'))
             print(s)
+
+    def tearDown(self):
+        print(RecordingModel.objects.all())
