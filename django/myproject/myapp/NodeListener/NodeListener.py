@@ -46,7 +46,7 @@ def filedrop(body):
         args = ('rsync -av {spath} {dpath} & &>> output.txt').format(spath=spath, dpath=dpath)
         epoch_file.write('#!/bin/bash\necho {}\n{}'.format(filename, args))
         epoch_file.close()
-        os.chmod(filename, os.stat(filename).st_mode | int("0111", 8)) # Make exec by everyone
+        os.chmod(filename, os.stat(filename).st_mode | int("0111", 8)) # Make exec by everyone	
 
 
         # Make the directory locally
@@ -83,10 +83,6 @@ def clear_atq():
     stdout, _ = Popen('./clearatq.sh', stdout=subprocess.PIPE).communicate()
     jobids = [int(x) for x in stdout.decode('ascii').split('\n')[:-1]]
     return json.dumps({ 'cancelledJobIds' : jobids})
-
-@hug.get('/shutdown')
-def shutdown():
-
 
 if __name__ == '__main__':
     print("Please refer to the README to use this file.")
