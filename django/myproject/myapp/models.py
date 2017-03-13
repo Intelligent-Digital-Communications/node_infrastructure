@@ -33,8 +33,15 @@ class SpecrecArgField(CompositeField):
     start = models.DateTimeField('Specrec begin recording time')
     full_commands = models.CharField(max_length=1000)
 
+class SessionModel(models.Model):
+    name = models.CharField(default="SESSION DEFAULT", max_length=100)
+    rfsns = models.ManyToManyField(RFSN)
+    log_path = models.CharField(max_length=100)
+    starting_path = models.CharField(max_length=100)
+
 class RecordingModel(models.Model):
     rfsn = models.ForeignKey(RFSN, on_delete=models.CASCADE)
+    session = models.ForeignKey(SessionModel, on_delete=models.CASCADE)
     at_datetime = models.DateTimeField('Linux AT start time')
     unix_jobid = models.IntegerField('Job ID', primary_key=True)
     specrec_args = SpecrecArgField()

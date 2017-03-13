@@ -38,11 +38,11 @@ class ScheduleSoonAndCancelTestCase(TestCase):
             #    'spring17_test.log', '60', '1', '2', '3'])
 
             csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
-                'spring17_test.log', '60', '1', '2', '3'])
+                'spring17_test.log', '60', '25e6', '1', '2', '3'])
             for i in range(1,10):
-                csvwriter.writerow([(now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'), 
-                'epoch_test' + str(i) + '.sc16', '2.41E+09', '3', '55', '25e6'])
-        
+                csvwriter.writerow([(now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'),
+                'epoch_test' + str(i) + '.sc16', '2.41E+09', '3', '60', '55'])
+
         c = Client()
         with open('myproject/myapp/csv/controller_test_schedule.csv', 'rb') as csvfile:
             response = c.post('/myapp/upload_file/', { 'docfile' : csvfile, 'rfsns' : [1] })
@@ -53,6 +53,17 @@ class ScheduleSoonAndCancelTestCase(TestCase):
 
     def tearDown(self):
         print(RecordingModel.objects.all())
+
+class ListRFSNsTest(TestCase):
+    def setUp(self):
+        RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
+        RFSN.objects.create(name="testRFSN", hostname="yourmom", port=8080, pk=1)
+
+    def test_listRFSNs(self):
+        c = Client()
+        response = c.get("/myapp/list/")
+        print(response.content)
+
 
 
 '''
