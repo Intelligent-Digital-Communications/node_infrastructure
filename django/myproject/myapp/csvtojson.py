@@ -19,7 +19,8 @@ def convert(csvfile):
             'startingpath'  : vals[1],
             'logpath'       : vals[2],
             'startearly'    : vals[3],
-            'rfsnids'       : [int(x) for x in vals[4:]] }
+            'samplerate'    : vals[4],
+            'rfsnids'       : [int(x) for x in vals[5:]] }
 
     return Util.dumps(Session(**master_dict))
 
