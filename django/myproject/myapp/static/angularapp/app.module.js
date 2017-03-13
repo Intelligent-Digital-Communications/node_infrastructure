@@ -5,7 +5,8 @@ angular.module('myApp', [
 	'myApp.scheduleRecordingController',
 	'myApp.scheduleRecordingDirective',
 	'myApp.scheduleRecordingService',
-    'myApp.recordingTableController'
+    'myApp.recordingTableController',
+		 'myApp.testController'
 ]).
 config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[[').endSymbol(']]');
@@ -21,9 +22,9 @@ config(['$routeProvider',
                 templateUrl: static_url + 'angularapp/components/recordingTable/recordingView.html',
                 controller: 'recordingController'
             }).
-            when('/route2', {
-                templateUrl: static_url + 'angularapp/html/test2.html',
-                controller: 'RouteController2'
+            when('/RFSNS', {
+                templateUrl: static_url + 'angularapp/components/TestTable/TestView.html',
+                controller: 'testController'
             }).
             otherwise({
                 redirectTo: '/'

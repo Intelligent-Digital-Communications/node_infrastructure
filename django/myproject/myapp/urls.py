@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^schedule_session/(?P<hostname>\w{0,50})/$', schedule_session,
         name='schedule_session'),
     url(r'^filedrop/(?P<hostname>\w{0,50})/$', filedrop, name='filedrop'),
-    url(r'^getatq/(?P<hostname>\w{0,50})/$', getatq, name='getatq'),
+    url(r'^getatq/$', getatq, name='getatq'),
     url(r'^schedule_form/$', schedule_a_session, name='schedule_a_session'),
     url(r'^shutdown/(?P<hostname>\w{0,50})/(?P<command>\w{0,50})/(?P<port>\w{0,50})/$', shutdown, name='shutdown')
 ]

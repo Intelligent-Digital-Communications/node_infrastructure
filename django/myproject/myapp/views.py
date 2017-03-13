@@ -57,10 +57,11 @@ def filedrop(request, hostname):
     return HttpResponse("OK")
 
 @csrf_exempt
-def getatq(request, hostname):
-    if request.method == 'POST':
-        jsonData = json.loads(request.body.decode('utf-8'))
-        result = getatq(hostname)
+def getatq(request):
+    if request.method == 'GET':
+        rfsn_list = RFSN.objects.filter(pk__in=request.GET.getlist('pks'))
+        result = getatq(rfsn)
+        print(result)
         return result
     return HttpResponse("OK")
 
@@ -86,6 +87,7 @@ def schedule_session(session):
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
             req_session = Util.loads(req.text)
+            print(req_session)
             for i in range(len(session.recordings)):
                 current_local_rec = session.recordings[i]
                 current_remote_rec = req_session.recordings[i]
@@ -100,7 +102,7 @@ def schedule_session(session):
                 rec.specrec_args_freq = current_remote_rec.frequency
                 rec.specrec_args_length = current_remote_rec.length
                 rec.specrec_args_start = current_remote_rec.starttime
-                rec.specrec_args_sample_rate = 392 # TODO FIXME
+                rec.specrec_args_sample_rate = current_remote_rec.samplerate
                 rec.save()
                 current_local_rec.uniques[rfsn] = current_remote_rec.uniques
         elif req.status_code == 404:
