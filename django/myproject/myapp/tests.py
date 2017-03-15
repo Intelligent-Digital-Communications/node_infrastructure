@@ -9,14 +9,15 @@ from .models import RFSN, RecordingModel
 import os
 import csv
 
-# Example test for posting a CSV, need to create a jsonSessionDict
 
 class ScheduleSoonAndCancelTestCase(TestCase):
+    """Example test for posting a CSV"""
+
     def setUp(self):
         RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
-        RFSN.objects.create(name="rfsn1", hostname="rfsn1", port=5035, pk=1)
-        RFSN.objects.create(name="rfsn2", hostname="rfsn2", port=5035, pk=2)
-        RFSN.objects.create(name="rfsn3", hostname="rfsn3", port=5035, pk=3)
+        RFSN.objects.create(name="rfsn1", hostname="rfsn1", port=8000, pk=1)
+        RFSN.objects.create(name="rfsn2", hostname="rfsn2", port=8000, pk=2)
+        RFSN.objects.create(name="rfsn3", hostname="rfsn3", port=8000, pk=3)
 
     def test_schedule_soon_then_cancel(self):
         testfile = 'myproject/myapp/csv/controller_test_schedule.csv'
@@ -28,7 +29,7 @@ class ScheduleSoonAndCancelTestCase(TestCase):
             #change 1,2,3 to 0 for local testing
             # Write the session properties 
             csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
-                'spring17_test.log', '60', '25e6', '0'])
+                'spring17_test.log', '60', '25000000', '0'])
 
             # Write each recording
             for i in range(1,10):
