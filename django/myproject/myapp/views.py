@@ -102,7 +102,6 @@ def schedule_session(session):
                 rec.specrec_args_freq = current_remote_rec.frequency
                 rec.specrec_args_length = current_remote_rec.length
                 rec.specrec_args_start = current_remote_rec.starttime
-                rec.specrec_args_sample_rate = current_remote_rec.samplerate
                 rec.save()
                 current_local_rec.uniques[rfsn] = current_remote_rec.uniques
         elif req.status_code == 404:
