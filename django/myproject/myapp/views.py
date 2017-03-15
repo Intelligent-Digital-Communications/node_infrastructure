@@ -81,6 +81,8 @@ def schedule_session(session):
     rfsn_list = RFSN.objects.filter(pk__in=session.rfsnids)
     print("IDs looking for {}".format(session.rfsnids))
     print("Matched {}".format(rfsn_list))
+    session_db = SessionModel(name=session.name, rfsns = rfsn_list,
+            log_path=session.logpath, starting_path=session.startingpath)
     for rfsn in rfsn_list:
         req = schedule(session, rfsn)
         status = ''
@@ -95,7 +97,7 @@ def schedule_session(session):
                     current_local_rec.uniques = {}
 
 
-                rec = RecordingModel(rfsn=rfsn,
+                rec = RecordingModel(rfsn=rfsn, session=session_db
                         unix_jobid = current_remote_rec.uniques['jobId'],
                         local_path = 'ERROR', backup_path = 'ERROR',
                         at_datetime = current_remote_rec.uniques['jobDateTime'])
