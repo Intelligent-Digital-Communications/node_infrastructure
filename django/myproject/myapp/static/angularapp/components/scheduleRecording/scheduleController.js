@@ -38,7 +38,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             "rfsnids": [0]
         }
         console.log($scope.session);
-        //fileUpload.uploadForm($scope.session);
+        fileUpload.uploadForm($scope.session);
         $scope.recording = {};
         $scope.recordings = [{}];
         $scope.session = {};
