@@ -1,4 +1,5 @@
 import os, shutil, stat, sys, datetime, subprocess, json, jsonpickle, re
+from nodelistener import recording_classes
 
 class Util(object):
     def __repr__(self):
@@ -12,19 +13,11 @@ class Util(object):
         return jsonpickle.encode(recording)
 
     @staticmethod
-    def loads(passsed_in):
-        sys.modules['RecordingClasses'] = sys.modules[__name__]
-        # This patches in the module's actual name to the global level.
-        # Possibly wouldn't be needed if module was set up correctly or registered somehow?
-
-        prefix = 'myproject.myapp.NodeListener.'
-        possible = jsonpickle.decode(re.sub(prefix, '', passsed_in))
-
-        if isinstance(possible, str):
-            return jsonpickle.decode(possible)
-        if isinstance(possible, dict): # Try without taking out the prefix...
-            possible = jsonpickle.decode(passsed_in)
-        # Must have succeeded!
+    def loads(passed_in):
+        try:
+            possible = jsonpickle.decode(passed_in)
+        except json.decoder.JSONDecodeError as e:
+            raise Exception("Malformed JSON: {}".format(passed_in))
         return possible
 
 class Recording(Util):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import csv, json, sys
-from .NodeListener import *
+from nodelistener import *
 
 def convert(csvfile):
     fieldnames = ["starttime", "recordpath", "frequency","length","gain"]

@@ -1,5 +1,7 @@
-from subprocess import Popen
-import os
+from nodelistener import nodelistener
 
 def main():
-    Popen(['hug', '-f', os.getcwd() + '/nodelistener.py'])
+    try:
+        nodelistener.main()
+    except OSError:
+        print("Listener was already running, or something else is using the port.")

@@ -2,7 +2,7 @@ import sys, time, os, pickle, urllib, json, datetime
 import requests
 from myproject.myapp.models import *
 from django.core.mail import send_mail
-from .NodeListener import *
+from nodelistener import *
 
 """ Issues commands to NodeListeners. """
 

@@ -3,21 +3,26 @@ from django.test import Client
 from django.core import mail
 from datetime import datetime, timedelta
 from .csvtojson import convert
-from .NodeListener import *
+from nodelistener import *
 from .models import RFSN, RecordingModel
-#from NodeListener import filedrop
 import os
 import csv
+from subprocess import Popen, call, PIPE
 
-
-class ScheduleSoonAndCancelTestCase(TestCase):
-    """Example test for posting a CSV"""
-
+class LocalTest(TestCase):
     def setUp(self):
+        #call('startlistener', stdout=PIPE, stderr=PIPE) # Pipes hide output
         RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
+
+class DeploymentTest(TestCase):
+    def setUp(self):
         RFSN.objects.create(name="rfsn1", hostname="rfsn1", port=8000, pk=1)
         RFSN.objects.create(name="rfsn2", hostname="rfsn2", port=8000, pk=2)
         RFSN.objects.create(name="rfsn3", hostname="rfsn3", port=8000, pk=3)
+
+
+class ScheduleSoonAndCancelTestCase(LocalTest):
+    """Example test for posting a CSV"""
 
     def test_schedule_soon_then_cancel(self):
         testfile = 'myproject/myapp/csv/controller_test_schedule.csv'
@@ -32,7 +37,7 @@ class ScheduleSoonAndCancelTestCase(TestCase):
                 'spring17_test.log', '60', '25000000', '0'])
 
             # Write each recording
-            for i in range(1,10):
+            for i in range(1,3):
                 csvwriter.writerow([
                     (now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'),
                 'epoch_test' + str(i) + '.sc16', '2.41E+09', '60', '55'])
@@ -49,16 +54,11 @@ class ScheduleSoonAndCancelTestCase(TestCase):
     def tearDown(self):
         print(RecordingModel.objects.all())
 
-class ListRFSNsTest(TestCase):
-    def setUp(self):
-        RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
-        RFSN.objects.create(name="testRFSN", hostname="yourmom", port=8080, pk=1)
-
+class ListRFSNsTest(LocalTest):
     def test_listRFSNs(self):
         c = Client()
         response = c.get("/myapp/list/")
         print(response.content)
-
 
 '''
 class TestFiledropSession(TestCase):
@@ -70,22 +70,14 @@ class TestFiledropSession(TestCase):
         #print(filedrop(json.dumps(passing)))
 '''
 
-class GetATQTestCase(TestCase):
-    def setUp(self):
-        RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
-        RFSN.objects.create(name="rfsn1", hostname="rfsn1", port=8000, pk=1)
-        RFSN.objects.create(name="rfsn2", hostname="rfsn2", port=8000, pk=2)
-        RFSN.objects.create(name="rfsn3", hostname="rfsn3", port=8000, pk=3)
-
+class GetATQTestCase(LocalTest):
     def test_get_atq(self):
         c = Client()
         for i in range(1,2):
             print(str(i))
             response = c.post('/myapp/getatq/' + str(i))
-            print("HERERERE")
-            print(response.content.decode('utf-8'))
+            print(response)
             s = Util.loads(response.content.decode('utf-8'))
-            print(s)
 
     def tearDown(self):
         print(RecordingModel.objects.all())

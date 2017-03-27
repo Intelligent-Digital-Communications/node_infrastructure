@@ -1,7 +1,9 @@
 import unittest, json, jsonpickle, sys
-from RecordingClasses import Recording, Session, Util
-from schedule_session import schedule_session
-from NodeListener import clear_atq, filedrop
+from nodelistener import *
+#from recording_classes import Recording, Session, Util
+from nodelistener.schedule_session import schedule_session
+from nodelistener.nodelistener import clear_atq, filedrop
+
 class TestScheduleSession(unittest.TestCase):
     def runTest(self):
         r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', frequency=2412e6, length=1)

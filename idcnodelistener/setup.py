@@ -4,7 +4,7 @@
 """setup.py: setuptools control."""
  
  
-import re
+import re, sys, os, glob
 from setuptools import setup
  
  
@@ -26,4 +26,6 @@ setup(
     author = "Intelligent Digital Communications",
     author_email = "vip-idc@gatech.edu",
     url = "http://github.gatech.edu/IDC/node-infrastructure",
+    test_suite="test.schedule_session_tests"
     )
+

@@ -9,7 +9,7 @@ from django.utils import timezone
 from .forms import UploadFileForm
 from .csvtojson import convert
 
-from .NodeListener import *
+from nodelistener import *
 import jsonpickle
 import json
 import re, sys

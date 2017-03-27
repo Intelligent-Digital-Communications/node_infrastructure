@@ -86,5 +86,5 @@ def clear_atq():
     jobids = [int(x) for x in stdout.decode('ascii').split('\n')[:-1]]
     return json.dumps({ 'cancelledJobIds' : jobids})
 
-if __name__ == '__main__':
-    print("Please refer to the README to use this file.")
+def main():
+    hug.API(__name__).http.serve()
