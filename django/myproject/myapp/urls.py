@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
-from myproject.myapp.views import list#, RfsnListView
+from myproject.myapp.views import list_rfsns#, RfsnListView
+from myproject.myapp.views import recording_list
 from myproject.myapp.views import status
 from myproject.myapp.views import schedule_session, schedule_a_session
 from myproject.myapp.views import upload_file
@@ -10,7 +11,8 @@ from myproject.myapp.views import shutdown
 #from myapp.views import RfsnListView
 
 urlpatterns = [
-    url(r'^list/$', list, name='list'),
+    url(r'^rfsns/$', list_rfsns, name='rfsns'),
+    url(r'^recording_list/$', recording_list, name='recording_list'),
     url(r'^upload_file/$', upload_file, name='upload_file'),
     url(r'^status/$', status, name='status'),
     url(r'^schedule_session/(?P<hostname>\w{0,50})/$', schedule_session,

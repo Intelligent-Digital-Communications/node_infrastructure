@@ -26,7 +26,7 @@ from django.views.generic.list import ListView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
-def list(request):
+def list_rfsns(request):
     rfsn_objects = RFSN.objects.all()
     print("LIST: ", rfsn_objects)
     rfsn_info = {}
@@ -36,6 +36,26 @@ def list(request):
                                 "port":rfsn.port}
     print(rfsn_info)
     return HttpResponse(json.dumps(rfsn_info))
+
+def recording_list(request):
+    if request.method == 'POST':
+        data = request.json()                               # get filter args from post request
+        recording_info = {}
+        query = {}                                          # dynamically build query
+        if data["rfsn_id"]:
+            query["rfsn__pk"] = data["rfsn_id"]
+        if data["session_name"]:
+            query["session__name"] = data["session_name"]
+        # unpack query arguments to query the DB
+        recording_objs = RecordingModel.objects.filter(**query)
+        for rec in recording_objs:
+            recording_info[rec.id] = {"rfsn":rec.rfsn.pk,
+                                        "datetime":rec.at_datetime,
+                                        "job_id":rec.unix_jobid,
+                                        "local_path":rec.local_path,
+                                        "backup_path":rec.backup_path}
+        print(recording_info) # delete this cause it'll spam the terminal
+        return HttpResponse(json.dumps(recording_info))
 
 @csrf_exempt
 def schedule_a_session(request):
