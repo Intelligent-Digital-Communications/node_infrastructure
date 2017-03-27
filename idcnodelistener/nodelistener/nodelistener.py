@@ -1,16 +1,17 @@
 import sys, os, subprocess, time, datetime, logging, pickle, hug, json
 from subprocess import Popen, PIPE
-try:
-    from .RecordingClasses import Recording, Session, Util
-    from .schedule_session import schedule_session
-except SystemError:
-    from RecordingClasses import Recording, Session, Util
-    from schedule_session import schedule_session
+from nodelistener import *
+#print(dir(nodelistener))
+#from nodelistener import recording_classes, schedule_session
+#from . import RecordingClasses, schedule_session
+#from RecordingClasses import Recording, Session, Util #from schedule_session import schedule_session
 
 """
 This REST API runs on the nodes in the stadium and awaits commands from the
 controlling server, such as scheduling a specrec record.
 """
+
+__version__ = "0.1.0"
 
 @hug.post('/generate_epochs')
 def generate_epochs(body):
@@ -71,6 +72,7 @@ def filedrop(body):
 @hug.get('/get_atq')
 def getatq():
     """Returns job ids that are currently in the atq."""
+    print(os.getcwd())
     try:
         stdout, _ = Popen('./getatq.sh', stdout=subprocess.PIPE).communicate()
         jobids = [int(x) for x in stdout.decode('ascii').split('\n')[:-1]]
