@@ -22,7 +22,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         for(var i = 0; i < $scope.recordings.length; i++) {
             var date = parseDate($scope.recordings[i].date);
             $scope.recordings[i].starttime = date + " " + $scope.recordings[i].time;
-            $scope.recordings[i].recordpath = "/opt/test/epoch" + i + ".sc16";
+            $scope.recordings[i].recordpath = $scope.session.startingpath + "epoch" + i + ".sc16";
             $scope.recordings[i].frequency = $scope.recordings[i].frequency * 1000000;
             delete $scope.recordings[i].date;
             delete $scope.recordings[i].time;
@@ -30,10 +30,10 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
 
         $scope.session = {
             "recordings" : $scope.recordings,
-            "name": $scope.session.name, 
+            "name": $scope.session.name,
             "startingpath": $scope.session.startingpath,
-            "startearly": $scope.session.startearly, 
-            "logpath": $scope.session.logpath , 
+            "startearly": $scope.session.startearly,
+            "logpath": $scope.session.logpath ,
             "samplerate": $scope.session.samplerate,
             "rfsnids": [0]
         }
@@ -47,14 +47,14 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
     var parseDate = function(date) {
         var arr = date.split("-");
         var newStr = arr[1] + "/" + arr[2] + "/" + arr[0];
-        return newStr; 
+        return newStr;
     }
 
     $scope.addTo = function() {
         $scope.recordings.push({
-            'frequency': $scope.recordings[0].frequency, 
-            'gain': $scope.recordings[0].gain, 
-            'date' : $scope.recordings[0].date, 
+            'frequency': $scope.recordings[0].frequency,
+            'gain': $scope.recordings[0].gain,
+            'date' : $scope.recordings[0].date,
             'length' : $scope.recordings[0].length,
             'time' : $scope.recordings[0].time
         });
