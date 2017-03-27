@@ -3,8 +3,9 @@ from subprocess import Popen, PIPE
 from nodelistener import *
 #print(dir(nodelistener))
 #from nodelistener import recording_classes, schedule_session
-#from . import RecordingClasses, schedule_session
-#from RecordingClasses import Recording, Session, Util #from schedule_session import schedule_session
+#from . import recording_classes, schedule_session
+from recording_classes import Recording, Session, Util
+from schedule_session import schedule_session
 
 """
 This REST API runs on the nodes in the stadium and awaits commands from the
