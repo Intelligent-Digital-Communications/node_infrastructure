@@ -25,7 +25,7 @@ class ScheduleSoonAndCancelTestCase(LocalTest):
     """Example test for posting a CSV"""
 
     def test_schedule_soon_then_cancel(self):
-        testfile = 'myproject/myapp/csv/controller_test_schedule.csv'
+        testfile = '/tmp/controller_test_schedule.csv'
         with open(testfile, 'w', newline='') as csvfile:
             now = datetime.datetime.now()
             csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|',
