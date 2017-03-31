@@ -56,7 +56,10 @@ def schedule_session(session):
             'jobDateTime' : datetime.datetime.strptime(atdate, "%c").isoformat()
         }
     atqCmd.close()
-    copyfolder(session.include, basepath)
+    try:
+        copyfolder(session.include, basepath)
+    except FileNotFoundError:
+        print('Failed to copy include folder.')
     return session
 
 def copyfolder(src, dest):

@@ -21,11 +21,13 @@ setup(
     entry_points = {
         "console_scripts": ['startlistener = startlistener:main']
         },
+    scripts = ['bin/atclear'],
     version = version,
     description = "Listens for commands from an instance of an idc-controller.",
     author = "Intelligent Digital Communications",
     author_email = "vip-idc@gatech.edu",
     url = "http://github.gatech.edu/IDC/node-infrastructure",
     test_suite="test.schedule_session_tests"
+
     )
 
