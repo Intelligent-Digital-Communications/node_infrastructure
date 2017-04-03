@@ -33,7 +33,8 @@ def list_rfsns(request):
     for rfsn in rfsn_objects:
         rfsn_info[rfsn.id] = {"name":rfsn.name,
                                 "hostname":rfsn.hostname,
-                                "port":rfsn.port}
+                                "port":rfsn.port,
+                                "id": rfsn.id}
     print(rfsn_info)
     return HttpResponse(json.dumps(rfsn_info))
 

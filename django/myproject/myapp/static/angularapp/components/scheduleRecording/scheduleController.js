@@ -1,8 +1,22 @@
 'use strict';
 
 angular.module('myApp.scheduleRecordingController', ['ngRoute'])
+.controller('scheduleController', ['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload, rfsns){
 
-.controller('scheduleController', ['$scope', 'fileUpload', function($scope, fileUpload){
+    $scope.rfsns = null;
+    $scope.rfsnList = [];
+
+    $http({
+            method: 'GET',
+            url: '/myapp/rfsns'
+        }).success(function (result) {
+        $scope.rfsnList = result;
+    });
+
+    $scope.print = function(){
+        console.log($scope.rfsnList);
+    }
+
     $scope.uploadFile = function(){
         var file = $scope.myFile;
         console.log('file is ' );

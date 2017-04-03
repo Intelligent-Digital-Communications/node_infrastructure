@@ -5,7 +5,7 @@
       <button class="btn btn-primary" ng-click="uploadFile()">Submit</button>
             <div class="container">
 
-            
+
             <table>
               <tr>
                 <th> Session Name </th>
@@ -22,6 +22,13 @@
                 <td> <input type="number" ng-model="session.samplerate"><br> </td>
               </tr>
             </table>
+
+            <label ng-repeat = "r in rfsnList">
+                <input type="checkbox">
+                    [[r.name]]
+                <br>
+            </label>
+            <button ng-click="print()">Print</button>
 
                 <h2>Schedule Recording Form</h2
                 <form novalidate>
@@ -43,7 +50,7 @@
                           <th> Gain</th>
                           <th> Frequency</th>
                         </tr>
-                                      
+
                         <tr ng-repeat ="recording in recordings" ng-form="recordingForm">
                           <td> <input type="date" ng-model="recording.date"><br> </td>
                           <td> <input type="time" ng-model="recording.time"><br> </td>
@@ -51,11 +58,11 @@
                           <td> <input type="number" ng-model="recording.gain"><br> </td>
                           <td> <input type="number" ng-model="recording.frequency"><br> </td>
                         </tr>
-                      
+
                     </table>
-        
+
                     <button ng-click="addTo()">Add</button>
-                
+
                 <button ng-click="submitForm()">Submit Form</button>
                 </form>
             </div>
