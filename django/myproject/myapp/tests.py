@@ -40,9 +40,9 @@ class ScheduleSoonAndCancelTestCase(TestCase):
             csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
                 'spring17_test.log', '60', '25E+06', '1', '2', '3'])
             for i in range(1,10):
-                csvwriter.writerow([(now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'), 
+                csvwriter.writerow([(now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'),
                 'epoch_test' + str(i) + '.sc16', '2.41E+09', '3', '55'])
-        
+
         c = Client()
         with open('myproject/myapp/csv/controller_test_schedule.csv', 'rb') as csvfile:
             response = c.post('/myapp/upload_file/', { 'docfile' : csvfile, 'rfsns' : [1] })
@@ -50,6 +50,8 @@ class ScheduleSoonAndCancelTestCase(TestCase):
             self.assertEqual(len(mail.outbox), 1)
             s = Util.loads(response.content.decode('utf-8'))
             print(s)
+            list_response = c.post('/myapp/recording_list', {'rfsn_id':'1'})
+            s = json.loads(response.content.decode('utf-8'))
 
     def tearDown(self):
         print(RecordingModel.objects.all())
