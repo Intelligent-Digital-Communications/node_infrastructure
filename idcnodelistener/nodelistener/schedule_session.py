@@ -1,4 +1,7 @@
 import os, shutil, stat, sys, datetime, subprocess
+from nodelistener import *
+
+#from recording_classes import Recording, Session, Util
 """
 Takes a Session object and schedules it locally.
 1. Generates .sh files that execute specrec.
@@ -6,8 +9,18 @@ Takes a Session object and schedules it locally.
 """
 
 def schedule_session(session):
+    print("Session:")
+    #print(session)
+    #for key, value in session.items() :
+    #    print (key, value)
+    #print(session['include'])
+    #print(session.include)
+    #session = Util.loads(str(session))
     print(session)
+    #session = Session(session)
+    print("--------")
     recordingslist = session.recordings
+    print(recordingslist)
     basepath = session.startingpath
     logfilepath = basepath + session.logpath
     print('.sh files being written to {}'.format(basepath))
