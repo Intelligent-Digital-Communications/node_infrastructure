@@ -1,11 +1,13 @@
 import sys, os, subprocess, time, datetime, logging, pickle, hug, json
 from subprocess import Popen, PIPE
 from nodelistener import *
+#from recording_classes import Recording, Session, Util
+#from schedule_session import schedule_session
 #print(dir(nodelistener))
-#from nodelistener import recording_classes, schedule_session
+#from recording_classes.py import recording_classes
 #from . import recording_classes, schedule_session
-from nodelistener.recording_classes import Recording, Session, Util
-from nodelistener.schedule_session import schedule_session
+#from nodelistener.recording_classes import Recording, Session, Util
+#from nodelistener.schedule_session import schedule_session
 
 """
 This REST API runs on the nodes in the stadium and awaits commands from the
