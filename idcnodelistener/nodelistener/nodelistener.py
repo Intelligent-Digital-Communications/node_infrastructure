@@ -1,10 +1,13 @@
 import sys, os, subprocess, time, datetime, logging, pickle, hug, json
 from subprocess import Popen, PIPE
-from nodelistener import *
+#from nodelistener import *
+#from recording_classes import Recording, Session, Util
+#from schedule_session import schedule_session
 #print(dir(nodelistener))
-#from nodelistener import recording_classes, schedule_session
-#from . import RecordingClasses, schedule_session
-#from RecordingClasses import Recording, Session, Util #from schedule_session import schedule_session
+#from recording_classes.py import recording_classes
+#from . import recording_classes, schedule_session
+from recording_classes import Recording, Session, Util
+from schedule_session import schedule_session
 
 """
 This REST API runs on the nodes in the stadium and awaits commands from the
@@ -15,8 +18,13 @@ __version__ = "0.1.0"
 
 @hug.post('/generate_epochs')
 def generate_epochs(body):
+
     session = Util.loads(body)
     try:
+        print(sys.modules[__name__])
+        print("UtilDumps:")
+        #print(Util.dumps(schedule_session(session)))
+        print("---------")
         return Util.dumps(schedule_session(session))
     except Exception as e:
         return {'log': 'Exception occurred: ' + str(e)} # TODO RETURN 500
@@ -82,7 +90,7 @@ def getatq():
 
 @hug.get('/clear_atq')
 def clear_atq():
-    stdout, _ = Popen('./clearatq.sh', stdout=subprocess.PIPE).communicate()
+    stdout, _ = Popen('atclear', stdout=subprocess.PIPE).communicate()
     jobids = [int(x) for x in stdout.decode('ascii').split('\n')[:-1]]
     return json.dumps({ 'cancelledJobIds' : jobids})
 
