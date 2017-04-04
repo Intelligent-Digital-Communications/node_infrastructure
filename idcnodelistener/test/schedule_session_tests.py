@@ -3,9 +3,13 @@ from nodelistener import *
 #from recording_classes import Recording, Session, Util
 from nodelistener.schedule_session import schedule_session
 from nodelistener.nodelistener import clear_atq, filedrop
+import platform
 
 class TestScheduleSession(unittest.TestCase):
+
     def runTest(self):
+        if platform.system() != 'Linux':
+            return 
         r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', frequency=2412e6, length=1)
         s = Session(startingpath='/tmp/scheduleTest/', rfsnids=[0], recordings=[r])
         returned = schedule_session(s)
@@ -16,6 +20,8 @@ class TestScheduleSession(unittest.TestCase):
 
 class TestJSONEncoderDecoder(unittest.TestCase):
     def runTest(self):
+        if platform.system() != 'Linux':
+            return
         r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', frequency=2412e6, length=1)
         s = Session(startingpath='/tmp/scheduleTest/', rfsnids=[0], recordings=[r])
         dumped = Util.dumps(s)
