@@ -1,8 +1,8 @@
 <div>
   <h2>Schedule a Recording</h2>
   <div ng-controller = "scheduleController">
-      <input id="file" type="file" file-model="myFile"/>
       <a href="https://github.gatech.edu/IDC/node_infrastructure/blob/master/django/myproject/myapp/csv/controller_test_schedule.csv">How to format your CSV</a>
+      <input id="file" type="file" file-model="myFile"/>
       <button class="btn btn-primary" ng-click="uploadFile()">Submit</button>
             <div class="container">
 
@@ -10,9 +10,9 @@
             <table>
               <tr>
                 <th> Session Name </th>
-                <th> Starting Path </th>
-                <th> Log Path </th>
-                <th> Start Early </th>
+                <th> Starting Path (/path/) </th>
+                <th> Log Name (test.log)</th>
+                <th> Start Early (sec) </th>
                 <th> Sample Rate </th>
               </tr>
               <tr>
@@ -24,19 +24,18 @@
               </tr>
             </table>
 
-            <label ng-repeat = "r in rfsnList">
-                <input type="checkbox">
-                    [[r.name]]
+            <label ng-repeat = "rfsn in rfsnList">
+                <input type="checkbox" ng-model="rfsns[rfsn.id]">
+                    [[rfsn.name]]
                 <br>
             </label>
-            <button ng-click="print()">Print</button>
 
                 <h2>Schedule Recording Form</h2
                 <form novalidate>
 
                 <table>
                   <tr>
-                    <th> Offset</th>
+                    <th> Time Offset</th>
                   </tr>
                   <tr>
                     <td> <input type="number" ng-model="offset"><br> </td>
@@ -47,9 +46,9 @@
                         <tr>
                           <th> Date </th>
                           <th> Time</th>
-                          <th> Length</th>
-                          <th> Gain</th>
-                          <th> Frequency</th>
+                          <th> Length (sec)</th>
+                          <th> Gain (DB)</th>
+                          <th> Frequency (Megahertz)</th>
                         </tr>
 
                         <tr ng-repeat ="recording in recordings" ng-form="recordingForm">

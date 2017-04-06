@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('myApp.scheduleRecordingController', ['ngRoute'])
+
 .controller('scheduleController', ['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload, rfsns){
 
-    $scope.rfsns = null;
+    $scope.rfsns = {};
     $scope.rfsnList = [];
 
     $http({
@@ -12,10 +13,6 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         }).success(function (result) {
         $scope.rfsnList = result;
     });
-
-    $scope.print = function(){
-        console.log($scope.rfsnList);
-    }
 
     $scope.uploadFile = function(){
         var file = $scope.myFile;
@@ -32,6 +29,10 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
     $scope.length = $scope.recordings.length;
 
     $scope.submitForm = function() {
+        var ids = [];
+        Object.keys($scope.rfsns).forEach(function(key){
+            ids.push(key);
+        });
 
         for(var i = 0; i < $scope.recordings.length; i++) {
             var date = parseDate($scope.recordings[i].date);
@@ -49,7 +50,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             "startearly": $scope.session.startearly,
             "logpath": $scope.session.logpath ,
             "samplerate": $scope.session.samplerate,
-            "rfsnids": [0]
+            "rfsnids": ids
         }
         console.log($scope.session);
         fileUpload.uploadForm($scope.session);
