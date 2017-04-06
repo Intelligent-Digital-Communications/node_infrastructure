@@ -5,7 +5,6 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
 .controller('scheduleController', ['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload, rfsns){
 
     $scope.rfsns = {};
-    $scope.rfsnList = [];
 
     $http({
             method: 'GET',

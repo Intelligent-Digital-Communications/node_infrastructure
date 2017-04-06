@@ -6,7 +6,7 @@ angular.module('myApp', [
 	'myApp.scheduleRecordingDirective',
 	'myApp.scheduleRecordingService',
     'myApp.recordingTableController',
-		 'myApp.testController'
+	'myApp.testController'
 ]).
 config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[[').endSymbol(']]');

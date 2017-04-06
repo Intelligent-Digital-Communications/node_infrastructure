@@ -1,57 +1,16 @@
-<head>
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+<div ng-controller="testController">
+    <h2>RFSNS</h2>
+    <table class="table table-striped">
+        <tr>
+          <th>RFSN</th>
+          <th>Power</th>
+          <th>Status</th>
+        </tr>
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
-<head>
-<div>
-	<h2>RFSNS</h2>
-  <table>
-    <tr>
-      <th>RFSN</th>
-      <th>Power</th>
-      <th>Status</th>
-    </tr>
-    <tr>
-      <th>RFSN 1</th>
-      <th> <button class="btn btn-primary" ng-click="uploadFile()">Node 1: ON/OFF</button></th>
-      <th><a href="http://idc.vip.gatech.edu/cacti/host.php">Click to see Status</a></th>
-    </tr>
-    <tr>
-      <th>RFSN 2</th>
-      <th> <button class="btn btn-primary" ng-click="uploadFile()">Node 2: ON/OFF</button></th>
-      <th><a href="http://idc.vip.gatech.edu/cacti/host.php">Click to see Status</a></th>
-    </tr>
-    <tr>
-      <th>RFSN 3</th>
-      <th> <button class="btn btn-primary" ng-click="uploadFile()">Node 3: ON/OFF</button></th>
-      <th><a href="http://idc.vip.gatech.edu/cacti/host.php">Click to see Status</a></th>
-    </tr>
-    <tr>
-      <th>RFSN 4</th>
-      <th> <button class="btn btn-primary" ng-click="uploadFile()">Node 4: ON/OFF</button></th>
-      <th><a href="http://idc.vip.gatech.edu/cacti/host.php">Click to see Status</a></th>
-    </tr>
-    <tr>
-      <th>RFSN 5</th>
-      <th> <button class="btn btn-primary" ng-click="uploadFile()">Node 5: ON/OFF</button></th>
-      <th><a href="http://idc.vip.gatech.edu/cacti/host.php">Click to see Status</a></th>
-    </tr>
-    <tr>
-      <th>RFSN 6</th>
-      <th> <button class="btn btn-primary" ng-click="uploadFile()">Node 6: ON/OFF</button></th>
-      <th><a href="http://idc.vip.gatech.edu/cacti/host.php">Click to see Status</a></th>
-    </tr>
+        <tr ng-repeat="rfsn in rfsnList">
+            <td>[[rfsn.name]]</td>
+            <td> <button class="btn btn-primary">[[rfsn.name]]: ON/OFF</button></td>
+            <td><a href="http://idc.vip.gatech.edu/cacti/host.php">Click to see Status</a></td>
+        </tr>
+    </table>
+</div>
