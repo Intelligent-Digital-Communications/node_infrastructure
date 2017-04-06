@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('myApp.testController', ['ngRoute'])
+angular.module('myApp.rfsnListController', ['ngRoute'])
 
-.controller('testController', ['$scope', '$http', function($scope, $http){
+.controller('rfsnListController', ['$scope', '$http', function($scope, $http){
     $http({
             method: 'GET',
             url: '/myapp/rfsns'

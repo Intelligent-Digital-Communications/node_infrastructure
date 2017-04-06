@@ -1,24 +1,24 @@
-<div ng-controller="recordingController">
-<h1> Recordings Scheduled </h1>
-<table class="table">
-  <tr>
-    <th> Date and Time </th>
-    <th> Name </th>
-    <th> Frequency (megahertz) </th>
-    <th> Length (sec) </th>
-    <th> Specrec Start Delay Time (sec) </th>
-    <th> Gain (DB) </th>
-    <th> RFSN ID's </th>
-  </tr>
-  <tr ng-repeat="x in names">
-    <td>[[ x.timedate ]]</td>
-    <td>[[ x.filename ]]</td>
-    <td>[[ (x.freq) / 1000000 ]]</td>
-    <td>[[ x.length ]]</td>
-    <td>[[ x.specrec ]]</td>
-    <td>[[ x.gain ]]</td>
-    <td>[[ x.ids ]] </td>
-  </tr>
-</table>
+<div ng-controller="recordingController" class="container">
+    <h1> Recordings Scheduled </h1>
+    <table class="table">
+        <tr>
+            <th> Date and Time </th>
+            <th> Name </th>
+            <th> Frequency (megahertz) </th>
+            <th> Length (sec) </th>
+            <th> Specrec Start Delay Time (sec) </th>
+            <th> Gain (DB) </th>
+            <th> RFSN ID's </th>
+        </tr>
+        <tr ng-repeat="x in names">
+            <td>[[ x.timedate ]]</td>
+            <td>[[ x.filename ]]</td>
+            <td>[[ (x.freq) / 1000000 ]]</td>
+            <td>[[ x.length ]]</td>
+            <td>[[ x.specrec ]]</td>
+            <td>[[ x.gain ]]</td>
+            <td>[[ x.ids ]] </td>
+        </tr>
+    </table>
 
 </div>
