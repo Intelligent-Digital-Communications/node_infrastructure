@@ -16,30 +16,15 @@
 	      <a class="navbar-brand" href="#">Intelligent Digital Communications</a>
 	    </div>
 	    <ul class="nav navbar-nav">
+          <li><a href="#/rfsns">RFSN List</a></li>
 	      <li><a href="#/schedule">Schedule Recording</a></li>
 	      <li><a href="#/viewRecordings">View Recordings</a></li>
-	      <li><a href="#/RFSNS">RFSNS</a></li>
 	    </ul>
 	  </div>
 	</nav>
 	<h1>Intelligent Digital Communications</h1>
 	<div class="container-fluid">
-		<h2>RFSNs</h2>
-		<ul>
-	 		<li> - rfsn-demo1.vip.gatech.edu</li>
-	        <li> - rfsn-demo2.vip.gatech.edu</li>
-	        <li> - rfsn-demo3.vip.gatech.edu</li>
-	        <li> - 143.215.249.243</li>
-	        <li> - 143.215.249.234</li>
-	        <li> - sn1-wifi.vip.gatech.edu 8095</li>
-	        <li> - sn1-wifi.vip.gatech.edu 8094</li>
-	        <li> - rfsn3.vip.gatech.edu</li>
-		</ul>
 		<div ng-view></div>
-
-
-
-
 	</div>
 
 <script>
@@ -52,6 +37,6 @@ var static_url = '{{STATIC_URL}}'
 <script src="{% static "angularapp/components/scheduleRecording/scheduleController.js" %}"></script>
 <script src="{% static "angularapp/components/scheduleRecording/scheduleDirective.js" %}"></script>
 <script src="{% static "angularapp/components/scheduleRecording/scheduleService.js" %}"></script>
-<script src="{% static "angularapp/components/TestTable/testController.js" %}"></script>
+<script src="{% static "angularapp/components/rfsnList/rfsnListController.js" %}"></script>
 </body>
 </html>

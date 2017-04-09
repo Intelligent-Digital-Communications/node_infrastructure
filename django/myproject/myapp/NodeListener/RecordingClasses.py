@@ -45,7 +45,7 @@ class Recording(Util):
 class Session(Util):
     """ Collection of Recordings and related metadata. """
 
-    def __init__(self, recordings, startingpath, rfsnids, include='include/', logpath='log.txt', name='Default Name', startearly=40, samplerate=25e6):
+    def __init__(self, recordings, startingpath, rfsnids, samplerate, include='include/', logpath='log.txt', name='Default Name', startearly=40):
         self.logpath = logpath
         self.startingpath = startingpath
         self.rfsnids = rfsnids

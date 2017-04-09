@@ -26,16 +26,37 @@ from django.views.generic.list import ListView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
-def list(request):
+def list_rfsns(request):
     rfsn_objects = RFSN.objects.all()
     print("LIST: ", rfsn_objects)
     rfsn_info = {}
     for rfsn in rfsn_objects:
         rfsn_info[rfsn.id] = {"name":rfsn.name,
                                 "hostname":rfsn.hostname,
-                                "port":rfsn.port}
+                                "port":rfsn.port,
+                                "id": rfsn.id}
     print(rfsn_info)
     return HttpResponse(json.dumps(rfsn_info))
+
+def recording_list(request):
+    if request.method == 'POST':
+        data = request.json()                               # get filter args from post request
+        recording_info = {}
+        query = {}                                          # dynamically build query
+        if data["rfsn_id"]:
+            query["rfsn__pk"] = data["rfsn_id"]
+        if data["session_name"]:
+            query["session__name"] = data["session_name"]
+        # unpack query arguments to query the DB
+        recording_objs = RecordingModel.objects.filter(**query)
+        for rec in recording_objs:
+            recording_info[rec.id] = {"rfsn":rec.rfsn.pk,
+                                        "datetime":rec.at_datetime,
+                                        "job_id":rec.unix_jobid,
+                                        "local_path":rec.local_path,
+                                        "backup_path":rec.backup_path}
+        print(recording_info) # delete this cause it'll spam the terminal
+        return HttpResponse(json.dumps(recording_info))
 
 @csrf_exempt
 def schedule_a_session(request):
@@ -74,9 +95,6 @@ def shutdown(request, hostname, command, port):
 
 @csrf_exempt
 def schedule_session(session):
-
-    print(session)
-    print("HEYOOO")
     results = ''
     rfsn_list = RFSN.objects.filter(pk__in=session.rfsnids)
     print("IDs looking for {}".format(session.rfsnids))
@@ -102,7 +120,7 @@ def schedule_session(session):
                 rec.specrec_args_freq = current_remote_rec.frequency
                 rec.specrec_args_length = current_remote_rec.length
                 rec.specrec_args_start = current_remote_rec.starttime
-                rec.specrec_args_sample_rate = current_remote_rec.samplerate
+                rec.specrec_args_sample_rate = req_session.samplerate
                 rec.save()
                 current_local_rec.uniques[rfsn] = current_remote_rec.uniques
         elif req.status_code == 404:
