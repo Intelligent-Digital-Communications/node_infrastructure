@@ -57,6 +57,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             'date' : $scope.recordings[0].date, 
             'length' : $scope.recordings[0].length,
             'time' : $scope.recordings[0].time
+            
         });
   };
 
