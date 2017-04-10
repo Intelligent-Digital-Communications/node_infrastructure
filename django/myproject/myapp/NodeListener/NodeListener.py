@@ -66,6 +66,7 @@ def filedrop(body):
         print(stdout.decode('ascii'))
         return 'success'
     except Exception as e:
+        raise e
         return {'log': 'Exception occurred: ' + str(e)}
 
 @hug.get('/get_atq')
@@ -86,7 +87,7 @@ def clear_atq():
 
 @hug.get('/shutdown')
 def shutdown():
-
+    return
 
 if __name__ == '__main__':
     print("Please refer to the README to use this file.")
