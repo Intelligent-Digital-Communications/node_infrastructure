@@ -40,16 +40,19 @@ def list_rfsns(request):
 
 def recording_list(request):
     print(request.body.decode('utf-8'))
-    if request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))     # get filter args from post request
+    if request.method == 'GET':
+        data = request.GET     # get filter args from post request
         recording_info = {}
         query = {}                                          # dynamically build query
-        if data["rfsn_id"]:
+        if "rfsn_id" in data:
             query["rfsn__pk"] = data["rfsn_id"]
-        if data["session_name"]:
+        if "session_name" in data and data["session_name"] is not None:
             query["session__name"] = data["session_name"]
         # unpack query arguments to query the DB
-        recording_objs = RecordingModel.objects.filter(**query)
+        if query:
+            recording_objs = RecordingModel.objects.filter(**query)
+        else:
+            recording_objs = RecordingModel.objects.all()
         for rec in recording_objs:
             recording_info[rec.pk] = {"rfsn":rec.rfsn.pk,
                                         "datetime":str(rec.at_datetime),

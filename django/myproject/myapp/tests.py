@@ -81,11 +81,14 @@ class ListRecordingsTestCase(TestCase):
 
     def test_list_recordings_test(self):
         c = Client()
-        response = c.post('/myapp/recording_list/', '{"rfsn_id": 0, "session_name": null}', content_type='application/json')
+        response = c.get('/myapp/recording_list/', {"rfsn_id": 0})
         print(response)
-        response = c.post('/myapp/recording_list/', '{"rfsn_id": 1, "session_name": null}', content_type='application/json')
+        response = c.get('/myapp/recording_list/', {"rfsn_id": 1})
         print(response)
-        response = c.post('/myapp/recording_list/', '{"rfsn_id": null, "session_name": null}', content_type='application/json')
+        response = c.get('/myapp/recording_list/', {"session_name": "TEST"})
+        print(response)
+        response = c.get('/myapp/recording_list/')
+        print(response)
 
 
 
