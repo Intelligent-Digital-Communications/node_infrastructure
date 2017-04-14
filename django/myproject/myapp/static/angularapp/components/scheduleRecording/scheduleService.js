@@ -14,8 +14,9 @@ angular.module('myApp.scheduleRecordingService', ['ngRoute'])
 	        .success(function(){
 	            alert("Success");
 	        })
-	        .error(function(){
-	            alert("Uploading file failed");
+	        .error(function(error, status){
+                var data = { message: error, status: status}
+	            alert("There was an error scheduling. Contact someone on the SysOps team");
 	        });
 	    },
 
@@ -23,9 +24,11 @@ angular.module('myApp.scheduleRecordingService', ['ngRoute'])
         	$http.post("/myapp/schedule_form/", object)
         	.success(function() {
                 alert("Success");
-            }).error(function(){
-                alert("Failed");
-            });
+            }).error(function(error, data, status, headers, config, statusText){
+                var data = { message: error, status: status, headers:headers, config:config, statusText:statusText};
+                console.log(data);
+	            alert("There was an error scheduling. Contact someone on the SysOps team");
+	        });
         }
 	}
 }]);
