@@ -39,8 +39,9 @@ def list_rfsns(request):
     return HttpResponse(json.dumps(rfsn_info))
 
 def recording_list(request):
+    print(request.body.decode('utf-8'))
     if request.method == 'POST':
-        data = request.json()                               # get filter args from post request
+        data = json.loads(request.body.decode('utf-8'))     # get filter args from post request
         recording_info = {}
         query = {}                                          # dynamically build query
         if data["rfsn_id"]:
@@ -50,8 +51,8 @@ def recording_list(request):
         # unpack query arguments to query the DB
         recording_objs = RecordingModel.objects.filter(**query)
         for rec in recording_objs:
-            recording_info[rec.id] = {"rfsn":rec.rfsn.pk,
-                                        "datetime":rec.at_datetime,
+            recording_info[rec.pk] = {"rfsn":rec.rfsn.pk,
+                                        "datetime":str(rec.at_datetime),
                                         "job_id":rec.unix_jobid,
                                         "local_path":rec.local_path,
                                         "backup_path":rec.backup_path}
