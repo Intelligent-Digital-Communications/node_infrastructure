@@ -62,7 +62,8 @@ class ListRecordingsTestCase(TestCase):
         local1.save()
         local2 = RFSN(name='localhost-2', hostname='localhost-2', port=6969, pk=1)
         local2.save()
-        b = SessionModel(sample_rate=25000000, start_early=60)
+        self.rate = 25000000
+        b = SessionModel(sample_rate=self.rate, start_early=60)
         b.save()
         b.name = "TEST"
         b.rfsns = [local1,local2]
@@ -82,13 +83,13 @@ class ListRecordingsTestCase(TestCase):
     def test_list_recordings_test(self):
         c = Client()
         response = c.get('/myapp/recording_list/', {"rfsn_id": 0})
-        print(response)
+        self.assertTrue(str(self.rate) in str(response.content))
         response = c.get('/myapp/recording_list/', {"rfsn_id": 1})
-        print(response)
+        self.assertTrue(str(self.rate) in str(response.content))
         response = c.get('/myapp/recording_list/', {"session_name": "TEST"})
-        print(response)
+        self.assertTrue(str(self.rate) in str(response.content))
         response = c.get('/myapp/recording_list/')
-        print(response)
+        self.assertTrue(str(self.rate) in str(response.content))
 
 
 
