@@ -30,6 +30,7 @@ class SpecrecArgField(CompositeField):
     length = models.IntegerField()
     freq = models.IntegerField()
     sample_rate = models.IntegerField()
+    gain = models.IntegerField()
     start = models.DateTimeField('Specrec begin recording time')
     full_commands = models.CharField(max_length=1000)
 

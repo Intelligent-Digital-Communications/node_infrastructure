@@ -62,7 +62,8 @@ def recording_list(request):
                                         "length":rec.specrec_args.length,
                                         "freq":rec.specrec_args.freq,
                                         "sample_rate":rec.specrec_args.sample_rate,
-                                        "session":rec.session.name}
+                                        "session":rec.session.name,
+                                        "gain": rec.specrec_args.gain}
         print(recording_info) # delete this cause it'll spam the terminal
         return HttpResponse(json.dumps(recording_info))
 
@@ -127,6 +128,7 @@ def schedule_session(session):
                         at_datetime = current_remote_rec.uniques['jobDateTime'])
                 rec.specrec_args_freq = current_remote_rec.frequency
                 rec.specrec_args_length = current_remote_rec.length
+                rec.specrec_args_gain = current_remote_rec.gain
                 rec.specrec_args_start = current_remote_rec.starttime
                 rec.specrec_args_sample_rate = req_session.samplerate
                 rec.save()

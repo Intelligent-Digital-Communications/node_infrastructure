@@ -71,11 +71,11 @@ class ListRecordingsTestCase(TestCase):
         b.save()
 
         RecordingModel.objects.create(rfsn=local1, session=b, at_datetime=datetime.datetime.now(), unix_jobid=1,
-            specrec_args_length=60,specrec_args_freq=50502025,specrec_args_sample_rate=25000000, 
+            specrec_args_length=60,specrec_args_freq=50502025,specrec_args_gain=45,specrec_args_sample_rate=25000000,
             specrec_args_start=datetime.datetime.now(), specrec_args_full_commands='',
             local_path='/dev/null/', backup_path='/dev/null/')
         RecordingModel.objects.create(rfsn=local2, session=b, at_datetime=datetime.datetime.now(), unix_jobid=26,
-            specrec_args_length=60,specrec_args_freq=50502025,specrec_args_sample_rate=25000000, 
+            specrec_args_length=60,specrec_args_freq=50502025,specrec_args_gain=55,specrec_args_sample_rate=25000000,
             specrec_args_start=datetime.datetime.now(), specrec_args_full_commands='',
             local_path='/dev/null/', backup_path='/dev/null/')
 
