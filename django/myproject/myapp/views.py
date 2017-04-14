@@ -58,7 +58,11 @@ def recording_list(request):
                                         "datetime":str(rec.at_datetime),
                                         "job_id":rec.unix_jobid,
                                         "local_path":rec.local_path,
-                                        "backup_path":rec.backup_path}
+                                        "backup_path":rec.backup_path,
+                                        "length":rec.specrec_args.length,
+                                        "freq":rec.specrec_args.freq,
+                                        "sample_rate":rec.specrec_args.sample_rate,
+                                        "session":rec.session.name}
         print(recording_info) # delete this cause it'll spam the terminal
         return HttpResponse(json.dumps(recording_info))
 
