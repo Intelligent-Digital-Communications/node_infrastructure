@@ -64,7 +64,6 @@ def recording_list(request):
                                         "sample_rate":rec.specrec_args.sample_rate,
                                         "session":rec.session.name,
                                         "gain": rec.specrec_args.gain}
-        print(recording_info) # delete this cause it'll spam the terminal
         return HttpResponse(json.dumps(recording_info))
 
 @csrf_exempt
