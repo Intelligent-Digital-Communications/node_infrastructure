@@ -3,7 +3,7 @@ import csv, json, sys
 from .NodeListener import *
 
 def convert(csvfile):
-    fieldnames = ["starttime","recordpath","frequency","length","gain"]
+    fieldnames = ["starttime", "recordpath", "frequency","length","gain"]
     recordings = []
     reader = csv.reader(csvfile, fieldnames)
     vals = next(reader)

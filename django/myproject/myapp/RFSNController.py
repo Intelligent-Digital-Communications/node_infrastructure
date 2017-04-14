@@ -7,8 +7,8 @@ from .NodeListener import *
 """ Issues commands to NodeListeners. """
 
 # TEST ENV
-listeners = ["localhost:8000", "rfsn1:5035",
-        "rfsn2:5035", "rfsn3:5035"]
+listeners = ["localhost:8000", "rfsn1:8000",
+        "rfsn2:8000", "rfsn3:8000"]
 
 # PRODUCTION
 '''

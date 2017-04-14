@@ -9,52 +9,44 @@ from .models import RFSN, RecordingModel, SessionModel, SpecrecArgField
 import os
 import csv
 
-# Example test for posting a CSV, need to create a jsonSessionDict
-'''
-class ScheduleAndCancelTestCase(TestCase):
-    def test_schedule_then_cancel(self):
+class ScheduleSoonAndCancelTestCase(TestCase):
+    """Example test for posting a CSV"""
+
+    def setUp(self):
+        RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
+        RFSN.objects.create(name="rfsn1", hostname="rfsn1", port=8000, pk=1)
+        RFSN.objects.create(name="rfsn2", hostname="rfsn2", port=8000, pk=2)
+        RFSN.objects.create(name="rfsn3", hostname="rfsn3", port=8000, pk=3)
+
+    def test_schedule_soon_then_cancel(self):
+        testfile = 'myproject/myapp/csv/controller_test_schedule.csv'
+        with open(testfile, 'w', newline='') as csvfile:
+            now = datetime.datetime.now()
+            csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|',
+                    quoting=csv.QUOTE_MINIMAL)
+
+            #change 1,2,3 to 0 for local testing
+            # Write the session properties 
+            csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
+                'spring17_test.log', '60', '25000000', '0'])
+
+            # Write each recording
+            for i in range(1,10):
+                csvwriter.writerow([
+                    (now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'),
+                'epoch_test' + str(i) + '.sc16', '2.41E+09', '3', '55'])
+
         c = Client()
-        with open('myproject/myapp/csv/controller_test_schedule.csv', 'rb') as csv:
-            response = c.post('/myapp/upload_file/', { 'docfile' : csv, 'rfsns' : [1] })
+        with open(testfile, 'rb') as csvfile:
+            response = c.post('/myapp/upload_file/',
+                    { 'docfile' : csvfile, 'rfsns' : [0] })
             self.assertTrue(response.status_code == 200)
             self.assertEqual(len(mail.outbox), 1)
             s = Util.loads(response.content.decode('utf-8'))
             print(s)
-'''
 
-# class ScheduleSoonAndCancelTestCase(TestCase):
-#     def setUp(self):
-#         RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
-#         RFSN.objects.create(name="rfsn1", hostname="rfsn1", port=5035, pk=1)
-#         RFSN.objects.create(name="rfsn2", hostname="rfsn2", port=5035, pk=2)
-#         RFSN.objects.create(name="rfsn3", hostname="rfsn3", port=5035, pk=3)
-
-#     def test_schedule_soon_then_cancel(self):
-#         with open('myproject/myapp/csv/controller_test_schedule.csv', 'w', newline='') as csvfile:
-#             now = datetime.datetime.now()
-#             csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-#             #change 1,2,3 to 0 for local testing
-#             # csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
-#             #    'spring17_test.log', '60', '1', '2', '3'])
-
-#             csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
-#                 'spring17_test.log', '60', '25000000000', '0'])
-#             for i in range(1,10):
-#                 csvwriter.writerow([(now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'),
-#                 'epoch_test' + str(i) + '.sc16', '2.41E+09', '3', '55'])
-
-#         c = Client()
-#         with open('myproject/myapp/csv/controller_test_schedule.csv', 'rb') as csvfile:
-#             response = c.post('/myapp/upload_file/', { 'docfile' : csvfile, 'rfsns' : [0] })
-#             self.assertTrue(response.status_code == 200)
-#             self.assertEqual(len(mail.outbox), 1)
-#             s = Util.loads(response.content.decode('utf-8'))
-#             print(s)
-#             list_response = c.post('/myapp/recording_list', {'rfsn_id':'0'})
-#             s = json.loads(response.content.decode('utf-8'))
-
-#     def tearDown(self):
-#         print(RecordingModel.objects.all())
+     #def tearDown(self):
+     #    print(RecordingModel.objects.all())
 
 class ListRecordingsTestCase(TestCase):
     def setUp(self):
@@ -92,7 +84,6 @@ class ListRecordingsTestCase(TestCase):
         self.assertTrue(str(self.rate) in str(response.content))
 
 
-
 '''
 class TestFiledropSession(TestCase):
     def runTest(self):
@@ -103,9 +94,22 @@ class TestFiledropSession(TestCase):
         #print(filedrop(json.dumps(passing)))
 '''
 
-# class GetATQTestCase(TestCase):
-#     def test_get_atq(self):
-#         for i in range[1,3]:
-#             response = c.post('/myapp/getatq/' + str(i), { 'docfile' : csvfile, 'rfsns' : [1] })
-#             s = Util.loads(response.content.decode('utf-8'))
-#             print(s)
+class GetATQTestCase(TestCase):
+    def setUp(self):
+        RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
+        RFSN.objects.create(name="rfsn1", hostname="rfsn1", port=8000, pk=1)
+        RFSN.objects.create(name="rfsn2", hostname="rfsn2", port=8000, pk=2)
+        RFSN.objects.create(name="rfsn3", hostname="rfsn3", port=8000, pk=3)
+
+    def test_get_atq(self):
+        c = Client()
+        for i in range(1,2):
+            print(str(i))
+            response = c.post('/myapp/getatq/' + str(i))
+            print("HERERERE")
+            print(response.content.decode('utf-8'))
+            s = Util.loads(response.content.decode('utf-8'))
+            print(s)
+
+    def tearDown(self):
+        print(RecordingModel.objects.all())

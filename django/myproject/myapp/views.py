@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django import forms
+from django.utils import timezone
 from .forms import UploadFileForm
 from .csvtojson import convert
 
@@ -101,15 +102,24 @@ def shutdown(request, hostname, command, port):
         return result
     return HttpResponse("OK")
 
+def fix_tz(a):
+    return timezone.make_aware(a, timezone.get_current_timezone())
+
 @csrf_exempt
 def schedule_session(session):
     results = ''
     rfsn_list = RFSN.objects.filter(pk__in=session.rfsnids)
-    print("IDs looking for {}".format(session.rfsnids))
-    print("Matched {}".format(rfsn_list))
+
+    session_db = SessionModel(name=session.name,
+            log_path=session.logpath, starting_path=session.startingpath,
+            sample_rate = session.samplerate)
+    session_db.save()
+
     for rfsn in rfsn_list:
+        session_db.rfsns.add(rfsn)
         req = schedule(session, rfsn)
         status = ''
+
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
             req_session = Util.loads(req.text)
@@ -121,31 +131,35 @@ def schedule_session(session):
                     current_local_rec.uniques = {}
 
 
-                rec = RecordingModel(rfsn=rfsn,
+                rec = RecordingModel(rfsn=rfsn, session=session_db,
                         unix_jobid = current_remote_rec.uniques['jobId'],
                         local_path = 'ERROR', backup_path = 'ERROR',
                         at_datetime = current_remote_rec.uniques['jobDateTime'])
+                # TODO at_datetime isn't Timezone aware, causes RuntimeWarning
+
                 rec.specrec_args_freq = current_remote_rec.frequency
                 rec.specrec_args_length = current_remote_rec.length
                 rec.specrec_args_gain = current_remote_rec.gain
-                rec.specrec_args_start = current_remote_rec.starttime
                 rec.specrec_args_sample_rate = req_session.samplerate
+                rec.specrec_args_start = fix_tz(current_remote_rec.starttime)
                 rec.save()
                 current_local_rec.uniques[rfsn] = current_remote_rec.uniques
+                
         elif req.status_code == 404:
-            status = str(req.status_code) + ' URL not found. Make sure NodeListener is running on the RFSN.\n'
+            status = str(req.status_code) + ' URL not found. Make sure \
+                    NodeListener is running on the RFSN.\n'
         elif req.status_code == 500:
             status = str(req.status_code) + ' Server error occurred.\n'
         results += ('RFSN ' + str(rfsn) + ': ' + str(status))
 
     send_mail(
-            session.name + ' Schedule Result',
-            'Results of scheduling recording session for ' + session.name + ":\n"
-            + results,
-            'idc.gatech@gmail.com',
-            ['rgallaway@gatech.edu', 'haydenflinner@gmail.com', 'orindlincoln@gatech.edu',
-                'jaison.george@gatech.edu'],
-            fail_silently=False
+        session.name + ' Schedule Result',
+        'Results of scheduling recording session for ' + session.name + ":\n"
+        + results,
+        'idc.gatech@gmail.com',
+        ['rgallaway@gatech.edu', 'haydenflinner@gmail.com', 'orindlincoln@gatech.edu',
+            'jaison.george@gatech.edu'],
+        fail_silently=False
     )
     return jsonpickle.encode(session)
 
