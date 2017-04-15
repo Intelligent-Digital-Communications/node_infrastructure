@@ -19,7 +19,7 @@ angular.module('myApp.scheduleRecordingDirective', ['ngRoute'])
     };
 }]);
 
-angular.module('myApp.scheduleRecordingDirective', ['ngRoute'])
+angular.module('myApp.scheduleRecordingInputDirective', ['ngRoute'])
 
 .directive('input', function() {
     return {
