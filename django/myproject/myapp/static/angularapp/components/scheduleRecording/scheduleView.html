@@ -1,11 +1,13 @@
 
 <div ng-controller = "scheduleController" class="container">
-    <h2>Schedule a Recording</h2>
-    <a href="https://github.gatech.edu/IDC/node_infrastructure/blob/master/django/myproject/myapp/csv/controller_test_schedule.csv">How to format your CSV</a>
+<div class="row">
+    <h2>CSV Scheduling</h2>
+    <a href="https://github.gatech.edu/IDC/node_infrastructure/blob/master/django/myproject/myapp/csv/controller_test_schedule.csv">CSV Formatting Reference</a>
     <input id="file" type="file" file-model="myFile"/>
     <button class="btn btn-primary" ng-click="uploadFile()">Submit</button>
 
-
+</div>
+<div class="row">
     <h2>Schedule Recording Form</h2>
     <table>
         <tr>
@@ -20,14 +22,15 @@
             <td> <input type="text" ng-model="session.startingpath"><br> </td>
             <td> <input type="text" ng-model="session.logpath"><br> </td>
             <td><input type="number" ng-model="session.startearly"><br></td>
-            <td> <input type="number" ng-model="session.samplerate"><br> </td>
+            <td> <input type="text" ng-model="session.samplerate"><br> </td>
         </tr>
     </table>
 
     <label ng-repeat = "rfsn in rfsnList">
+        <div class="span8">
         <input type="checkbox" ng-model="rfsns[rfsn.id]">
         [[rfsn.name]]
-        <br>
+        </div>
     </label>
 
 
@@ -44,11 +47,11 @@
 
         <table>
             <tr>
-                <th> Date </th>
-                <th> Time</th>
-                <th> Length (sec)</th>
-                <th> Gain (db)</th>
-                <th> Frequency (Megahertz)</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Length (sec)</th>
+                <th>Gain (db)</th>
+                <th>Frequency (hz)</th>
             </tr>
 
             <tr ng-repeat ="recording in recordings" ng-form="recordingForm">
@@ -56,7 +59,7 @@
                 <td> <input type="time" ng-model="recording.time"><br> </td>
                 <td> <input type="number" ng-model="recording.length"><br> </td>
                 <td> <input type="number" ng-model="recording.gain"><br> </td>
-                <td> <input type="number" ng-model="recording.frequency"><br> </td>
+                <td> <input type="text" ng-model="recording.frequency"><br> </td>
             </tr>
 
         </table>
@@ -65,4 +68,5 @@
 
         <button ng-click="submitForm()">Submit Form</button>
     </form>
+<div class="row">
 </div>

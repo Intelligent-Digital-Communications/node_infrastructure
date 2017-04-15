@@ -2,7 +2,7 @@
 
 angular.module('myApp.scheduleRecordingController', ['ngRoute'])
 
-.controller('scheduleController', ['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload, rfsns){
+.controller('scheduleController', ['$scope', '$http', '$filter', 'fileUpload', function($scope, $http, $filter, fileUpload, rfsns){
 
     $scope.rfsns = {};
 
@@ -25,6 +25,18 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
     $scope.recordings = [{}];
     $scope.session = {};
     $scope.offset = {};
+    var d = new Date();
+    // Default values
+    $scope.recordings[0].time = d.getHours() + ":" + d.getMinutes();
+    $scope.recordings[0].date = $filter("date")(d, 'yyyy-MM-dd');
+    $scope.recordings[0].gain = 55;
+    $scope.recordings[0].frequency= '2.4E+9';
+
+    $scope.session.startearly = 60;
+    $scope.session.logpath = 'log.txt';
+    $scope.session.samplerate = '25e6';
+
+
     $scope.length = $scope.recordings.length;
 
     $scope.submitForm = function() {
@@ -37,7 +49,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             var date = parseDate($scope.recordings[i].date);
             $scope.recordings[i].starttime = date + " " + $scope.recordings[i].time;
             $scope.recordings[i].recordpath = $scope.session.startingpath + "epoch" + i + ".sc16";
-            $scope.recordings[i].frequency = $scope.recordings[i].frequency * 1000000;
+            $scope.recordings[i].frequency = $scope.recordings[i].frequency;
             delete $scope.recordings[i].date;
             delete $scope.recordings[i].time;
         }
