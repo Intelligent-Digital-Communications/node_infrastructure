@@ -43,7 +43,6 @@ class ScheduleSoonAndCancelTestCase(TestCase):
             self.assertTrue(response.status_code == 200)
             self.assertEqual(len(mail.outbox), 1)
             s = Util.loads(response.content.decode('utf-8'))
-            print(s)
 
      #def tearDown(self):
      #    print(RecordingModel.objects.all())
@@ -104,12 +103,4 @@ class GetATQTestCase(TestCase):
     def test_get_atq(self):
         c = Client()
         for i in range(1,2):
-            print(str(i))
             response = c.post('/myapp/getatq/' + str(i))
-            print("HERERERE")
-            print(response.content.decode('utf-8'))
-            s = Util.loads(response.content.decode('utf-8'))
-            print(s)
-
-    def tearDown(self):
-        print(RecordingModel.objects.all())

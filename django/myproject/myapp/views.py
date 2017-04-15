@@ -112,7 +112,7 @@ def schedule_session(session):
 
     session_db = SessionModel(name=session.name,
             log_path=session.logpath, starting_path=session.startingpath,
-            sample_rate = session.samplerate)
+            sample_rate = session.samplerate, start_early=session.startearly)
     session_db.save()
 
     for rfsn in rfsn_list:
@@ -123,7 +123,6 @@ def schedule_session(session):
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
             req_session = Util.loads(req.text)
-            print(req_session)
             for i in range(len(session.recordings)):
                 current_local_rec = session.recordings[i]
                 current_remote_rec = req_session.recordings[i]
@@ -176,7 +175,6 @@ def upload_file(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['docfile']
         jsonschedule = convert(TextIOWrapper(uploaded_file.file, encoding='utf-8'))
-        print(jsonschedule)
         session = Util.loads(jsonschedule)
         return HttpResponse(schedule_session(session))
     return render(request, 'main.html')
