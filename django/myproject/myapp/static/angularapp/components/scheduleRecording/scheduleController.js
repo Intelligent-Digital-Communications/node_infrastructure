@@ -25,16 +25,30 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
     $scope.recordings = [{}];
     $scope.session = {};
     $scope.offset = {};
-    var d = new Date();
     // Default values
-    $scope.recordings[0].time = d.getHours() + ":" + d.getMinutes();
-    $scope.recordings[0].date = $filter("date")(d, 'yyyy-MM-dd');
-    $scope.recordings[0].gain = 55;
-    $scope.recordings[0].frequency= '2.4E+9';
+    // var d = new Date();
+    // $scope.recordings[0].time = d.getHours() + ":" + d.getMinutes();
+    // $scope.recordings[0].date = $filter("date")(d, 'yyyy-MM-dd');
+    // $scope.recordings[0].gain = 55;
+    // $scope.recordings[0].frequency= '2.4E+9';
+    //
+    // $scope.session.startearly = 60;
+    // $scope.session.logpath = 'log.txt';
+    // $scope.session.samplerate = '25e6';
+    var setDefaults = function() {
+        var d = new Date();
+        // Default values
+        $scope.recordings[0].time = d.getHours() + ":" + d.getMinutes();
+        $scope.recordings[0].date = $filter("date")(d, 'yyyy-MM-dd');
+        $scope.recordings[0].gain = 55;
+        $scope.recordings[0].frequency= '2.4E+9';
 
-    $scope.session.startearly = 60;
-    $scope.session.logpath = 'log.txt';
-    $scope.session.samplerate = '25e6';
+        $scope.session.startearly = 60;
+        $scope.session.logpath = 'log.txt';
+        $scope.session.samplerate = '25e6';
+    }
+    
+    setDefaults();
 
 
     $scope.length = $scope.recordings.length;
@@ -49,7 +63,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             var date = parseDate($scope.recordings[i].date);
             $scope.recordings[i].starttime = date + " " + $scope.recordings[i].time;
             $scope.recordings[i].recordpath = $scope.session.startingpath + "epoch" + i + ".sc16";
-            $scope.recordings[i].frequency = $scope.recordings[i].frequency;
+            $scope.recordings[i].frequency = convertSciNotation($scope.recordings[i].frequency);
             delete $scope.recordings[i].date;
             delete $scope.recordings[i].time;
         }
@@ -60,7 +74,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             "startingpath": $scope.session.startingpath,
             "startearly": $scope.session.startearly,
             "logpath": $scope.session.logpath ,
-            "samplerate": $scope.session.samplerate,
+            "samplerate": convertSciNotation($scope.session.samplerate),
             "rfsnids": ids
         }
         console.log($scope.session);
@@ -68,6 +82,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         $scope.recording = {};
         $scope.recordings = [{}];
         $scope.session = {};
+        setDefaults();
     };
 
     var parseDate = function(date) {
@@ -75,6 +90,22 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         var newStr = arr[1] + "/" + arr[2] + "/" + arr[0];
         return newStr;
     }
+
+    var convertSciNotation = function(num) {
+        num = num.replace(/\s+/, "");
+        if (num.includes("e")) {
+            var temp = num.split("e");
+            num = temp[0] * (10 ** temp[1]);
+        } else if (num.includes("E+")) {
+            var temp = num.split("E+");
+            num = temp[0] * (10 ** temp[1]);
+        } else if (num.includes("E")) {
+            var temp = num.split("E");
+            num = temp[0] * (10 ** temp[1]);
+        }
+        return num;
+    }
+
 
     $scope.addTo = function() {
         $scope.recordings.push({

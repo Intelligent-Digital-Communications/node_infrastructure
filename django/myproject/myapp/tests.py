@@ -26,7 +26,7 @@ class ScheduleSoonAndCancelTestCase(TestCase):
                     quoting=csv.QUOTE_MINIMAL)
 
             #change 1,2,3 to 0 for local testing
-            # Write the session properties 
+            # Write the session properties
             csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
                 'spring17_test.log', '60', '25000000', '0'])
 

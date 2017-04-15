@@ -32,7 +32,6 @@ class Recording(Util):
 
     def __init__(self, starttime, recordpath, frequency, length,
             gain=50, uniques=None):
-        print(starttime)
         self.starttime  = datetime.datetime.strptime(starttime, "%m/%d/%Y %H:%M")
         self.recordpath = recordpath # ends in Sc16
         self.frequency = float(frequency)
