@@ -28,7 +28,7 @@ class ScheduleSoonAndCancelTestCase(TestCase):
             #change 1,2,3 to 0 for local testing
             # Write the session properties
             csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
-                'spring17_test.log', '60', '25000000', '0'])
+                'spring17_test.log', '60', '2.5e6', '0'])
 
             # Write each recording
             for i in range(1,10):

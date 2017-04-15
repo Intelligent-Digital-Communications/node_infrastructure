@@ -117,26 +117,26 @@ def schedule_session(session):
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
             req_session = Util.loads(req.text)
-            # for i in range(len(session.recordings)):
-            #     current_local_rec = session.recordings[i]
-            #     current_remote_rec = req_session.recordings[i]
-            #     if current_local_rec.uniques == None:
-            #         current_local_rec.uniques = {}
-            #
-            #
-            #     rec = RecordingModel(rfsn=rfsn, session=session_db,
-            #             unix_jobid = current_remote_rec.uniques['jobId'],
-            #             local_path = 'ERROR', backup_path = 'ERROR',
-            #             at_datetime = current_remote_rec.uniques['jobDateTime'])
-            #     # TODO at_datetime isn't Timezone aware, causes RuntimeWarning
-            #
-            #     rec.specrec_args_freq = current_remote_rec.frequency
-            #     rec.specrec_args_length = current_remote_rec.length
-            #     rec.specrec_args_gain = current_remote_rec.gain
-            #     rec.specrec_args_sample_rate = req_session.samplerate
-            #     rec.specrec_args_start = fix_tz(current_remote_rec.starttime)
-            #     rec.save()
-            #     current_local_rec.uniques[rfsn] = current_remote_rec.uniques
+            for i in range(len(session.recordings)):
+                current_local_rec = session.recordings[i]
+                current_remote_rec = req_session.recordings[i]
+                if current_local_rec.uniques == None:
+                    current_local_rec.uniques = {}
+
+
+                rec = RecordingModel(rfsn=rfsn, session=session_db,
+                        unix_jobid = current_remote_rec.uniques['jobId'],
+                        local_path = 'ERROR', backup_path = 'ERROR',
+                        at_datetime = current_remote_rec.uniques['jobDateTime'])
+                # TODO at_datetime isn't Timezone aware, causes RuntimeWarning
+
+                rec.specrec_args_freq = current_remote_rec.frequency
+                rec.specrec_args_length = current_remote_rec.length
+                rec.specrec_args_gain = current_remote_rec.gain
+                rec.specrec_args_sample_rate = req_session.samplerate
+                rec.specrec_args_start = fix_tz(current_remote_rec.starttime)
+                rec.save()
+                current_local_rec.uniques[rfsn] = current_remote_rec.uniques
 
         elif req.status_code == 404:
             status = str(req.status_code) + ' URL not found. Make sure \
