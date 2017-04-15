@@ -32,6 +32,7 @@ class Recording(Util):
 
     def __init__(self, starttime, recordpath, frequency, length,
             gain=50, uniques=None):
+        print(starttime)
         self.starttime  = datetime.datetime.strptime(starttime, "%m/%d/%Y %H:%M")
         self.recordpath = recordpath # ends in Sc16
         self.frequency = float(frequency)
@@ -59,7 +60,7 @@ class Session(Util):
                 appending = record
             self.recordings.append(appending)
 
-        #this line might be wrong because it was holding up ^recordings when i placed it above    
+        #this line might be wrong because it was holding up ^recordings when i placed it above
         self.startearly = int(startearly)
         self.include = include
         self.name = name
