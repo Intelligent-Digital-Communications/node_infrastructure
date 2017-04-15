@@ -50,7 +50,7 @@ class Session(Util):
         self.startingpath = startingpath
         self.rfsnids = rfsnids
         self.recordings = []
-        self.samplerate = samplerate
+        self.samplerate = float(samplerate)
         for record in recordings:
             appending = None
             if not type(record) is Recording:
