@@ -145,15 +145,15 @@ def schedule_session(session):
             status = str(req.status_code) + ' Server error occurred.\n'
         results += ('RFSN ' + str(rfsn) + ': ' + str(status))
 
-    send_mail(
-        session.name + ' Schedule Result',
-        'Results of scheduling recording session for ' + session.name + ":\n"
-        + results,
-        'idc.gatech@gmail.com',
-        ['rgallaway@gatech.edu', 'haydenflinner@gmail.com', 'orindlincoln@gatech.edu',
-            'jaison.george@gatech.edu'],
-        fail_silently=False
-    )
+    # send_mail(
+    #     session.name + ' Schedule Result',
+    #     'Results of scheduling recording session for ' + session.name + ":\n"
+    #     + results,
+    #     'idc.gatech@gmail.com',
+    #     ['rgallaway@gatech.edu', 'haydenflinner@gmail.com', 'orindlincoln@gatech.edu',
+    #         'jaison.george@gatech.edu'],
+    #     fail_silently=False
+    # )
     return jsonpickle.encode(session)
 
 def status(request):

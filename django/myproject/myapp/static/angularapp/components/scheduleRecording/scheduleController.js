@@ -47,7 +47,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         $scope.session.logpath = 'log.txt';
         $scope.session.samplerate = '25e6';
     }
-    
+
     setDefaults();
 
 
@@ -63,7 +63,6 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             var date = parseDate($scope.recordings[i].date);
             $scope.recordings[i].starttime = date + " " + $scope.recordings[i].time;
             $scope.recordings[i].recordpath = $scope.session.startingpath + "epoch" + i + ".sc16";
-            $scope.recordings[i].frequency = convertSciNotation($scope.recordings[i].frequency);
             delete $scope.recordings[i].date;
             delete $scope.recordings[i].time;
         }
@@ -74,7 +73,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             "startingpath": $scope.session.startingpath,
             "startearly": $scope.session.startearly,
             "logpath": $scope.session.logpath ,
-            "samplerate": convertSciNotation($scope.session.samplerate),
+            "samplerate": $scope.session.samplerate,
             "rfsnids": ids
         }
         console.log($scope.session);
@@ -91,7 +90,8 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         return newStr;
     }
 
-    var convertSciNotation = function(num) {
+    // Don' need this anymore. Backend handles it
+    /*var convertSciNotation = function(num) {
         num = num.replace(/\s+/, "");
         if (num.includes("e")) {
             var temp = num.split("e");
@@ -104,7 +104,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             num = temp[0] * (10 ** temp[1]);
         }
         return num;
-    }
+    }*/
 
 
     $scope.addTo = function() {
