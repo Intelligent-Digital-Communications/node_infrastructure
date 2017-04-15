@@ -29,18 +29,15 @@ from django.utils import timezone
 
 def list_rfsns(request):
     rfsn_objects = RFSN.objects.all()
-    print("LIST: ", rfsn_objects)
     rfsn_info = {}
     for rfsn in rfsn_objects:
         rfsn_info[rfsn.id] = {"name":rfsn.name,
-                                "hostname":rfsn.hostname,
-                                "port":rfsn.port,
+                                #"hostname":rfsn.hostname, Hidden because includes username
+                                #"port":rfsn.port,
                                 "id": rfsn.id}
-    print(rfsn_info)
     return HttpResponse(json.dumps(rfsn_info))
 
 def recording_list(request):
-    print(request.body.decode('utf-8'))
     if request.method == 'GET':
         data = request.GET     # get filter args from post request
         recording_info = {}
@@ -80,9 +77,7 @@ def schedule_a_session(request):
 def filedrop(request, hostname):
     if request.method == 'POST':
         data = request.POST
-        print(hostname)
         result = file_drop(data, hostname)
-        print(result)
         return HttpResponse(result)
     return HttpResponse("OK")
 
@@ -91,7 +86,6 @@ def getatq(request):
     if request.method == 'GET':
         rfsn_list = RFSN.objects.filter(pk__in=request.GET.getlist('pks'))
         result = getatq(rfsn)
-        print(result)
         return result
     return HttpResponse("OK")
 
