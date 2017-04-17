@@ -34,7 +34,7 @@
 
         <table>
             <tr>
-                <th> Time Offset</th>
+                <th> Time Offset (min)</th>
             </tr>
             <tr>
                 <td> <input type="number" ng-model="offset"><br> </td>
@@ -48,6 +48,8 @@
                 <th> Length (sec)</th>
                 <th> Gain (db)</th>
                 <th> Frequency (Megahertz)</th>
+                <th> TESTdate</th>
+                <th> TESTtime</th>
             </tr>
 
             <tr ng-repeat ="recording in recordings" ng-form="recordingForm">
@@ -56,6 +58,8 @@
                 <td> <input type="number" ng-model="recording.length"><br> </td>
                 <td> <input type="number" ng-model="recording.gain"><br> </td>
                 <td> <input type="number" ng-model="recording.frequency"><br> </td>
+                <td> <input type="text" ng-model="recording.date"><br> </td>
+                <td> <input type="text" ng-model="recording.time"><br> </td>
             </tr>
 
         </table>

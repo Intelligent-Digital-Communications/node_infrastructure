@@ -24,7 +24,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
     $scope.recording = {};
     $scope.recordings = [{}];
     $scope.session = {};
-    $scope.offset = {};
+    $scope.offset = 0;
     $scope.length = $scope.recordings.length;
 
     $scope.submitForm = function() {
@@ -64,14 +64,29 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         return newStr;
     }
 
+    var offsetDate = function(date, time) {
+        var dateArr = date.split("-");
+        var year = parseInt(dateArr[0]);
+        var month = parseInt(dateArr[1]);
+        var day = parseInt(dateArr[2]);
+        var timeArr = time.split(":");
+        var hour = parseInt(timeArr[0]);
+        var minute = parseInt(timeArr[1]);
+        var newDate = new Date(year, month - 1, day, hour, minute + $scope.offset);
+        var dateString = newDate.getFullYear() + "-" + (newDate.getMonth()+1) + "-" + newDate.getDate();
+        var timeString = newDate.getHours() + ":" + newDate.getMinutes();
+        return ([dateString,timeString]);
+    }
+
     $scope.addTo = function() {
+        var newDate = offsetDate($scope.recordings[$scope.recordings.length - 1].date,$scope.recordings[$scope.recordings.length - 1].time);
         $scope.recordings.push({
             'frequency': $scope.recordings[0].frequency,
             'gain': $scope.recordings[0].gain,
-            'date' : $scope.recordings[0].date,
+            'date' : newDate[0], //$scope.recordings[$scope.recordings.length - 1].date,
             'length' : $scope.recordings[0].length,
-            'time' : $scope.recordings[0].time
-            
+            'time' : newDate[1]//$scope.recordings[$scope.recordings.length - 1].time
+
         });
   };
 
