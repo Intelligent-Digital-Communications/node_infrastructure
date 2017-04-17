@@ -4,6 +4,7 @@ angular.module('myApp', [
 	'ngRoute',
 	'myApp.scheduleRecordingController',
 	'myApp.scheduleRecordingDirective',
+    'myApp.scheduleRecordingInputDirective',
 	'myApp.scheduleRecordingService',
     'myApp.recordingTableController',
 	'myApp.rfsnListController'

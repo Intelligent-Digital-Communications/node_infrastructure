@@ -2,7 +2,7 @@
 
 angular.module('myApp.scheduleRecordingController', ['ngRoute'])
 
-.controller('scheduleController', ['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload, rfsns){
+.controller('scheduleController', ['$scope', '$http', '$filter', 'fileUpload', function($scope, $http, $filter, fileUpload, rfsns){
 
     $scope.rfsns = {};
 
@@ -25,6 +25,33 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
     $scope.recordings = [{}];
     $scope.session = {};
     $scope.offset = 0;
+    // Default values
+    // var d = new Date();
+    // $scope.recordings[0].time = d.getHours() + ":" + d.getMinutes();
+    // $scope.recordings[0].date = $filter("date")(d, 'yyyy-MM-dd');
+    // $scope.recordings[0].gain = 55;
+    // $scope.recordings[0].frequency= '2.4E+9';
+    //
+    // $scope.session.startearly = 60;
+    // $scope.session.logpath = 'log.txt';
+    // $scope.session.samplerate = '25e6';
+    var setDefaults = function() {
+        var d = new Date();
+        // Default values
+        $scope.recordings[0].time = d.getHours() + ":" + d.getMinutes();
+        $scope.recordings[0].date = $filter("date")(d, 'yyyy-MM-dd');
+        $scope.recordings[0].gain = 55;
+        $scope.recordings[0].frequency= '2.4E+9';
+
+        $scope.session.startearly = 60;
+        $scope.session.logpath = 'log.txt';
+        $scope.session.samplerate = '25e6';
+    }
+
+    setDefaults();
+
+
+
     $scope.length = $scope.recordings.length;
 
     $scope.submitForm = function() {
@@ -37,7 +64,6 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
             var date = parseDate($scope.recordings[i].date);
             $scope.recordings[i].starttime = date + " " + $scope.recordings[i].time;
             $scope.recordings[i].recordpath = $scope.session.startingpath + "epoch" + i + ".sc16";
-            $scope.recordings[i].frequency = $scope.recordings[i].frequency * 1000000;
             delete $scope.recordings[i].date;
             delete $scope.recordings[i].time;
         }
@@ -56,6 +82,7 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         $scope.recording = {};
         $scope.recordings = [{}];
         $scope.session = {};
+        setDefaults();
     };
 
     var parseDate = function(date) {
@@ -72,11 +99,33 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         var timeArr = time.split(":");
         var hour = parseInt(timeArr[0]);
         var minute = parseInt(timeArr[1]);
-        var newDate = new Date(year, month - 1, day, hour, minute + $scope.offset);
-        var dateString = newDate.getFullYear() + "-" + (newDate.getMonth()+1) + "-" + newDate.getDate();
+        var newDate = new Date(year, month - 1, day, hour, (minute + $scope.offset));
         var timeString = newDate.getHours() + ":" + newDate.getMinutes();
-        return ([dateString,timeString]);
+        var hours = String(newDate.getHours());
+        if (hours.length == 1) {
+            timeString = "0" + timeString;
+        }
+        console.log(timeString);
+        newDate = $filter("date")(newDate, 'yyyy-MM-dd');
+        return ([newDate,timeString]);
     }
+
+    // Don' need this anymore. Backend handles it
+    /*var convertSciNotation = function(num) {
+        num = num.replace(/\s+/, "");
+        if (num.includes("e")) {
+            var temp = num.split("e");
+            num = temp[0] * (10 ** temp[1]);
+        } else if (num.includes("E+")) {
+            var temp = num.split("E+");
+            num = temp[0] * (10 ** temp[1]);
+        } else if (num.includes("E")) {
+            var temp = num.split("E");
+            num = temp[0] * (10 ** temp[1]);
+        }
+        return num;
+    }*/
+
 
     $scope.addTo = function() {
         var newDate = offsetDate($scope.recordings[$scope.recordings.length - 1].date,$scope.recordings[$scope.recordings.length - 1].time);
