@@ -3,6 +3,7 @@ import requests
 from myproject.myapp.models import *
 from django.core.mail import send_mail
 from nodelistener import *
+from recordingclasses import *
 
 """ Issues commands to NodeListeners. """
 
@@ -19,6 +20,9 @@ listeners = ["localhost:8000", "sn1-wifi.vip.gatech.edu:8094",
 
 def schedule(session, rfsn):
     """Schedules a Session on an RFSN."""
+    #for key in sys.modules:
+    #    print(key)
+    
     print(rfsn)
     url = "http://{}:{}/generate_epochs/".format(rfsn.hostname,rfsn.port)
     print("SCHEDULE URL: " + url)

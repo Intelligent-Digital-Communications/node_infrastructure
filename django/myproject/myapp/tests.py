@@ -4,6 +4,7 @@ from django.core import mail
 from datetime import datetime, timedelta
 from .csvtojson import convert
 from nodelistener import *
+from recordingclasses import Recording, Session, Util
 from .models import RFSN, RecordingModel
 import os
 import csv
@@ -16,9 +17,10 @@ class LocalTest(TestCase):
 
 class DeploymentTest(TestCase):
     def setUp(self):
-        RFSN.objects.create(name="rfsn1", hostname="rfsn1", port=8000, pk=1)
-        RFSN.objects.create(name="rfsn2", hostname="rfsn2", port=8000, pk=2)
-        RFSN.objects.create(name="rfsn3", hostname="rfsn3", port=8000, pk=3)
+        RFSN.objects.create(name="localhost", hostname="localhost", port=8000, pk=0)
+        RFSN.objects.create(name="rfsn1", hostname="rfsn1", port=5035, pk=1)
+        RFSN.objects.create(name="rfsn2", hostname="rfsn2", port=5035, pk=2)
+        RFSN.objects.create(name="rfsn3", hostname="rfsn3", port=5035, pk=3)
 
 
 class ScheduleSoonAndCancelTestCase(LocalTest):
@@ -32,7 +34,7 @@ class ScheduleSoonAndCancelTestCase(LocalTest):
                     quoting=csv.QUOTE_MINIMAL)
 
             #change 1,2,3 to 0 for local testing
-            # Write the session properties 
+            # Write the session properties
             csvwriter.writerow(['TestGame1', '/tmp/' + now.strftime('%H-%M') + '/',
                 'spring17_test.log', '60', '25000000', '0'])
 

@@ -10,6 +10,8 @@ from .forms import UploadFileForm
 from .csvtojson import convert
 
 from nodelistener import *
+from recordingclasses import Recording, Session, Util
+
 import jsonpickle
 import json
 import re, sys
@@ -93,8 +95,7 @@ def schedule_session(session):
 
         if req.status_code == 200:
             status = str(req.status_code) + ' Job scheduled successfully!\n'
-            req_session = Util.loads(req.text)
-            print(req_session)
+            req_session = Util.loads(Util.loads(req.text))
             for i in range(len(session.recordings)):
                 current_local_rec = session.recordings[i]
                 current_remote_rec = req_session.recordings[i]
@@ -113,7 +114,7 @@ def schedule_session(session):
                 rec.specrec_args_start = fix_tz(current_remote_rec.starttime)
                 rec.save()
                 current_local_rec.uniques[rfsn] = current_remote_rec.uniques
-                
+
         elif req.status_code == 404:
             status = str(req.status_code) + ' URL not found. Make sure \
                     NodeListener is running on the RFSN.\n'

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import csv, json, sys
 from nodelistener import *
+from recordingclasses import *
 
 def convert(csvfile):
     fieldnames = ["starttime", "recordpath", "frequency","length","gain"]

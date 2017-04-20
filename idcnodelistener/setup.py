@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
- 
- 
+
+
 """setup.py: setuptools control."""
- 
- 
+
+
 import re, sys, os, glob
 from setuptools import setup
- 
- 
+
+
 version = re.search(
     '^__version__\s*=\s*"(.*)"',
     open('nodelistener/nodelistener.py').read(),
     re.M
     ).group(1)
- 
- 
+
+
 setup(
     name = "idcnodelistener",
-    packages = ["nodelistener"],
+    packages = ["nodelistener","recordingclasses"],
     entry_points = {
         "console_scripts": ['startlistener = startlistener:main']
         },
@@ -30,4 +30,3 @@ setup(
     test_suite="test.schedule_session_tests"
 
     )
-
