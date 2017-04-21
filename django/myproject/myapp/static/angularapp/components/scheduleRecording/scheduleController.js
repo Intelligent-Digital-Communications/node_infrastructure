@@ -25,20 +25,27 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
     $scope.recordings = [{}];
     $scope.session = {};
     $scope.offset = 0;
-    // Default values
-    // var d = new Date();
-    // $scope.recordings[0].time = d.getHours() + ":" + d.getMinutes();
-    // $scope.recordings[0].date = $filter("date")(d, 'yyyy-MM-dd');
-    // $scope.recordings[0].gain = 55;
-    // $scope.recordings[0].frequency= '2.4E+9';
-    //
-    // $scope.session.startearly = 60;
-    // $scope.session.logpath = 'log.txt';
-    // $scope.session.samplerate = '25e6';
+
+    var fixTime = function(date) {
+        var hours = String(date.getHours());
+        var minutes = String(date.getMinutes());
+        if (hours.length == 1) {
+            hours = "0" + hours;
+        }
+        if (minutes.length == 1) {
+            minutes = "0" + minutes;
+        }
+        return hours + ":" + minutes;
+
+    }
+
     var setDefaults = function() {
         var d = new Date();
         // Default values
-        $scope.recordings[0].time = d.getHours() + ":" + d.getMinutes();
+
+
+        $scope.recordings[0].time = fixTime(d);
+
         $scope.recordings[0].date = $filter("date")(d, 'yyyy-MM-dd');
         $scope.recordings[0].gain = 55;
         $scope.recordings[0].frequency= '2.4E+9';
@@ -100,31 +107,11 @@ angular.module('myApp.scheduleRecordingController', ['ngRoute'])
         var hour = parseInt(timeArr[0]);
         var minute = parseInt(timeArr[1]);
         var newDate = new Date(year, month - 1, day, hour, (minute + $scope.offset));
-        var timeString = newDate.getHours() + ":" + newDate.getMinutes();
-        var hours = String(newDate.getHours());
-        if (hours.length == 1) {
-            timeString = "0" + timeString;
-        }
-        console.log(timeString);
+        var timeString = fixTime(newDate);
         newDate = $filter("date")(newDate, 'yyyy-MM-dd');
-        return ([newDate,timeString]);
+        return ([newDate, timeString]);
     }
 
-    // Don' need this anymore. Backend handles it
-    /*var convertSciNotation = function(num) {
-        num = num.replace(/\s+/, "");
-        if (num.includes("e")) {
-            var temp = num.split("e");
-            num = temp[0] * (10 ** temp[1]);
-        } else if (num.includes("E+")) {
-            var temp = num.split("E+");
-            num = temp[0] * (10 ** temp[1]);
-        } else if (num.includes("E")) {
-            var temp = num.split("E");
-            num = temp[0] * (10 ** temp[1]);
-        }
-        return num;
-    }*/
 
 
     $scope.addTo = function() {

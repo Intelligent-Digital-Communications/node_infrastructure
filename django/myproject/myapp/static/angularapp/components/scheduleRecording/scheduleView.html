@@ -15,7 +15,7 @@
             <th> Starting Path (/path/) </th>
             <th> Log Name (test.log)</th>
             <th> Start Early (sec) </th>
-            <th> Sample Rate </th>
+            <th> Sample Rate (samples/sec) </th>
         </tr>
         <tr>
             <td> <input type="text" ng-model="session.name"><br> </td>
@@ -60,7 +60,7 @@
                 <td> <input type="time" ng-model="recording.time"><br> </td>
                 <td> <input type="number" ng-model="recording.length"><br> </td>
                 <td> <input type="number" ng-model="recording.gain"><br> </td>
-                <td> <input type="number" ng-model="recording.frequency"><br> </td>
+                <td> <input type="text" ng-model="recording.frequency"><br> </td>
             </tr>
 
         </table>
