@@ -14,8 +14,7 @@ angular.module('myApp.scheduleRecordingService', ['ngRoute'])
 	        .success(function(){
 	            alert("Success");
 	        })
-	        .error(function(error, status){
-                var data = { message: error, status: status}
+	        .error(function(){
 	            alert("There was an error scheduling. Contact someone on the SysOps team");
 	        });
 	    },
