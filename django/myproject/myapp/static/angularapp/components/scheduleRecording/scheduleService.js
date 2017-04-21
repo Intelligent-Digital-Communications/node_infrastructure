@@ -24,9 +24,7 @@ angular.module('myApp.scheduleRecordingService', ['ngRoute'])
         	$http.post("/myapp/schedule_form/", object)
         	.success(function() {
                 alert("Success");
-            }).error(function(error, data, status, headers, config, statusText){
-                var data = { message: error, status: status, headers:headers, config:config, statusText:statusText};
-                console.log(data);
+            }).error(function(){
 	            alert("There was an error scheduling. Contact someone on the SysOps team");
 	        });
         }
