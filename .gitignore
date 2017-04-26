@@ -1,3 +1,6 @@
+.DS_Store
+*.swp
+
 #tilde
 *~$
 # Byte-compiled / optimized / DLL files
@@ -90,3 +93,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+.DS_Store
+controller_test_schedule.csv

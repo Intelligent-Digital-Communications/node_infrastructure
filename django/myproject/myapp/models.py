@@ -26,15 +26,28 @@ class RFSN(models.Model):
     def __str__(self):
         return self.hostname
 
+    def conn_info(self):
+        return "http://{}:{}".format(self.hostname, str(self.port))
+
 class SpecrecArgField(CompositeField):
     length = models.IntegerField()
     freq = models.IntegerField()
     sample_rate = models.IntegerField()
+    gain = models.IntegerField()
     start = models.DateTimeField('Specrec begin recording time')
     full_commands = models.CharField(max_length=1000)
 
+class SessionModel(models.Model):
+    name = models.CharField(default="SESSION DEFAULT", max_length=100)
+    rfsns = models.ManyToManyField(RFSN)
+    log_path = models.CharField(max_length=100)
+    starting_path = models.CharField(max_length=100)
+    sample_rate = models.IntegerField()
+    start_early = models.IntegerField()
+
 class RecordingModel(models.Model):
     rfsn = models.ForeignKey(RFSN, on_delete=models.CASCADE)
+    session = models.ForeignKey(SessionModel, on_delete=models.CASCADE)
     at_datetime = models.DateTimeField('Linux AT start time')
     unix_jobid = models.IntegerField('Job ID', primary_key=True)
     specrec_args = SpecrecArgField()

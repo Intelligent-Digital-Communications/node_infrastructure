@@ -14,7 +14,7 @@ ADDR=$1
 PORT=$2
 OP=$3
 echo $OP
-if [$OP == "on" ]
+if [ $OP == "on" ]
 then
   echo "Turning relay ON"
   cat $relay_on_file | nc $ADDR $PORT | hexdump -C

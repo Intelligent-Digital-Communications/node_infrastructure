@@ -4,8 +4,10 @@ angular.module('myApp', [
 	'ngRoute',
 	'myApp.scheduleRecordingController',
 	'myApp.scheduleRecordingDirective',
+    'myApp.scheduleRecordingInputDirective',
 	'myApp.scheduleRecordingService',
-    'myApp.recordingTableController'
+    'myApp.recordingTableController',
+	'myApp.rfsnListController'
 ]).
 config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[[').endSymbol(']]');
@@ -21,11 +23,11 @@ config(['$routeProvider',
                 templateUrl: static_url + 'angularapp/components/recordingTable/recordingView.html',
                 controller: 'recordingController'
             }).
-            when('/route2', {
-                templateUrl: static_url + 'angularapp/html/test2.html',
-                controller: 'RouteController2'
+            when('/rfsns', {
+                templateUrl: static_url + 'angularapp/components/rfsnList/rfsnListView.html',
+                controller: 'rfsnListController'
             }).
             otherwise({
-                redirectTo: '/'
+                redirectTo: '/rfsns'
             });
     }]);

@@ -1,43 +1,73 @@
-<div>
-	<h2>Schedule a Recording</h2>
-	<div ng-controller = "scheduleController">
-	    <input id="file" type="file" file-model="myFile"/>
-	    <button class="btn btn-primary" ng-click="uploadFile()">Submit</button>
-            <div class="container">
-                <h2>Schedule Recording Form</h2
-                <form novalidate>
-                  <label for="name">Session Name:</label>
-	              <input type="text" ng-model="session.name"><br>
 
-	              <label for="startingpath">Starting Path</label>
-	              <input type="text" ng-model="session.startingpath"><br>
+<div ng-controller = "scheduleController" class="container">
+<div class="row">
+    <h2>CSV Scheduling</h2>
+    <a href="https://github.gatech.edu/IDC/node_infrastructure/blob/master/django/myproject/myapp/csv/controller_test_schedule.csv">CSV Formatting Reference</a>
+    <input id="file" type="file" file-model="myFile"/>
+    <button class="btn btn-primary" ng-click="uploadFile()">Submit</button>
 
-	              <label for="logpath">Log Path</label>
-	              <input type="text" ng-model="session.logpath"><br>
+</div>
+<div class="row">
+    <h2>Schedule Recording Form</h2>
+    <table>
+        <tr>
+            <th> Session Name </th>
+            <th> Starting Path (/path/) </th>
+            <th> Log Name (test.log)</th>
+            <th> Start Early (sec) </th>
+            <th> Sample Rate (samples/sec) </th>
+        </tr>
+        <tr>
+            <td> <input type="text" ng-model="session.name"><br> </td>
+            <td> <input type="text" ng-model="session.startingpath"><br> </td>
+            <td> <input type="text" ng-model="session.logpath"><br> </td>
+            <td><input type="number" ng-model="session.startearly"><br></td>
+            <td> <input type="text" ng-model="session.samplerate"><br> </td>
+        </tr>
+    </table>
 
-                  <div ng-repeat ="recording in recordings" ng-form="recordingForm" >
-	              
-	              <label for="date">Date:</label>
-	              <input type="date" ng-model="recording.date"><br>
+    <label ng-repeat = "rfsn in rfsnList">
+        <div class="span8">
+        <input type="checkbox" ng-model="rfsns[rfsn.id]">
+        [[rfsn.name]]
+        </div>
+    </label>
 
-		          <label for="time">Time:</label>
-	              <input type="time" ng-model="recording.time"><br>
 
-	              <label for="length">Length:</label>
-	              <input type="number" ng-model="recording.length"><br>
+    <form novalidate>
 
-                  <label for="startearly">Start Early:</label>
-                  <input type="number" ng-model="recording.startearly"><br>
+        <table>
+            <tr>
+                <th> Time Offset (min)</th>
+            </tr>
+            <tr>
+                <td> <input type="number" ng-model="offset"><br> </td>
+            </tr>
+        </table>
 
-                  <label for="gain">Gain:</label>
-	              <input type="number" ng-model="recording.gain"><br>
+        <table>
+            <tr>
 
-	              <label for="frequency">Frequency (megahertz):</label>
-	              <input type="number" ng-model="recording.frequency"><br>
-	              </div>
-	              <button ng-click="addTo(recordings,{'frequency': recordings[0].frequency, 'gain': recordings[0].gain, 'date' : recordings[0].date, 'length' : recordings[0].length, 'startearly' : recordings[0].startearly, 'time' : recordings[0].time})">Add</button>
-	              <button ng-click="submitForm()">Submit Form</button>
-                </form>
-            </div>
-	</div>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Length (sec)</th>
+                <th>Gain (db)</th>
+                <th>Frequency (hz)</th>
+            </tr>
+
+            <tr ng-repeat ="recording in recordings" ng-form="recordingForm">
+                <td> <input type="date" ng-model="recording.date"><br> </td>
+                <td> <input type="time" ng-model="recording.time"><br> </td>
+                <td> <input type="number" ng-model="recording.length"><br> </td>
+                <td> <input type="number" ng-model="recording.gain"><br> </td>
+                <td> <input type="text" ng-model="recording.frequency"><br> </td>
+            </tr>
+
+        </table>
+
+        <button ng-click="addTo()">Add</button>
+
+        <button ng-click="submitForm()">Submit Form</button>
+    </form>
+<div class="row">
 </div>

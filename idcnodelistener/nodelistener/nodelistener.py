@@ -1,25 +1,24 @@
 import sys, os, subprocess, time, datetime, logging, pickle, hug, json
 from subprocess import Popen, PIPE
-try:
-    from .RecordingClasses import Recording, Session, Util
-    from .schedule_session import schedule_session
-except SystemError:
-    from RecordingClasses import Recording, Session, Util
-    from schedule_session import schedule_session
+from recordingclasses import Recording, Session, Util
+from .schedule_session import schedule_session
 
 """
 This REST API runs on the nodes in the stadium and awaits commands from the
 controlling server, such as scheduling a specrec record.
 """
 
+__version__ = "0.1.0"
+
 @hug.post('/generate_epochs')
 def generate_epochs(body):
+
     session = Util.loads(body)
     try:
         return Util.dumps(schedule_session(session))
     except Exception as e:
-        return {'log': 'Exception occurred: ' + str(e)} # TODO RETURN 500
         raise e
+        return {'log': 'Exception occurred: ' + str(e)} # TODO RETURN 500
 
 @hug.post('/filedrop')
 def filedrop(body):
@@ -43,10 +42,10 @@ def filedrop(body):
 
         filename = spath +'/' + 'delayedrsync.sh'
         epoch_file = open(filename, 'w')
-        args = ('rsync -av {spath} {dpath} & &>> output.txt').format(spath=spath, dpath=dpath)
-        epoch_file.write('#!/bin/bash\necho {}\n{}'.format(filename, args))
+        args = ('rsync -av "{spath}" "{dpath}" &>> output.txt').format(spath=spath, dpath=dpath)
+        epoch_file.write('#!/bin/bash\n{}'.format(args))
         epoch_file.close()
-        os.chmod(filename, os.stat(filename).st_mode | int("0111", 8)) # Make exec by everyone	
+        os.chmod(filename, os.stat(filename).st_mode | int("0111", 8)) # Make exec by everyone
 
 
         # Make the directory locally
@@ -66,11 +65,13 @@ def filedrop(body):
         print(stdout.decode('ascii'))
         return 'success'
     except Exception as e:
+        raise e
         return {'log': 'Exception occurred: ' + str(e)}
 
-@hug.post('/get_atq')
-def getatq(body):
+@hug.get('/get_atq')
+def getatq():
     """Returns job ids that are currently in the atq."""
+    print(os.getcwd())
     try:
         stdout, _ = Popen('./getatq.sh', stdout=subprocess.PIPE).communicate()
         jobids = [int(x) for x in stdout.decode('ascii').split('\n')[:-1]]
@@ -80,9 +81,12 @@ def getatq(body):
 
 @hug.get('/clear_atq')
 def clear_atq():
-    stdout, _ = Popen('./clearatq.sh', stdout=subprocess.PIPE).communicate()
+    stdout, _ = Popen('atclear', stdout=subprocess.PIPE).communicate()
     jobids = [int(x) for x in stdout.decode('ascii').split('\n')[:-1]]
     return json.dumps({ 'cancelledJobIds' : jobids})
+
+def main():
+    hug.API(__name__).http.serve()
 
 if __name__ == '__main__':
     print("Please refer to the README to use this file.")
