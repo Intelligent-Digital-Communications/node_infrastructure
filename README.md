@@ -1,11 +1,11 @@
 # Node Infrastructure - Operations
 
 ## What's Next
-Refer to [Issues Page](https://github.gatech.edu/hflinner3/node_infrastructure-operations/issues)
+Refer to [Issues Page](https://github.gatech.edu/IDC/node_infrastructure/issues)
 
 ## Building/Testing
 #### Controller Testing
-Navigate to `django` folder and run `python3 manage.py test`.
+Navigate to `django` folder and run `python3 manage.py test`. Don't forget to have the Listener running on localhost!
 
 #### Listener Testing
 Go to `django/myproject/myapp/NodeListener` and run `python3 schedule_session_tests.py`.
@@ -17,9 +17,9 @@ Go to `django/myproject/myapp/NodeListener` and run `python3 schedule_session_te
 3. Click this link: http://localhost:8080
 
 #### Deployment
-On RFSNS, simply navigate to NodeListener folder and run `./startlistener.sh`.
+On RFSNS, navigate to nodelistener package folder and run `nohup startlistener &`.
 
-On idc-dev, simply navigate to django folder and run `./startserver.sh`.
+On idc-dev, navigate to django folder and run `sudo nohup python3 manage.py runserver 0.0.0.0:443 &`.
 
 ## FAQ
 `Connection refused error`: The Listener isn't running or the Controller is looking at the wrong address for it. If you get this during a Controller test, be sure that you have a Listener running locally.
