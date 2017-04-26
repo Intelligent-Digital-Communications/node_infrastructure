@@ -27,6 +27,6 @@ setup(
     author = "Intelligent Digital Communications",
     author_email = "vip-idc@gatech.edu",
     url = "http://github.gatech.edu/IDC/node-infrastructure",
-    test_suite="test.schedule_session_tests"
-
-    )
+    test_suite="test.schedule_session_tests",
+    install_requires=['hug']
+)
