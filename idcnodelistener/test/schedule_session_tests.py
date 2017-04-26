@@ -1,32 +1,30 @@
 import unittest, json, jsonpickle, sys
-from nodelistener import *
-#from recording_classes import Recording, Session, Util
+from recordingclasses import Recording, Session, Util
 from nodelistener.schedule_session import schedule_session
 from nodelistener.nodelistener import clear_atq, filedrop
 import platform
 
-class TestScheduleSession(unittest.TestCase):
-
-    def runTest(self):
+class CommonTest(unittest.TestCase):
+    def setUp(self):
         if platform.system() != 'Linux':
-            return 
-        r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', frequency=2412e6, length=1)
-        s = Session(startingpath='/tmp/scheduleTest/', rfsnids=[0], recordings=[r])
-        returned = schedule_session(s)
+            raise RuntimeError("These tests will if your environment is not similar enough to production devices.")
+        self.r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', 
+                frequency=2412e6, length=1)
+        self.s = Session(startingpath='/tmp/scheduleTest/', rfsnids=[0], recordings=[self.r], samplerate=25e6)
+
+class TestScheduleSession(CommonTest):
+    def runTest(self):
+        returned = schedule_session(self.s)
         jobid = returned.recordings[0].uniques['jobId']
         self.assertIsNotNone(jobid)
         returned = json.loads(clear_atq())
         self.assertEqual(int(returned['cancelledJobIds'][0]), jobid)
 
-class TestJSONEncoderDecoder(unittest.TestCase):
+class TestJSONEncoderDecoder(CommonTest):
     def runTest(self):
-        if platform.system() != 'Linux':
-            return
-        r = Recording(starttime='12/12/2050 2:24', recordpath='testnamedeleteme.sc16', frequency=2412e6, length=1)
-        s = Session(startingpath='/tmp/scheduleTest/', rfsnids=[0], recordings=[r])
-        dumped = Util.dumps(s)
+        dumped = Util.dumps(self.s)
         loaded = Util.loads(dumped)
-        self.assertEqual(loaded, s)
+        self.assertEqual(loaded, self.s)
         self.assertEqual(loaded.recordings[0].length, 1)
 
 ''' Fails but doesn't throw error!
