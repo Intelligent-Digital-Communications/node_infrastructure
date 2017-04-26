@@ -51,22 +51,18 @@ class ScheduleSoonAndCancelTestCase(LocalTest):
             self.assertTrue(response.status_code == 200)
             self.assertEqual(len(mail.outbox), 1)
             s = Util.loads(response.content.decode('utf-8'))
-            print(s)
-
-    def tearDown(self):
-        print(RecordingModel.objects.all())
 
 class ListRFSNsTest(LocalTest):
     def test_listRFSNs(self):
         c = Client()
         response = c.get("/myapp/list/")
-        print(response.content)
 
 '''
 class TestFiledropSession(TestCase):
     def runTest(self):
         c = Client()
-        passing = {'spath': '/home/ops/testfolder/', 'rfsnid':'1', 'fpath':'test', 'date':'20161029', 'game':'duke', 'scheduletime': '2:30 PM 11/15/2016'}
+        passing = {'spath': '/home/ops/testfolder/', 'rfsnid':'1', 'fpath':'test', 'date':'20161029',
+        'game':'duke', 'scheduletime': '2:30 PM 11/15/2016'}
         response = c.post('/myapp/filedrop/1/', passing)
         print(response)
         #print(filedrop(json.dumps(passing)))
@@ -75,11 +71,5 @@ class TestFiledropSession(TestCase):
 class GetATQTestCase(LocalTest):
     def test_get_atq(self):
         c = Client()
-        for i in range(1,2):
-            print(str(i))
-            response = c.post('/myapp/getatq/' + str(i))
-            print(response)
-            s = Util.loads(response.content.decode('utf-8'))
-
-    def tearDown(self):
-        print(RecordingModel.objects.all())
+        response = c.get('/myapp/getatq/', {'pk': 0})
+        s = Util.loads(response.content)

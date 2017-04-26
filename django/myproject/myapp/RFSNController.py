@@ -7,27 +7,13 @@ from recordingclasses import *
 
 """ Issues commands to NodeListeners. """
 
-# TEST ENV
-listeners = ["localhost:8000", "rfsn1:8000",
-        "rfsn2:8000", "rfsn3:8000"]
-
-# PRODUCTION
-'''
-listeners = ["localhost:8000", "sn1-wifi.vip.gatech.edu:8094",
-        "sn1-wifi.vip.gatech.edu:8095", "sn2-wifi.vip.gatech.edu:8094"]
-'''
-
-
 def schedule(session, rfsn):
     """Schedules a Session on an RFSN."""
-    #for key in sys.modules:
-    #    print(key)
-    
-    print(rfsn)
-    url = "http://{}:{}/generate_epochs/".format(rfsn.hostname,rfsn.port)
-    print("SCHEDULE URL: " + url)
+    url = "{}/generate_epochs/".format(rfsn.conn_info())
     req = requests.post(url, data=Util.dumps(session))
-    file_drop(session, rfsn)
+    # TODO: Add a check for whether or not we're doing copy-back before calling file_drop
+    # Until then, disabled.
+    # file_drop(session, rfsn)
     return req
 
 def file_drop(session, rfsn):
@@ -42,19 +28,10 @@ def file_drop(session, rfsn):
     formatted_schedule_time = (last_time.replace(hour=hour)
         + datetime.timedelta(days=1)).strftime("%H:%M %m/%d/%Y")
     data = {'spath': session.startingpath, 'rfsnid': rfsn.pk, 'fpath':'test',
-        'date': formatted_date, 'game':'gatech',
-        'scheduletime': formatted_schedule_time, }
+        'date': formatted_date, 'game':'gatech', 'scheduletime': formatted_schedule_time, }
     json_data = Util.dumps(data)
     url = "http://{}:{}/filedrop/".format(rfsn.hostname, rfsn.port)
     req = requests.post(url, data=json_data)
-    return req
-
-def getatq(rfsns):
-    req = ""
-    for rfsn in rfsn_list:
-        url = "http://" + rfsn.hostname + "/getatq/"
-        print("GetATQ URL: " + url)
-        req = req + requests.get(url)
     return req
 
 def shutdown(command, rfsn, port):

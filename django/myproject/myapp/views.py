@@ -22,7 +22,6 @@ from myproject.myapp.models import *
 #from myproject.myapp.forms import DocumentForm
 from myproject.myapp.RFSNController import schedule
 from myproject.myapp.RFSNController import file_drop
-from myproject.myapp.RFSNController import getatq
 from myproject.myapp.RFSNController import shutdown
 
 from django.views.generic.list import ListView
@@ -31,13 +30,11 @@ from django.utils import timezone
 
 def list(request):
     rfsn_objects = RFSN.objects.all()
-    print("LIST: ", rfsn_objects)
     rfsn_info = {}
     for rfsn in rfsn_objects:
         rfsn_info[rfsn.id] = {"name":rfsn.name,
                                 "hostname":rfsn.hostname,
                                 "port":rfsn.port}
-    print(rfsn_info)
     return HttpResponse(json.dumps(rfsn_info))
 
 @csrf_exempt
@@ -53,19 +50,16 @@ def schedule_a_session(request):
 def filedrop(request, hostname):
     if request.method == 'POST':
         data = request.POST
-        print(hostname)
         result = file_drop(data, hostname)
-        print(result)
         return HttpResponse(result)
     return HttpResponse("OK")
 
 @csrf_exempt
 def getatq(request):
     if request.method == 'GET':
-        rfsn_list = RFSN.objects.filter(pk__in=request.GET.getlist('pks'))
-        result = getatq(rfsn)
-        print(result)
-        return result
+        rfsn = RFSN.objects.get(pk=request.GET.get('pk'))
+        result = requests.get("{}/get_atq/".format(rfsn.conn_info()))
+        return HttpResponse(json.dumps(result.json()))
     return HttpResponse("OK")
 
 @csrf_exempt
@@ -146,7 +140,6 @@ def upload_file(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['docfile']
         jsonschedule = convert(TextIOWrapper(uploaded_file.file, encoding='utf-8'))
-        print(jsonschedule)
         session = Util.loads(jsonschedule)
         return HttpResponse(schedule_session(session))
     return render(request, 'main.html')

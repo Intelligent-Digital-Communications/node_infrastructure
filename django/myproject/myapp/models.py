@@ -26,6 +26,9 @@ class RFSN(models.Model):
     def __str__(self):
         return self.hostname
 
+    def conn_info(self):
+        return "http://{}:{}".format(self.hostname, str(self.port))
+
 class SpecrecArgField(CompositeField):
     length = models.IntegerField()
     freq = models.IntegerField()
