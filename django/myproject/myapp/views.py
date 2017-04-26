@@ -28,14 +28,42 @@ from django.views.generic.list import ListView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
-def list(request):
+def list_rfsns(request):
     rfsn_objects = RFSN.objects.all()
     rfsn_info = {}
     for rfsn in rfsn_objects:
         rfsn_info[rfsn.id] = {"name":rfsn.name,
-                                "hostname":rfsn.hostname,
-                                "port":rfsn.port}
+                                #"hostname":rfsn.hostname, Hidden because includes username
+                                #"port":rfsn.port,
+                                "id": rfsn.id}
     return HttpResponse(json.dumps(rfsn_info))
+
+def recording_list(request):
+    if request.method == 'GET':
+        data = request.GET     # get filter args from post request
+        recording_info = {}
+        query = {}                                          # dynamically build query
+        if "rfsn_id" in data:
+            query["rfsn__pk"] = data["rfsn_id"]
+        if "session_name" in data and data["session_name"] is not None:
+            query["session__name"] = data["session_name"]
+        # unpack query arguments to query the DB
+        if query:
+            recording_objs = RecordingModel.objects.filter(**query)
+        else:
+            recording_objs = RecordingModel.objects.all()
+        for rec in recording_objs:
+            recording_info[rec.pk] = {"rfsn":rec.rfsn.pk,
+                                        "datetime":str(rec.at_datetime),
+                                        "job_id":rec.unix_jobid,
+                                        "local_path":rec.local_path,
+                                        "backup_path":rec.backup_path,
+                                        "length":rec.specrec_args.length,
+                                        "freq":rec.specrec_args.freq,
+                                        "sample_rate":rec.specrec_args.sample_rate,
+                                        "session":rec.session.name,
+                                        "gain": rec.specrec_args.gain}
+        return HttpResponse(json.dumps(recording_info))
 
 @csrf_exempt
 def schedule_a_session(request):
@@ -79,7 +107,7 @@ def schedule_session(session):
 
     session_db = SessionModel(name=session.name,
             log_path=session.logpath, starting_path=session.startingpath,
-            sample_rate = session.samplerate)
+            sample_rate = session.samplerate, start_early=session.startearly)
     session_db.save()
 
     for rfsn in rfsn_list:
@@ -105,6 +133,8 @@ def schedule_session(session):
 
                 rec.specrec_args_freq = current_remote_rec.frequency
                 rec.specrec_args_length = current_remote_rec.length
+                rec.specrec_args_gain = current_remote_rec.gain
+                rec.specrec_args_sample_rate = req_session.samplerate
                 rec.specrec_args_start = fix_tz(current_remote_rec.starttime)
                 rec.save()
                 current_local_rec.uniques[rfsn] = current_remote_rec.uniques

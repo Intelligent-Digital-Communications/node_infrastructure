@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from .csvtojson import convert
 from nodelistener import *
 from recordingclasses import Recording, Session, Util
-from .models import RFSN, RecordingModel
+from .models import RFSN, RecordingModel, SessionModel
 import os
 import csv
 from subprocess import Popen, call, PIPE
@@ -42,7 +42,7 @@ class ScheduleSoonAndCancelTestCase(LocalTest):
             for i in range(1,3):
                 csvwriter.writerow([
                     (now + timedelta(minutes=1*i)).strftime('%m/%d/%Y %H:%M'),
-                'epoch_test' + str(i) + '.sc16', '2.41E+09', '60', '55'])
+                'epoch_test' + str(i) + '.sc16', '2.41E+09', '3', '55'])
 
         c = Client()
         with open(testfile, 'rb') as csvfile:
@@ -56,6 +56,34 @@ class ListRFSNsTest(LocalTest):
     def test_listRFSNs(self):
         c = Client()
         response = c.get("/myapp/list/")
+
+     #def tearDown(self):
+     #    print(RecordingModel.objects.all())
+
+class ListRecordingsTestCase(LocalTest):
+    def test_list_recordings_test(self):
+        self.rate = 25000000
+        b = SessionModel(sample_rate=self.rate, start_early=60)
+        b.save()
+        b.name = "TEST"
+        local = RFSN.objects.get(id=0)
+        b.rfsns = [local]
+        b.log_path = "/dev/null"
+        b.starting_path = "/dev/null"
+        b.save()
+        RecordingModel.objects.create(rfsn=local, session=b, at_datetime=datetime.now(), unix_jobid=1,
+            specrec_args_length=60,specrec_args_freq=50502025,specrec_args_gain=45,specrec_args_sample_rate=25000000,
+            specrec_args_start=datetime.now(), specrec_args_full_commands='',
+            local_path='/dev/null/', backup_path='/dev/null/')
+
+
+        c = Client()
+        response = c.get('/myapp/recording_list/', {"rfsn_id": 0})
+        self.assertTrue(str(self.rate) in str(response.content))
+        response = c.get('/myapp/recording_list/', {"session_name": "TEST"})
+        self.assertTrue(str(self.rate) in str(response.content))
+        response = c.get('/myapp/recording_list/')
+        self.assertTrue(str(self.rate) in str(response.content))
 
 '''
 class TestFiledropSession(TestCase):

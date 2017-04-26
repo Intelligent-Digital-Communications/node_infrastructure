@@ -1,11 +1,5 @@
 import sys, os, subprocess, time, datetime, logging, pickle, hug, json
 from subprocess import Popen, PIPE
-#from nodelistener import *
-#from recording_classes import Recording, Session, Util
-#from schedule_session import schedule_session
-#print(dir(nodelistener))
-#from recording_classes.py import recording_classes
-#from . import recording_classes, schedule_session
 from recordingclasses import Recording, Session, Util
 from .schedule_session import schedule_session
 
@@ -48,8 +42,8 @@ def filedrop(body):
 
         filename = spath +'/' + 'delayedrsync.sh'
         epoch_file = open(filename, 'w')
-        args = ('rsync -av {spath} {dpath} & &>> output.txt').format(spath=spath, dpath=dpath)
-        epoch_file.write('#!/bin/bash\necho {}\n{}'.format(filename, args))
+        args = ('rsync -av "{spath}" "{dpath}" &>> output.txt').format(spath=spath, dpath=dpath)
+        epoch_file.write('#!/bin/bash\n{}'.format(args))
         epoch_file.close()
         os.chmod(filename, os.stat(filename).st_mode | int("0111", 8)) # Make exec by everyone
 
@@ -71,6 +65,7 @@ def filedrop(body):
         print(stdout.decode('ascii'))
         return 'success'
     except Exception as e:
+        raise e
         return {'log': 'Exception occurred: ' + str(e)}
 
 @hug.get('/get_atq')
@@ -92,3 +87,6 @@ def clear_atq():
 
 def main():
     hug.API(__name__).http.serve()
+
+if __name__ == '__main__':
+    print("Please refer to the README to use this file.")

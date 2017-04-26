@@ -15,7 +15,7 @@ angular.module('myApp.scheduleRecordingService', ['ngRoute'])
 	            alert("Success");
 	        })
 	        .error(function(){
-	            alert("Uploading file failed");
+	            alert("There was an error scheduling. Contact someone on the SysOps team");
 	        });
 	    },
 
@@ -24,8 +24,8 @@ angular.module('myApp.scheduleRecordingService', ['ngRoute'])
         	.success(function() {
                 alert("Success");
             }).error(function(){
-                alert("Failed");
-            });
+	            alert("There was an error scheduling. Contact someone on the SysOps team");
+	        });
         }
 	}
 }]);

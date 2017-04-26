@@ -1,0 +1,16 @@
+<div ng-controller="rfsnListController" class="container">
+    <h2>RFSNs</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>RFSN</th>
+            <th>Power</th>
+            <th>Status</th>
+        </tr>
+
+        <tr ng-repeat="rfsn in rfsnList">
+            <td>[[rfsn.name]]</td>
+            <td> <button class="btn btn-primary">[[rfsn.name]]: ON/OFF</button></td>
+            <td><a href="http://idc.vip.gatech.edu/cacti/host.php">Click to see Status</a></td>
+        </tr>
+    </table>
+</div>

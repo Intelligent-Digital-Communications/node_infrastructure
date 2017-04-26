@@ -32,6 +32,8 @@ class RFSN(models.Model):
 class SpecrecArgField(CompositeField):
     length = models.IntegerField()
     freq = models.IntegerField()
+    sample_rate = models.IntegerField()
+    gain = models.IntegerField()
     start = models.DateTimeField('Specrec begin recording time')
     full_commands = models.CharField(max_length=1000)
 
@@ -41,6 +43,7 @@ class SessionModel(models.Model):
     log_path = models.CharField(max_length=100)
     starting_path = models.CharField(max_length=100)
     sample_rate = models.IntegerField()
+    start_early = models.IntegerField()
 
 class RecordingModel(models.Model):
     rfsn = models.ForeignKey(RFSN, on_delete=models.CASCADE)
