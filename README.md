@@ -1,7 +1,7 @@
 # Node Infrastructure - Operations
 
 ## What's Next
-Refer to [Issues Page](https://github.gatech.edu/IDC/node_infrastructure/issues)
+Refer to [Issues Page](https://github.com/Intelligent-Digital-Communications/node_infrastructure/issues)
 
 ## Building/Testing
 #### Controller Testing
